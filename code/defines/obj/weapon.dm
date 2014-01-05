@@ -53,6 +53,7 @@
 	var/access = list()
 	var/registered = null
 	var/assignment = null
+
 /obj/item/weapon/card/id/attackby()
 	return
 
@@ -64,7 +65,7 @@
 /obj/item/weapon/card/id/syndicate
 	name = "agent id card"
 	origin_tech = "syndicate=3"
-	access = list(access_maint_tunnels)
+	access = list(access_maint_tunnels, access_syndicate)
 
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/card/id))

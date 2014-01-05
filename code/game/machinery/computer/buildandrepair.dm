@@ -173,7 +173,7 @@
 
 /obj/structure/frame/computer
 	anchored = 0
-	name = "Computer-frame"
+	name = "computer frame"
 	icon_state = "0"
 	var/state = 0
 	var/obj/item/weapon/circuitboard/computer/circuit = null

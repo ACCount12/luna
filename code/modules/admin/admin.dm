@@ -1062,12 +1062,10 @@
 			var/ok = 0
 			switch(href_list["secretsadmin"])
 				if("clear_bombs")
-					for(var/obj/item/assembly/r_i_ptank/O in world)
+					for(var/obj/item/device/onetankbomb/O in world)
 						del(O)
-					for(var/obj/item/assembly/m_i_ptank/O in world)
-						del(O)
-					for(var/obj/item/assembly/t_i_ptank/O in world)
-						del(O)
+					//for(var/obj/item/assembly/m_i_ptank/O in world)
+					//	del(O)
 					ok = 1
 				if("list_bombers")
 					var/dat = "<B>Bombing List<HR>"
@@ -1759,16 +1757,16 @@
 		return 0
 	switch(ticker.mode.config_tag)
 		if("revolution")
-			if(M.mind in (ticker.mode:head_revolutionaries + ticker.mode:revolutionaries))
+			if(M.mind in (ticker.mode.head_revolutionaries + ticker.mode.revolutionaries))
 				return 1
 		if("rp-revolution")
-			if(M.mind in (ticker.mode:head_revolutionaries + ticker.mode:revolutionaries))
+			if(M.mind in (ticker.mode.head_revolutionaries + ticker.mode.revolutionaries))
 				return 1
 		if("malfunction")
-			if(M.mind in ticker.mode:malf_ai)
+			if(M.mind in ticker.mode:malf_ais)
 				return 1
 		if("nuclear")
-			if(M.mind in ticker.mode:syndicates)
+			if(M.mind in ticker.mode.syndicates)
 				return 1
 		/*if("traitoramongus")
 			if(M.mind in ticker.mode:chosentraitor)
@@ -1784,7 +1782,7 @@
 /obj/admins/proc/traitorize(mob/M as mob, var/objective, var/mode)
 	//mode = 1 for normal traitorise, mode = 0 for traitor_all
 	if ((src.rank in list( "Administrator", "Primary Administrator", "Super Administrator", "Coder", "Host"  )))
-		if(M.stat == 2 || !(M.client))
+		if(M.stat == 2 || !M.client)
 			alert("Person is dead or not logged in or hasn't started yet. Be nice")
 			return
 		if(checktraitor(M))

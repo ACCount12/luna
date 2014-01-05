@@ -1,8 +1,8 @@
 /obj/machinery/door/poddoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	src.add_fingerprint(user)
-	if (!( istype(C, /obj/item/weapon/crowbar) ))
+	if (!istype(C, /obj/item/weapon/crowbar))
 		return
-	if ((src.density && (stat & NOPOWER) && !( src.operating )))
+	if (src.density && (stat & NOPOWER) && !src.operating)
 		spawn( 0 )
 			src.operating = 1
 			flick("pdoorc0", src)
@@ -52,4 +52,4 @@
 	return
 
 /obj/machinery/door/poddoor/roofdoor
-	name = "Retractable roof"
+	name = "retractable roof"

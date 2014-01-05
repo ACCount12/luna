@@ -683,27 +683,35 @@
 	if(!src.holder)
 		src << "Only administrators may use this command."
 		return
-	QML_loadMap(map)
+
+	var/mapfile = file(map)
+	var/z = input("Input z-level:") as num
+	//var/speed = input("Input speed (turfs per second) - optional") as num | null
+
+	if(isnum(z) && isfile(mapfile))
+		maploader.load_map(mapfile, z)
+	else
+		src << "Wrong map - ([map]) or wrong z ([z])."
 
 /client/proc/delay()
 	set category = "Server"
 	set name = "Delay start"
 	if(delay_start == 0)
 		delay_start = 1
-		world << "\blue <b>[usr.client.stealth ? "Administrator" : usr.key] Delays the game</b>"
+		world << "\blue <b>[usr.client.stealth ? "Administrator" : usr.key] delays the game!</b>"
 	else
 		delay_start = 0
-		world << "\blue <b>[usr.client.stealth ? "Administrator" : usr.key] Undelays the game</b>"
+		world << "\blue <b>[usr.client.stealth ? "Administrator" : usr.key] undelays the game!</b>"
 
 /client/proc/hubvis()
 	set category = "Admin"
 	set name = "Toggle hub visibility"
 	if(world.visibility == 0)
 		world.visibility = 1
-		message_admins("\blue <b>[usr.client.stealth ? "Administrator" : usr.key] Makes the game visible on the byond hub</b>")
+		message_admins("\blue <b>[usr.client.stealth ? "Administrator" : usr.key] makes the game visible on the byond hub</b>")
 	else
 		world.visibility = 0
-		message_admins("\blue <b>[usr.client.stealth ? "Administrator" : usr.key] Removes the game from the byond hub</b>")
+		message_admins("\blue <b>[usr.client.stealth ? "Administrator" : usr.key] removes the game from the byond hub</b>")
 
 /client/proc/toggleevents()
 	set category = "Admin"

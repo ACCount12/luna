@@ -283,8 +283,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							if(linked_destroy.loaded_item.reliability < 100 && linked_destroy.loaded_item.crit_fail)
 								files.UpdateDesign(linked_destroy.loaded_item.type)
 							if(linked_lathe) //Also sends salvaged materials to a linked protolathe, if any.
-								linked_lathe.m_amount += min((linked_lathe.max_material_storage - linked_lathe.TotalMaterials()), (linked_destroy.loaded_item.m_amt*linked_destroy.decon_mod))
-								linked_lathe.g_amount += min((linked_lathe.max_material_storage - linked_lathe.TotalMaterials()), (linked_destroy.loaded_item.g_amt*linked_destroy.decon_mod))
+								linked_lathe.m_amount += min((linked_lathe.max_material_storage - linked_lathe.TotalMaterials()), (linked_destroy.loaded_item.m_amt*(linked_destroy.decon_mod/10)))
+								linked_lathe.g_amount += min((linked_lathe.max_material_storage - linked_lathe.TotalMaterials()), (linked_destroy.loaded_item.g_amt*(linked_destroy.decon_mod/10)))
+
 							linked_destroy.loaded_item = null
 						for(var/obj/I in linked_destroy.contents)
 							for(var/mob/M in I.contents)
@@ -348,6 +349,8 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	else if(href_list["build"]) //Causes the Protolathe to build something.
 		if(linked_lathe)
 			var/datum/design/being_built = null
+			var/coeff = linked_lathe.efficiency_coeff
+
 			for(var/datum/design/D in files.known_designs)
 				if(D.id == href_list["build"])
 					being_built = D
@@ -366,37 +369,44 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						for(var/M in being_built.materials)
 							switch(M)
 								if("$metal")
-									linked_lathe.m_amount = max(0, (linked_lathe.m_amount-being_built.materials[M]))
+									linked_lathe.m_amount = max(0, (linked_lathe.m_amount-being_built.materials[M]/coeff))
 								if("$glass")
-									linked_lathe.g_amount = max(0, (linked_lathe.g_amount-being_built.materials[M]))
+									linked_lathe.g_amount = max(0, (linked_lathe.g_amount-being_built.materials[M]/coeff))
 								if("$gold")
-									linked_lathe.gold_amount = max(0, (linked_lathe.gold_amount-being_built.materials[M]))
+									linked_lathe.gold_amount = max(0, (linked_lathe.gold_amount-being_built.materials[M]/coeff))
 								if("$silver")
-									linked_lathe.silver_amount = max(0, (linked_lathe.silver_amount-being_built.materials[M]))
+									linked_lathe.silver_amount = max(0, (linked_lathe.silver_amount-being_built.materials[M]/coeff))
 								if("$plasma")
-									linked_lathe.plasma_amount = max(0, (linked_lathe.plasma_amount-being_built.materials[M]))
+									linked_lathe.plasma_amount = max(0, (linked_lathe.plasma_amount-being_built.materials[M]/coeff))
 								if("$uranium")
-									linked_lathe.uranium_amount = max(0, (linked_lathe.uranium_amount-being_built.materials[M]))
+									linked_lathe.uranium_amount = max(0, (linked_lathe.uranium_amount-being_built.materials[M]/coeff))
 								if("$diamond")
-									linked_lathe.diamond_amount = max(0, (linked_lathe.diamond_amount-being_built.materials[M]))
+									linked_lathe.diamond_amount = max(0, (linked_lathe.diamond_amount-being_built.materials[M]/coeff))
 								if("$clown")
-									linked_lathe.clown_amount = max(0, (linked_lathe.clown_amount-being_built.materials[M]))
+									linked_lathe.clown_amount = max(0, (linked_lathe.clown_amount-being_built.materials[M]/coeff))
 								else
-									linked_lathe.reagents.remove_reagent(M, being_built.materials[M])
+									linked_lathe.reagents.remove_reagent(M, being_built.materials[M]/coeff)
 
 						if(being_built.build_path)
 							var/obj/new_item = new being_built.build_path(src)
+
 							new_item.reliability = being_built.reliability
-							if(linked_lathe.hacked) being_built.reliability = max((reliability / 2), 0)
-							else
-								new_item.loc = linked_lathe.loc
+							new_item.m_amt /= coeff
+							new_item.g_amt /= coeff
+
+							if(linked_lathe.hacked)
+								being_built.reliability /= 2
+
+							new_item.loc = linked_lathe.loc
 							linked_lathe.busy = 0
 							screen = 3.1
 							updateUsrDialog()
 
 	else if(href_list["imprint"]) //Causes the Circuit Imprinter to build something.
 		if(linked_imprinter)
+			var/coeff = 2 ** linked_imprinter.efficiency_coeff
 			var/datum/design/being_built = null
+
 			for(var/datum/design/D in files.known_designs)
 				if(D.id == href_list["imprint"])
 					being_built = D
@@ -414,16 +424,19 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					for(var/M in being_built.materials)
 						switch(M)
 							if("$glass")
-								linked_imprinter.g_amount = max(0, (linked_imprinter.g_amount-being_built.materials[M]))
+								linked_imprinter.g_amount = max(0, (linked_imprinter.g_amount-being_built.materials[M]/coeff))
 							if("$gold")
-								linked_imprinter.gold_amount = max(0, (linked_imprinter.gold_amount-being_built.materials[M]))
+								linked_imprinter.gold_amount = max(0, (linked_imprinter.gold_amount-being_built.materials[M]/coeff))
 							if("$diamond")
-								linked_imprinter.diamond_amount = max(0, (linked_imprinter.diamond_amount-being_built.materials[M]))
+								linked_imprinter.diamond_amount = max(0, (linked_imprinter.diamond_amount-being_built.materials[M]/coeff))
 							else
-								linked_imprinter.reagents.remove_reagent(M, being_built.materials[M])
+								linked_imprinter.reagents.remove_reagent(M, being_built.materials[M]/coeff)
 					var/obj/new_item = new being_built.build_path(src)
+
 					new_item.reliability = being_built.reliability
-					if(linked_imprinter.hacked) being_built.reliability = max((reliability / 2), 0)
+					new_item.m_amt /= coeff
+					new_item.g_amt /= coeff
+
 					new_item.loc = linked_imprinter.loc
 					linked_imprinter.busy = 0
 					screen = 4.1
@@ -707,32 +720,33 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "Protolathe Menu:<BR><BR>"
 			dat += "<B>Material Amount:</B> [linked_lathe.TotalMaterials()] cm<sup>3</sup> (MAX: [linked_lathe.max_material_storage])<BR>"
 			dat += "<B>Chemical Volume:</B> [linked_lathe.reagents.total_volume] (MAX: [linked_lathe.reagents.maximum_volume])<HR>"
+			var/coeff = linked_lathe.efficiency_coeff
 			for(var/datum/design/D in files.known_designs)
 				if(!(D.build_type & PROTOLATHE))
 					continue
 				var/temp_dat = "[D.name]"
 				var/check_materials = 1
 				for(var/M in D.materials)
-					temp_dat += " [D.materials[M]] [CallMaterialName(M)]"
+					temp_dat += " [D.materials[M]/coeff] [CallMaterialName(M)]"
 					if(copytext(M, 1, 2) == "$")
 						switch(M)
 							if("$glass")
-								if(D.materials[M] > linked_lathe.g_amount) check_materials = 0
+								if(D.materials[M]/coeff > linked_lathe.g_amount) check_materials = 0
 							if("$metal")
-								if(D.materials[M] > linked_lathe.m_amount) check_materials = 0
+								if(D.materials[M]/coeff > linked_lathe.m_amount) check_materials = 0
 							if("$gold")
-								if(D.materials[M] > linked_lathe.gold_amount) check_materials = 0
+								if(D.materials[M]/coeff > linked_lathe.gold_amount) check_materials = 0
 							if("$silver")
-								if(D.materials[M] > linked_lathe.silver_amount) check_materials = 0
+								if(D.materials[M]/coeff > linked_lathe.silver_amount) check_materials = 0
 							if("$plasma")
-								if(D.materials[M] > linked_lathe.plasma_amount) check_materials = 0
+								if(D.materials[M]/coeff > linked_lathe.plasma_amount) check_materials = 0
 							if("$uranium")
-								if(D.materials[M] > linked_lathe.uranium_amount) check_materials = 0
+								if(D.materials[M]/coeff > linked_lathe.uranium_amount) check_materials = 0
 							if("$diamond")
-								if(D.materials[M] > linked_lathe.diamond_amount) check_materials = 0
+								if(D.materials[M]/coeff > linked_lathe.diamond_amount) check_materials = 0
 							if("$clown")
-								if(D.materials[M] > linked_lathe.clown_amount) check_materials = 0
-					else if (!linked_lathe.reagents.has_reagent(M, D.materials[M]))
+								if(D.materials[M]/coeff > linked_lathe.clown_amount) check_materials = 0
+					else if (!linked_lathe.reagents.has_reagent(M, D.materials[M]/coeff))
 						check_materials = 0
 				if (check_materials)
 					dat += "* <A href='?src=\ref[src];build=[D.id]'>[temp_dat]</A><BR>"
@@ -820,6 +834,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "Circuit Imprinter Menu:<BR><BR>"
 			dat += "Material Amount: [linked_imprinter.TotalMaterials()] cm<sup>3</sup><BR>"
 			dat += "Chemical Volume: [linked_imprinter.reagents.total_volume]<HR>"
+			var/coeff = 2 ** linked_imprinter.efficiency_coeff
 
 			for(var/datum/design/D in files.known_designs)
 				if(!(D.build_type & IMPRINTER))
@@ -827,16 +842,16 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				var/temp_dat = "[D.name]"
 				var/check_materials = 1
 				for(var/M in D.materials)
-					temp_dat += " [D.materials[M]] [CallMaterialName(M)]"
+					temp_dat += " [D.materials[M]/coeff] [CallMaterialName(M)]"
 					if(copytext(M, 1, 2) == "$")
 						switch(M)
 							if("$glass")
-								if(D.materials[M] > linked_imprinter.g_amount) check_materials = 0
+								if(D.materials[M]/coeff > linked_imprinter.g_amount) check_materials = 0
 							if("$gold")
-								if(D.materials[M] > linked_imprinter.gold_amount) check_materials = 0
+								if(D.materials[M]/coeff > linked_imprinter.gold_amount) check_materials = 0
 							if("$diamond")
-								if(D.materials[M] > linked_imprinter.diamond_amount) check_materials = 0
-					else if (!linked_imprinter.reagents.has_reagent(M, D.materials[M]))
+								if(D.materials[M]/coeff > linked_imprinter.diamond_amount) check_materials = 0
+					else if (!linked_imprinter.reagents.has_reagent(M, D.materials[M]/coeff))
 						check_materials = 0
 				if (check_materials)
 					dat += "* <A href='?src=\ref[src];imprint=[D.id]'>[temp_dat]</A><BR>"

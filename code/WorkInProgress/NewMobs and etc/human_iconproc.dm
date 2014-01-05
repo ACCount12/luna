@@ -5,10 +5,15 @@
 
 	overlays = null
 
+
+	if(buckled)
+		if(istype(buckled, /obj/structure/stool/bed)  && !istype(buckled, /obj/structure/stool/bed/chair))
+			lying = 1
+		else
+			lying = 0
+
 	var/g = "_male"
-	if (gender == MALE)
-		g = "_male"
-	else if (gender == FEMALE)
+	if (gender == FEMALE)
 		g = "_female"
 
 	if(HULK in mutations)
@@ -35,13 +40,6 @@
 			update_face()
 		if(!stand_icon || !lying_icon)
 			update_body()
-
-
-	if(buckled)
-		if(istype(buckled, /obj/structure/stool/bed)  && !istype(buckled, /obj/structure/stool/bed/chair))
-			lying = 1
-		else
-			lying = 0
 
 	// Automatically drop anything in store / id / belt if you're not wearing a uniform.
 	if (!w_uniform)
@@ -215,7 +213,7 @@
 
 	if (head)
 		var/t1 = head.icon_state
-		var/icon/head_icon = icon('head.dmi', text("[][]", t1, (!( lying ) ? null : "2")))
+		var/icon/head_icon = icon('head.dmi', text("[][]", t1, (!lying ? null : "2")))
 		overlays += image("icon" = head_icon, "layer" = MOB_LAYER)
 		if (head.blood_DNA.len)
 			var/icon/stain_icon = icon('blood.dmi', "helmetblood[!lying ? "" : "2"]")
@@ -334,9 +332,7 @@
 		del(lying_icon)
 
 	var/g = "m"
-	if (gender == MALE)
-		g = "m"
-	else if (gender == FEMALE)
+	if (gender == FEMALE)
 		g = "f"
 
 	stand_icon = new /icon('human.dmi', "body_[g]_s")

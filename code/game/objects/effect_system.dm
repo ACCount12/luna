@@ -5,23 +5,6 @@ it needs to create more trails.A beaker could have a steam_trail_follow system s
 would spawn and follow the beaker, even if it is carried or thrown.
 */
 
-
-/obj/effects
-	name = "effects"
-	icon = 'effects.dmi'
-	mouse_opacity = 0
-	flags = 0
-
-/obj/effects/smoke
-	name = "smoke"
-	icon = 'water.dmi'
-	icon_state = "smoke"
-	opacity = 1
-	anchored = 0.0
-	mouse_opacity = 0
-	var/amount = 8.0
-
-
 /////////////////////////////////////////////
 // GENERIC STEAM SPREAD SYSTEM
 
@@ -37,12 +20,6 @@ OPTIONAL: steam.attach(mob)
 steam.start() -- spawns the effect
 */
 /////////////////////////////////////////////
-/obj/effects/steam
-	name = "steam"
-	icon = 'effects.dmi'
-	icon_state = "extinguish"
-	density = 0
-
 /datum/effect/system/steam_spread
 	var/number = 3
 	var/cardinals = 0
@@ -65,7 +42,7 @@ steam.start() -- spawns the effect
 		spawn(0)
 			if(holder)
 				src.location = get_turf(holder)
-			var/obj/effects/steam/steam = new /obj/effects/steam(src.location)
+			var/obj/effect/effect/steam/steam = new /obj/effect/effect/steam(src.location)
 			var/direction
 			if(src.cardinals)
 				direction = pick(cardinal)
@@ -83,57 +60,17 @@ steam.start() -- spawns the effect
 
 
 
-/////////////////////////////////////////////
-//SPARK SYSTEM (like steam system)
-// The attach(atom/atom) proc is optional, and can be called to attach the effect
-// to something, like the RCD, so then you can just call start() and the sparks
-// will always spawn at the items location.
-/////////////////////////////////////////////
-
-/obj/effects/sparks
-	name = "sparks"
-	icon_state = "sparks"
-	var/amount = 6.0
-	anchored = 1.0
-	mouse_opacity = 0
-
-/obj/effects/sparks/New()
-	..()
-	playsound(src.loc, "sparks", 100, 1)
-	var/turf/T = src.loc
-	if (istype(T, /turf))
-		T.hotspot_expose(3000,100)
-	spawn (100)
-		del(src)
-	return
-
-/obj/effects/sparks/Del()
-	var/turf/T = src.loc
-	if (istype(T, /turf))
-		T.hotspot_expose(3000,100)
-	..()
-	return
-
-/obj/effects/sparks/Move()
-	..()
-	var/turf/T = src.loc
-	if (istype(T, /turf))
-		T.hotspot_expose(3000,100)
-	return
-
-
 //////////////////////////////////
 //////SPARKELS FIREWORKS
 /////////////////////////////////
-////////////////////////////
-/obj/effects/sparkels
+/obj/effect/effect/sparkels
 	name = "sparkel"
 	icon = 'fireworks.dmi'//findback
 	icon_state = "sparkel"
 	var/amount = 6.0
 	anchored = 1.0
 	mouse_opacity = 0
-/obj/effects/sparkels/New()
+/obj/effect/effect/sparkels/New()
 	..()
 	var/icon/I = new(src.icon,src.icon_state)
 	var/r = rand(0,255)
@@ -150,13 +87,13 @@ steam.start() -- spawns the effect
 		del(src)
 	return
 
-/obj/effects/sparkels/Del()
+/obj/effect/effect/sparkels/Del()
 	var/turf/T = src.loc
 	if (istype(T, /turf))
 		T.hotspot_expose(3000,100)
 	..()
 	return
-/obj/effects/sparkels/Move()
+/obj/effect/effect/sparkels/Move()
 	..()
 	var/turf/T = src.loc
 	if (istype(T, /turf))
@@ -192,7 +129,7 @@ steam.start() -- spawns the effect
 		spawn(0)
 			if(holder)
 				src.location = get_turf(holder)
-			var/obj/effects/sparkels/sparks = new(src.location)
+			var/obj/effect/effect/sparkels/sparks = new(src.location)
 			src.total_sparks++
 			var/direction
 			if(src.cardinals)
@@ -216,28 +153,6 @@ steam.start() -- spawns the effect
 // direct can be optinally added when set_up, to make the smoke always travel in one direction
 // in case you wanted a vent to always smoke north for example
 /////////////////////////////////////////////
-
-/obj/effects/harmless_smoke
-	name = "smoke"
-	icon_state = "smoke"
-	opacity = 1
-	anchored = 0.0
-	mouse_opacity = 0
-	var/amount = 6.0
-	//Remove this bit to use the old smoke
-	icon = '96x96.dmi'
-	pixel_x = -32
-	pixel_y = -32
-
-/obj/effects/harmless_smoke/New()
-	..()
-	spawn (100)
-		del(src)
-	return
-
-/obj/effects/harmless_smoke/Move()
-	..()
-	return
 
 /datum/effect/system/harmless_smoke_spread
 	var/number = 3
@@ -271,7 +186,7 @@ steam.start() -- spawns the effect
 		spawn(0)
 			if(holder)
 				src.location = get_turf(holder)
-			var/obj/effects/harmless_smoke/smoke = new /obj/effects/harmless_smoke(src.location)
+			var/obj/effect/effect/harmless_smoke/smoke = new /obj/effect/effect/harmless_smoke(src.location)
 			src.total_smoke++
 			var/direction = src.direction
 			if(!direction)
@@ -288,62 +203,6 @@ steam.start() -- spawns the effect
 
 
 
-
-
-
-
-/////////////////////////////////////////////
-// Bad smoke
-/////////////////////////////////////////////
-
-/obj/effects/bad_smoke
-	name = "smoke"
-	icon_state = "smoke"
-	opacity = 1
-	anchored = 0.0
-	mouse_opacity = 0
-	var/amount = 6.0
-	//Remove this bit to use the old smoke
-	icon = '96x96.dmi'
-	pixel_x = -32
-	pixel_y = -32
-
-/obj/effects/bad_smoke/New()
-	..()
-	spawn (200+rand(10,30))
-		del(src)
-	return
-
-/obj/effects/bad_smoke/Move()
-	..()
-	for(var/mob/living/carbon/M in get_turf(src))
-		if (M.internal != null && M.wear_mask && (M.wear_mask.flags & MASKINTERNALS))
-		else
-			M.drop_item()
-			M.oxyloss += 1
-			if (M.coughedtime != 1)
-				M.coughedtime = 1
-				M.emote("cough")
-				spawn ( 20 )
-					M.coughedtime = 0
-	for(var/atom/A in src)
-		reagents.reaction(A, 1, 1)
-	return
-
-/obj/effects/bad_smoke/HasEntered(mob/living/carbon/M as mob )
-	..()
-	if(istype(M, /mob/living/carbon))
-		if (!(M.internal != null && M.wear_mask && (M.wear_mask.flags & MASKINTERNALS)))
-			M.drop_item()
-			M.oxyloss += 1
-			if (M.coughedtime != 1)
-				M.coughedtime = 1
-				M.emote("cough")
-				spawn ( 20 )
-					M.coughedtime = 0
-		if(reagents)
-			src.reagents.reaction(M, 1, 1)
-	return
 
 /datum/effect/system/bad_smoke_spread
 	var/number = 3
@@ -380,7 +239,7 @@ steam.start() -- spawns the effect
 		spawn(0)
 			if(holder)
 				src.location = get_turf(holder)
-			var/obj/effects/bad_smoke/smoke = new /obj/effects/bad_smoke(src.location)
+			var/obj/effect/effect/bad_smoke/smoke = new /obj/effect/effect/bad_smoke(src.location)
 			src.total_smoke++
 			var/direction = src.direction
 			if(!direction)
@@ -404,7 +263,7 @@ steam.start() -- spawns the effect
 /////////////////////////////////////////////
 
 
-/obj/effects/mustard_gas
+/obj/effect/effect/mustard_gas
 	name = "mustard gas"
 	icon_state = "mustard"
 	opacity = 1
@@ -412,13 +271,13 @@ steam.start() -- spawns the effect
 	mouse_opacity = 0
 	var/amount = 6.0
 
-/obj/effects/mustard_gas/New()
+/obj/effect/effect/mustard_gas/New()
 	..()
 	spawn (100)
 		del(src)
 	return
 
-/obj/effects/mustard_gas/Move()
+/obj/effect/effect/mustard_gas/Move()
 	..()
 	for(var/mob/living/carbon/human/R in get_turf(src))
 		if (R.internal != null && usr.wear_mask && (R.wear_mask.flags & MASKINTERNALS) && R.wear_suit != null && !istype(R.wear_suit, /obj/item/clothing/suit/storage/labcoat) && !istype(R.wear_suit, /obj/item/clothing/suit/straight_jacket) && !istype(R.wear_suit, /obj/item/clothing/suit/straight_jacket && !istype(R.wear_suit, /obj/item/clothing/suit/armor)))
@@ -432,7 +291,7 @@ steam.start() -- spawns the effect
 			R.updatehealth()
 	return
 
-/obj/effects/mustard_gas/HasEntered(mob/living/carbon/human/R as mob )
+/obj/effect/effect/mustard_gas/HasEntered(mob/living/carbon/human/R as mob )
 	..()
 	if (istype(R, /mob/living/carbon/human))
 		if (R.internal != null && usr.wear_mask && (R.wear_mask.flags & MASKINTERNALS) && R.wear_suit != null && !istype(R.wear_suit, /obj/item/clothing/suit/storage/labcoat) && !istype(R.wear_suit, /obj/item/clothing/suit/straight_jacket) && !istype(R.wear_suit, /obj/item/clothing/suit/straight_jacket && !istype(R.wear_suit, /obj/item/clothing/suit/armor)))
@@ -477,7 +336,7 @@ steam.start() -- spawns the effect
 		spawn(0)
 			if(holder)
 				src.location = get_turf(holder)
-			var/obj/effects/mustard_gas/smoke = new /obj/effects/mustard_gas(src.location)
+			var/obj/effect/effect/mustard_gas/smoke = new /obj/effect/effect/mustard_gas(src.location)
 			src.total_smoke++
 			var/direction = src.direction
 			if(!direction)
@@ -503,11 +362,6 @@ steam.start() -- spawns the effect
 /// and don't call start() in a loop that will be repeated otherwise it'll get spammed!
 /////////////////////////////////////////////
 
-/obj/effects/ion_trails
-	name = "ion trails"
-	icon_state = "ion_trails"
-	anchored = 1.0
-
 /datum/effect/system/ion_trail_follow
 	var/atom/holder
 	var/turf/oldposition
@@ -528,7 +382,7 @@ steam.start() -- spawns the effect
 			var/turf/T = get_turf(src.holder)
 			if(T != src.oldposition)
 				if(istype(T, /turf/space))
-					var/obj/effects/ion_trails/I = new /obj/effects/ion_trails(src.oldposition)
+					var/obj/effect/effect/ion_trails/I = new /obj/effect/effect/ion_trails(src.oldposition)
 					src.oldposition = T
 					I.dir = src.holder.dir
 					flick("ion_fade", I)

@@ -201,7 +201,7 @@ datum/controller/game_controller
 
 		sleep(-1)
 
-		for(var/obj/fire/F in world)
+		for(var/obj/effect/fire/F in world)
 			ticker_debug = "fire processing"
 			F.process()
 

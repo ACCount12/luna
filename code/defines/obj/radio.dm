@@ -11,14 +11,6 @@
 	slot_flags = SLOT_BACK
 	item_state = "electropack"
 
-/obj/item/device/radio/signaler
-	name = "remote signaling device"
-	desc = "Used to remotely activate devices."
-	icon_state = "signaller"
-	item_state = "signaler"
-	w_class = 1
-	frequency = 1457
-
 /obj/item/device/radio/intercom
 	name = "station intercom (radio)"
 	desc = "Talk through this."
@@ -27,3 +19,8 @@
 	var/number = 0
 	var/anyai = 1
 	var/mob/living/silicon/ai/ai = list()
+
+/obj/item/device/radio/banana //Why is this even needed? So that it shows up as a banana in the chat log.
+	name = "banana phone"
+	icon = 'items.dmi'
+	icon_state = "banana" //needs a new icon.

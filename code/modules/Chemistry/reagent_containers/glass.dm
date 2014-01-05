@@ -206,7 +206,7 @@
 	flags = FPRINT | OPENCONTAINER
 
 	attackby(var/obj/D, mob/user as mob)
-		if(istype(D, /obj/item/device/prox_sensor))
+		if(isprox(D))
 			var/obj/item/weapon/robot_assembly/bucket_sensor/B = new /obj/item/weapon/robot_assembly/bucket_sensor
 			B.loc = user.loc
 

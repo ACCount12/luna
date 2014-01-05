@@ -1,10 +1,10 @@
 /obj/item/weapon/disk
-	name = "Disk"
+	name = "disk"
 	icon = 'items.dmi'
 	w_class = 1.0
 
 /obj/item/weapon/disk/data
-	name = "Data Disk"
+	name = "data disk"
 	var/title = "Data Disk"
 	icon_state = "datadisk0"
 	item_state = "card-id"
@@ -28,7 +28,7 @@
 
 //TO DO: Look over this code. Something is fishy in it, possibly the way it stores the UI and the UE.
 /obj/item/weapon/disk/data/genetics
-	name = "Genetics Data Disk"
+	name = "genetics data disk"
 	icon_state = "datadiskgen0" //Gosh I hope syndies don't mistake them for the nuke disk.
 	data_type = "ui"
 	var/owner = ""
@@ -42,7 +42,7 @@
 
 
 /obj/item/weapon/disk/nuclear
-	name = "Nuclear Authentication Disk"
+	name = "nuclear authentication disk"
 	icon_state = "nucleardisk"
 	item_state = "card-id"
 

@@ -1,4 +1,5 @@
-/turf/space/transit
+/turf/space/transit/New()
+	return
 
 //Overwrite because we dont want people building rods in space.
 /turf/space/transit/attackby(obj/O as obj, mob/user as mob)

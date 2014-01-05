@@ -1,7 +1,7 @@
-obj/machinery/atmospherics/pipe
-
+/obj/machinery/atmospherics/pipe
 	layer = 2.4
 
+	var/pipe_color
 	var/datum/gas_mixture/air_temporary //used when reconstructing a pipeline that broke
 	var/datum/pipeline/parent
 
@@ -335,14 +335,68 @@ obj/machinery/atmospherics/pipe
 		fatigue_pressure = 900*ONE_ATMOSPHERE
 		alert_pressure = 900*ONE_ATMOSPHERE
 
-		level = 2
+		level = 2.4
+
+	simple/insulated/hidden
+		icon_state = "intact-f"
+		level = 1
 
 
+	simple/scrubbers
+		name="scrubbers pipe"
+		pipe_color="red"
+		level = 2.4
+		icon_state = "intact-r"
 
-	simple/junction
+	simple/supply
+		name="air supply pipe"
+		pipe_color="blue"
+		level = 2.4
+		icon_state = "intact-b"
+
+	simple/supplymain
+		name="main air supply pipe"
+		pipe_color="purple"
+		level = 2.4
+		icon_state = "intact-p"
+
+	simple/general
+		name="pipe"
+		pipe_color=""
+		level = 2.4
+		icon_state = "intact"
+
+	simple/yellow
+		pipe_color="yellow"
+		level = 2.4
+		icon_state = "intact-y"
+
+
+	simple/scrubbers/hidden
+		level = 1
+		icon_state = "intact-r-f"
+
+	simple/supply/hidden
+		level = 1
+		icon_state = "intact-b-f"
+
+	simple/supplymain/hidden
+		level = 1
+		icon_state = "intact-p-f"
+
+	simple/general/hidden
+		level = 1
+		icon_state = "intact-f"
+
+	simple/yellow/hidden
+		level = 1
+		icon_state = "intact-y-f"
+
+
+	simple/heat_exchanging/junction
 		icon = 'junction.dmi'
 		icon_state = "intact"
-		level = 2
+		level = 2.4
 
 		update_icon()
 			if(istype(node1, /obj/machinery/atmospherics/pipe/simple/heat_exchanging))
@@ -367,23 +421,17 @@ obj/machinery/atmospherics/pipe
 	simple/reinforced
 		maximum_pressure = 350*ONE_ATMOSPHERE
 		fatigue_pressure = 305*ONE_ATMOSPHERE
-		name = "Reinforced Pipe"
+		name = "reinforced pipe"
 		icon_state = "intact"
-		level = 2
+		level = 2.4
 
 	simple/heat_exchanging
 		icon = 'heat.dmi'
 		icon_state = "intact"
-		level = 2
+		level = 2.4
 
 		minimum_temperature_difference = 20
 		thermal_conductivity = WINDOW_HEAT_TRANSFER_COEFFICIENT
-
-		update_icon()
-			if(node1&&node2)
-				icon_state = "intact"
-
-				icon_state = "[node1dir|node2dir]"
 
 	tank
 		icon = 'pipe_tank.dmi'
@@ -563,7 +611,7 @@ obj/machinery/atmospherics/pipe
 		icon = 'pipe_vent.dmi'
 		icon_state = "intact"
 
-		name = "Vent"
+		name = "vent"
 		desc = "A large air vent"
 
 		level = 1
@@ -795,3 +843,53 @@ obj/machinery/atmospherics/pipe
 			var/turf/T = src.loc			// hide if turf is not intact
 			hide(T.intact)
 			//update_icon()
+
+	manifold/scrubbers
+		name="scrubbers pipe"
+		pipe_color="red"
+		level = 2.4
+		icon_state = "manifold-r"
+
+	manifold/supply
+		name="air supply pipe"
+		pipe_color="blue"
+		level = 2.4
+		icon_state = "manifold-b"
+
+	manifold/supplymain
+		name="main air supply pipe"
+		pipe_color="purple"
+		level = 2.4
+		icon_state = "manifold-p"
+
+	manifold/general
+		pipe_color="gray"
+		level = 2.4
+		icon_state = "manifold"
+
+	manifold/yellow
+		name="air supply pipe"
+		pipe_color="yellow"
+		level = 2.4
+		icon_state = "manifold-y"
+
+
+	manifold/scrubbers/hidden
+		level = 1
+		icon_state = "manifold-r-f"
+
+	manifold/supply/hidden
+		level = 1
+		icon_state = "manifold-b-f"
+
+	manifold/supplymain/hidden
+		level = 1
+		icon_state = "manifold-p-f"
+
+	manifold/general/hidden
+		level = 1
+		icon_state = "manifold-f"
+
+	manifold/yellow/hidden
+		level = 1
+		icon_state = "manifold-y-f"

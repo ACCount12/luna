@@ -44,7 +44,6 @@ datum
 						break // Don't bother adding ourselves to other reagent ids, it is redundant.
 
 		proc
-
 			remove_any(var/amount=1)
 				var/total_transfered = 0
 				var/current_list_element = 1
@@ -424,6 +423,6 @@ datum
 
 // Convenience proc to create a reagents holder for an atom
 // Max vol is maximum volume of holder
-atom/proc/create_reagents(var/max_vol)
+/atom/proc/create_reagents(var/max_vol)
 	reagents = new/datum/reagents(max_vol)
 	reagents.my_atom = src

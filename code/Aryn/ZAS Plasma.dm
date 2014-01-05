@@ -5,7 +5,7 @@ pl_control/var
 	CLOTH_CONTAMINATION = 1 //If this is on, plasma does damage by getting into cloth.
 	CLOTH_CONTAMINATION_RANDOM = 60
 	CLOTH_CONTAMINATION_METHOD = "Toggle"
-	CLOTH_CONTAMINATION_DESC = "If set to nonzero, plasma will contaminate cloth items (uniforms, backpacks, etc.)\
+	CLOTH_CONTAMINATION_DESC = "If set to nonzero, plasma will contaminate cloth items (uniforms, etc.)\
 	and cause a small amount of damage over time to anyone carrying or wearing them. Contamination can be detected\
 	with a Health Analyzer, and washed off in the washer."
 
@@ -30,7 +30,7 @@ pl_control/var
 	GENETIC_CORRUPTION_DESC = "When set to a probability in 1000, any humans in plasma will have this chance to develop a random mutation."
 
 	SKIN_BURNS = 1       //Plasma has an effect similar to mustard gas on the un-suited.
-	SKIN_BURNS_RANDOM = 10
+	SKIN_BURNS_RANDOM = 5
 	SKIN_BURNS_METHOD = "Toggle"
 	SKIN_BURNS_DESC = "When toggled, humans with exposed skin will suffer burns (similar to mustard gas) in plasma."
 
@@ -70,13 +70,11 @@ pl_control/var
 
 obj/var/contaminated = 0
 
-obj/item/proc
-	can_contaminate()
-		if(flags & PLASMAGUARD) return 0
-		if((flags & SUITSPACE) && !vsc.plc.PLASMAGUARD_ONLY) return 1
-		if(vsc.plc.ALL_ITEM_CONTAMINATION) return 1
-		else if(istype(src,/obj/item/clothing)) return 1
-		else if(istype(src,/obj/item/weapon/storage/backpack)) return 1
+obj/item/proc/can_contaminate()
+	if(flags & PLASMAGUARD) return 0
+	if(flags & SUITSPACE) return 0
+	else if(istype(src,/obj/item/clothing)) return 1
+	else if(istype(src,/obj/item/weapon/storage/backpack)) return 0
 
 /mob/living/carbon/proc/contaminate()
 	if(!pl_suit_protected())

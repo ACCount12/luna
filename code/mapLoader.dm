@@ -123,7 +123,6 @@ var/qsow = 0
 		QML_makeObject(loc,dat)
 
 /proc/QML_loadMap(var/mapName, var/offset_x=0, var/offset_y=0, var/offset_z=0)
-	//world.log_game("QML_loadMap([mapName], [offset_x], [offset_y], [offset_z])")
 	var/mapText = file2text(mapName)
 	var/list/map = list()
 	var/str

@@ -528,8 +528,7 @@
 			src.equip_if_possible(new /obj/item/clothing/shoes/black(src), slot_shoes)
 			src.equip_if_possible(new /obj/item/clothing/under/rank/cargo(src), slot_w_uniform)
 			src.equip_if_possible(new /obj/item/device/pda/quartermaster(src), slot_belt)
-			src.equip_if_possible(new /obj/item/device/radio/headset/headset_cargo(src), slot_ears) // heads(!)/qm
-			//src.equip_if_possible(new /obj/item/clothing/suit/exo_suit(src), slot_wear_suit)
+			src.equip_if_possible(new /obj/item/device/radio/headset/headset_cargo(src), slot_ears)
 			src.equip_if_possible(new /obj/item/weapon/storage/backpack(src), slot_back)
 
 		if ("Cargo Technician")
@@ -538,7 +537,6 @@
 			src.equip_if_possible(new /obj/item/clothing/under/rank/cargotech(src), slot_w_uniform)
 			src.equip_if_possible(new /obj/item/device/pda/cargo(src), slot_belt)
 			src.equip_if_possible(new /obj/item/device/radio/headset/headset_cargo(src), slot_ears)
-			//src.equip_if_possible(new /obj/item/clothing/suit/exo_suit(src), slot_wear_suit)
 			src.equip_if_possible(new /obj/item/weapon/storage/backpack(src), slot_back)
 
 		if ("Chief Engineer")
@@ -552,6 +550,7 @@
 			src.equip_if_possible(new /obj/item/device/radio/headset/heads/ce(src), slot_ears)
 			src.equip_if_possible(new /obj/item/weapon/storage/backpack/industrial(src), slot_back)
 			src.equip_if_possible(new /obj/item/clothing/suit/storage/hazard(src), slot_wear_suit)
+			src.mind.store_memory(get_airlock_wires_text())
 
 		if ("Research Director")
 			src.equip_if_possible(new /obj/item/device/pda/heads/rd(src), slot_belt)
@@ -569,7 +568,6 @@
 			src.equip_if_possible(new /obj/item/clothing/under/rank/miner(src), slot_w_uniform)
 			src.equip_if_possible(new /obj/item/device/pda/miner(src), slot_belt)
 			src.equip_if_possible(new /obj/item/device/radio/headset/headset_mine(src), slot_ears)
-			//src.equip_if_possible(new /obj/item/clothing/suit/exo_suit(src), slot_wear_suit)
 			src.equip_if_possible(new /obj/item/weapon/storage/backpack/industrial(src), slot_back)
 			src.equip_if_possible(new /obj/item/clothing/glasses/meson(src), slot_glasses)
 		else

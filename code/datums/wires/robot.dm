@@ -19,8 +19,8 @@ var/const/BORG_WIRE_CAMERA = 16
 	return .
 
 /datum/wires/robot/UpdateCut(var/index, var/mended)
-
 	var/mob/living/silicon/robot/R = holder
+
 	switch(index)
 		if(BORG_WIRE_LAWCHECK) //Cut the law wire, and the borg will no longer receive law updates from its AI
 			if(!mended)
@@ -50,8 +50,8 @@ var/const/BORG_WIRE_CAMERA = 16
 
 
 /datum/wires/robot/UpdatePulsed(var/index)
-
 	var/mob/living/silicon/robot/R = holder
+
 	switch(index)
 		if (BORG_WIRE_AI_CONTROL) //pulse the AI wire to make the borg reselect an AI
 			if(!R.emagged)

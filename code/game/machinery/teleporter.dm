@@ -121,7 +121,7 @@
 	return
 
 /proc/do_teleport(atom/movable/M as mob|obj, atom/destination, precision)
-	if(istype(M, /obj/effects))
+	if(istype(M, /obj/effect))
 		del(M)
 		return
 

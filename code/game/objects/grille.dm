@@ -13,6 +13,11 @@
 	flags = FPRINT | CONDUCT
 	pressure_resistance = 5*ONE_ATMOSPHERE
 
+/obj/structure/grille/destroyed
+	icon_state = "brokengrille"
+	health = -1
+	destroyed = 1
+	density = 0
 
 /obj/structure/grille/ex_act(severity)
 	switch(severity)
@@ -102,7 +107,7 @@
 	if(air_group || (height==0)) return 1
 	if(istype(mover) && mover.checkpass(PASSGRILLE))
 		return 1
-	else if (istype(mover, /obj/effects) || istype(mover, /obj/item/weapon/dummy) || istype(mover, /obj/beam) || istype(mover, /obj/effect/meteor/small))
+	else if (istype(mover, /obj/effect) || istype(mover, /obj/item/weapon/dummy) || istype(mover, /obj/beam) || istype(mover, /obj/effect/meteor/small))
 		return 1
 	else
 		if(istype(mover, /obj/item/projectile))
@@ -219,7 +224,7 @@
 // shock user with probability prb (if all connections & power are working)
 // returns 1 if shocked, 0 otherwise
 
-/obj/structure/grille/proc/shock(mob/living/user, prb)
+/obj/structure/grille/shock(mob/living/user, prb)
 	if(!anchored || destroyed)		// !anchored/destroyed grilles are never connected
 		return 0
 	if(!prob(prb))

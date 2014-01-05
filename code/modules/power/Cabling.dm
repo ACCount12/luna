@@ -1,6 +1,5 @@
 /obj/cabling/power
 	icon = 'power_cond.dmi'
-
 	name = "power cable"
 
 	ConnectableTypes = list(/obj/machinery/power, /obj/structure/grille)
@@ -13,3 +12,13 @@
 	CoilColour = "red"
 	BaseName  = "Electrical"
 	CableType = /obj/cabling/power
+
+/obj/cabling/power/heavy
+	icon = 'power_heavy.dmi'
+	DropCablePieceType = /obj/item/weapon/cable_coil/heavy
+
+/obj/item/weapon/cable_coil/heavy
+	icon_state = "heavycoil3"
+
+	CoilColour = "heavy"
+	CanLayDiagonally = 0

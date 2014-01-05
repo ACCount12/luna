@@ -17,10 +17,10 @@
 /obj/machinery/r_n_d/server/New()
 	..()
 	component_parts = list()
-	component_parts += new /obj/item/weapon/circuitboard/machine/rdserver(src)
-	component_parts += new /obj/item/weapon/stock_parts/scanning_module(src)
-	component_parts += new /obj/item/weapon/cable_coil(src)
-	component_parts += new /obj/item/weapon/cable_coil(src)
+	component_parts += new /obj/item/weapon/circuitboard/machine/rdserver(null)
+	component_parts += new /obj/item/weapon/stock_parts/scanning_module(null)
+	component_parts += new /obj/item/weapon/cable_coil(null)
+	component_parts += new /obj/item/weapon/cable_coil(null)
 	RefreshParts()
 	src.initialize(); //Agouri
 

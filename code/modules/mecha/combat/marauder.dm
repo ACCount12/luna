@@ -9,7 +9,7 @@
 	max_temperature = 60000
 	infra_luminosity = 3
 	var/zoom = 0
-	var/thrusters = 0
+	has_thrusters = 1
 	var/smoke = 5
 	var/smoke_ready = 1
 	var/smoke_cooldown = 100
@@ -129,20 +129,6 @@
 		return 1
 	return 0
 
-
-/obj/mecha/combat/marauder/verb/toggle_thrusters()
-	set category = "Exosuit Interface"
-	set name = "Toggle thrusters"
-	set src = usr.loc
-	set popup_menu = 0
-	if(usr!=src.occupant)
-		return
-	if(src.occupant)
-		if(get_charge() > 0)
-			thrusters = !thrusters
-			src.log_message("Toggled thrusters.")
-			src.occupant_message("<font color='[src.thrusters?"blue":"red"]'>Thrusters [thrusters?"en":"dis"]abled.")
-	return
 
 /obj/mecha/combat/marauder/move_z(cardinal)
 	if (!thrusters) return 0

@@ -307,7 +307,7 @@
 		del(src)
 
 /obj/machinery/turretid
-	name = "Turret deactivation control"
+	name = "turret deactivation control"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "motion3"
 	anchored = 1

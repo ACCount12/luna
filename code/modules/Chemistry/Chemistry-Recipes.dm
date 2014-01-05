@@ -443,7 +443,6 @@ datum
 			var/level = 2
 
 			on_reaction(var/datum/reagents/holder, var/created_volume)
-
 				var/datum/reagent/blood/B = locate(/datum/reagent/blood) in holder.reagent_list
 				if(B && B.data)
 					var/datum/disease/advance/D = locate(/datum/disease/advance) in B.data["viruses"]
@@ -947,7 +946,7 @@ datum
 			on_reaction(var/datum/reagents/holder)
 				var/obj/item/weapon/slimesteroid/P = new /obj/item/weapon/slimesteroid
 				P.loc = get_turf_loc(holder.my_atom)
-
+*/
 		slimejam
 			name = "Slime Jam"
 			id = "m_jam"
@@ -956,7 +955,7 @@ datum
 			result_amount = 10
 			required_container = /obj/item/weapon/slime_extract/purple
 			required_other = 1
-*/
+
 
 //Dark Purple
 		slimeplasma
@@ -1189,7 +1188,7 @@ datum
 			required_reagents = list("soymilk" = 4, "sacid" = 1)
 			result_amount = 5
 
-/*		cheesewheel
+		cheesewheel
 			name = "Cheesewheel"
 			id = "cheesewheel"
 			result = null
@@ -1207,7 +1206,7 @@ datum
 			result = null
 			required_reagents = list("blood" = 5, "clonexadone" = 1)
 			result_amount = 1
-			on_reaction(var/datum/reagents/holder, var/created_volume)
+/*			on_reaction(var/datum/reagents/holder, var/created_volume)
 				var/location = get_turf(holder.my_atom)
 				new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(location)
 				return*/

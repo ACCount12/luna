@@ -39,7 +39,7 @@
 		if(A)
 			var/turf/T = get_turf(A)
 			for(var/atom/movable/M in T)
-				if(istype(M, /obj/effects)) //sparks don't teleport
+				if(istype(M, /obj/effect)) //sparks don't teleport
 					continue
 				if (M.anchored)
 					continue
@@ -56,7 +56,7 @@
 
 /obj/item/projectile/bullet/gyro
 	name ="explosive bolt"
-	icon_state= "bolter"
+	icon_state = "bolter"
 	damage = 50
 	flag = "bullet"
 

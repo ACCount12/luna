@@ -1,4 +1,4 @@
-/obj/effects/expl_particles
+/obj/effect/effect/expl_particles
 	name = "fire"
 	icon = 'effects.dmi'
 	icon_state = "explosion_particle"
@@ -6,13 +6,13 @@
 	anchored = 1
 	mouse_opacity = 0
 
-/obj/effects/expl_particles/New()
+/obj/effect/effect/expl_particles/New()
 	..()
 	spawn (15)
 		del(src)
 	return
 
-/obj/effects/expl_particles/Move()
+/obj/effect/effect/expl_particles/Move()
 	..()
 	return
 
@@ -30,13 +30,13 @@
 	var/i = 0
 	for(i=0, i<src.number, i++)
 		spawn(0)
-			var/obj/effects/expl_particles/expl = new /obj/effects/expl_particles(src.location)
+			var/obj/effect/effect/expl_particles/expl = new /obj/effect/effect/expl_particles(src.location)
 			var/direct = pick(cardinal8)
 			for(i=0, i<pick(1;25,2;50,3,4;200), i++)
 				sleep(1)
 				step(expl,direct)
 
-/obj/effects/explosion
+/obj/effect/effect/explosion
 	name = "fire"
 	icon = '96x96.dmi'
 	icon_state = "explosion"
@@ -46,7 +46,7 @@
 	pixel_x = -32
 	pixel_y = -32
 
-/obj/effects/explosion/New()
+/obj/effect/effect/explosion/New()
 	..()
 	spawn (10)
 		del(src)
@@ -60,7 +60,7 @@
 	else location = get_turf(loca)
 
 /datum/effect/system/explosion/proc/start()
-	new/obj/effects/explosion( location )
+	new/obj/effect/effect/explosion( location )
 	var/datum/effect/system/expl_particles/P = new/datum/effect/system/expl_particles()
 	P.set_up(10,location)
 	P.start()

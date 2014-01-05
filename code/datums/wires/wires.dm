@@ -10,7 +10,6 @@ var/list/same_wires = list()
 var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", "gold", "gray", "cyan", "navy", "purple", "pink")
 
 /datum/wires
-
 	var/random = 0 // Will the wires be different for every single instance.
 	var/atom/holder = null // The holder
 	var/holder_type = null // The holder type; used to make sure that the holder is the correct type.
@@ -72,13 +71,13 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 		html = GetInteractWindow()
 	if(html)
 		user.set_machine(holder)
-	//user << browse(html, "window=wires;size=[window_x]x[window_y]")
-	//onclose(user, "wires")
 	if(holder)
-		var/datum/browser/popup = new(user, "wires", holder.name, window_x, window_y)
+		user << browse(html, "window=wires;size=[window_x]x[window_y]")
+		onclose(user, "wires")
+		/*var/datum/browser/popup = new(user, "wires", holder.name, window_x, window_y)
 		popup.set_content(html)
 		popup.set_title_image(user.browse_rsc_icon(holder.icon, holder.icon_state))
-		popup.open()
+		popup.open()*/
 
 /datum/wires/proc/GetInteractWindow()
 	var/html = "" //"<div class='block'>"
@@ -193,6 +192,8 @@ var/const/POWER = 8
 		return
 	UpdatePulsed(index)
 
+
+
 /datum/wires/proc/GetIndex(var/colour)
 	if(wires[colour])
 		var/index = wires[colour]
@@ -244,7 +245,6 @@ var/const/POWER = 8
 
 
 /datum/wires/proc/Pulse(var/obj/item/device/assembly/signaler/S)
-
 	for(var/colour in signallers)
 		if(S == signallers[colour])
 			PulseColour(colour)
@@ -271,6 +271,10 @@ var/const/POWER = 8
 	var/r = rand(1, wires.len)
 	CutWireIndex(r)
 
+/datum/wires/proc/RandomPulse()
+	var/r = rand(1, wires.len)
+	PulseIndex(r)
+
 /datum/wires/proc/CutAll()
 	for(var/i = 1; i < MAX_FLAG && i < (1 << wire_count); i += i)
 		CutWireIndex(i)
@@ -279,3 +283,18 @@ var/const/POWER = 8
 	if(wires_status == (1 << wire_count) - 1)
 		return 1
 	return 0
+
+
+proc/IsWiresHackingTool(var/obj/item/I)
+	return (istype(I, /obj/item/weapon/wirecutters) || istype(I, /obj/item/device/assembly) || istype(I, /obj/item/device/multitool))
+
+proc/GetWireColorByFlag(var/flag, var/holder_type)
+	var/list/wires = same_wires[holder_type]
+	if(!wires.len)
+		return null
+
+	for(var/wire in wires)
+		if(wires[wire] == flag)
+			return wire
+
+	return null

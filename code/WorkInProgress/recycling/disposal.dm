@@ -4,18 +4,21 @@
 // Once full (~1 atm), uses air resv to flush items into the pipes
 // Automatically recharges air (unless off), will flush when ready if pre-set
 // Can hold items and human size things, no other draggables
+/obj/structure/disposal
+	icon = 'icons/obj/pipes/disposal.dmi'
+
 
 /obj/machinery/disposal
 	name = "disposal unit"
 	desc = "A pneumatic waste disposal unit."
-	icon = 'disposal.dmi'
+	icon = 'icons/obj/pipes/disposal.dmi'
 	icon_state = "disposal"
 	anchored = 1
 	density = 1
 	var/datum/gas_mixture/air_contents	// internal reservoir
 	var/mode = 1	// item mode 0=off 1=charging 2=charged
 	var/flush = 0	// true if flush handle is pulled
-	var/obj/structure/disposalpipe/trunk/trunk = null // the attached pipe trunk
+	var/obj/structure/disposal/pipe/trunk/trunk = null // the attached pipe trunk
 	var/flushing = 0	// true if flushing in progress
 	networking = 2
 	security = 1
@@ -94,7 +97,7 @@
 					if(do_after(user,20))
 						if(!src || !W.isOn()) return
 						user << "You sliced the floorweld off the disposal unit."
-						var/obj/structure/disposalconstruct/C = new (src.loc)
+						var/obj/structure/disposal/construct/C = new (src.loc)
 						C.ptype = 6 // 6 = disposal unit
 						C.anchored = 1
 						C.density = 1
@@ -360,7 +363,7 @@
 		flushing = 1
 		flick("disposal-flush", src)
 
-		var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
+		var/obj/structure/disposal/holder/H = new()	// virtual holder object which actually
 											// travels through the pipes.
 
 		H.init(src)	// copy the contents of disposer to holder
@@ -391,7 +394,7 @@
 
 	// called when holder is expelled from a disposal
 	// should usually only occur if the pipe network is modified
-	proc/expel(var/obj/structure/disposalholder/H)
+	proc/expel(var/obj/structure/disposal/holder/H)
 
 		var/turf/target
 		playsound(src, 'hiss.ogg', 50, 0, 0)
@@ -454,7 +457,7 @@
 		flushing = 1
 		flick("intake-closing", src)
 		//var/deliveryCheck = 0
-		var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
+		var/obj/structure/disposal/holder/H = new()	// virtual holder object which actually
 													// travels through the pipes.
 		/*for(var/obj/structure/bigDelivery/O in src)
 			deliveryCheck = 1
@@ -507,7 +510,7 @@
 				if(do_after(user,20))
 					if(!src || !W.isOn()) return
 					user << "<span class='notice'>You sliced the floorweld off the delivery chute.</span>"
-					var/obj/structure/disposalconstruct/C = new (loc)
+					var/obj/structure/disposal/construct/C = new (loc)
 					C.ptype = 8 // 8 =  Delivery chute
 					C.update()
 					C.anchored = 1
@@ -523,7 +526,7 @@
 // contents will be items flushed by the disposal
 // this allows the gas flushed to be tracked
 
-/obj/structure/disposalholder
+/obj/structure/disposal/holder
 	invisibility = 101
 	var/datum/gas_mixture/gas = null	// gas used to flush, will appear at exit point
 	var/active = 0	// true if the holder is moving, otherwise inactive
@@ -564,10 +567,10 @@
 	// movement process, persists while holder is moving through pipes
 	proc/process()
 		sleep(1)
-		var/obj/structure/disposalpipe/last
+		var/obj/structure/disposal/pipe/last
 		while(active)
 			sleep(1)		// was 1
-			var/obj/structure/disposalpipe/curr = loc
+			var/obj/structure/disposal/pipe/curr = loc
 			last = curr
 			curr = curr.transfer(src)
 			if(!curr)
@@ -592,7 +595,7 @@
 		if(!(dir & (UP|DOWN)))			// |flip the movement direction
 			fdir = turn(dir, 180)		// |
 
-		for(var/obj/structure/disposalpipe/P in T)
+		for(var/obj/structure/disposal/pipe/P in T)
 			if(fdir & P.dpdir)		// find pipe direction mask that matches flipped dir
 				return P
 		// if no matching pipe, return null
@@ -600,7 +603,7 @@
 
 	// merge two holder objects
 	// used when a a holder meets a stuck holder
-	proc/merge(var/obj/structure/disposalholder/other)
+	proc/merge(var/obj/structure/disposal/holder/other)
 		for(var/atom/movable/AM in other)
 			AM.loc = src		// move everything in other holder to this one
 			if(ismob(AM))
@@ -627,9 +630,7 @@
 		return
 
 // Disposal pipes
-
-/obj/structure/disposalpipe
-	icon = 'disposal.dmi'
+/obj/structure/disposal/pipe
 	name = "disposal pipe"
 	desc = "An underfloor disposal pipe."
 	anchored = 1
@@ -652,7 +653,7 @@
 	// pipe is deleted
 	// ensure if holder is present, it is expelled
 	Del()
-		var/obj/structure/disposalholder/H = locate() in src
+		var/obj/structure/disposal/holder/H = locate() in src
 		if(H)
 			// holder was present
 			H.active = 0
@@ -680,20 +681,20 @@
 	// transfer the holder through this pipe segment
 	// overriden for special behaviour
 	//
-	proc/transfer(var/obj/structure/disposalholder/H)
+	proc/transfer(var/obj/structure/disposal/holder/H)
 		var/nextdir = nextdir(H.dir)
 		H.dir = nextdir
 		var/turf/T = H.nextloc()
-		var/obj/structure/disposalpipe/P = H.findpipe(T)
+		var/obj/structure/disposal/pipe/P = H.findpipe(T)
 
 		if(P)
 			// find other holder in next loc, if inactive merge it with current
-			var/obj/structure/disposalholder/H2 = locate() in P
+			var/obj/structure/disposal/holder/H2 = locate() in P
 			if(H2 && !H2.active)
 				H.merge(H2)
 
 			H.loc = P
-			if((P.dir & (P.dir - 1)) || istype(P,/obj/structure/disposalpipe/crossZ) || istype(P,/obj/structure/disposalpipe/junction))
+			if((P.dir & (P.dir - 1)) || istype(P,/obj/structure/disposal/pipe/crossZ) || istype(P,/obj/structure/disposal/pipe/junction))
 				for(var/mob/M in H)
 					if(prob(40)) M.weakened += 1
 					if(prob(5)) M.paralysis += 2
@@ -753,7 +754,7 @@
 	// called when there is a break in the pipe
 	//
 
-	proc/expel(var/obj/structure/disposalholder/H, var/turf/T, var/direction)
+	proc/expel(var/obj/structure/disposal/holder/H, var/turf/T, var/direction)
 
 		var/turf/target
 
@@ -811,11 +812,11 @@
 		if(remains)
 			for(var/D in cardinal)
 				if(D & dpdir)
-					var/obj/structure/disposalpipe/broken/P = new(src.loc)
+					var/obj/structure/disposal/pipe/broken/P = new(src.loc)
 					P.dir = D
 
 		src.invisibility = 101	// make invisible (since we won't delete the pipe immediately)
-		var/obj/structure/disposalholder/H = locate() in src
+		var/obj/structure/disposal/holder/H = locate() in src
 		if(H)
 			// holder was present
 			H.active = 0
@@ -897,7 +898,7 @@
 	// called when pipe is cut with welder
 	proc/welded()
 
-		var/obj/structure/disposalconstruct/C = new (src.loc)
+		var/obj/structure/disposal/construct/C = new (src.loc)
 		switch(base_icon_state)
 			if("pipe-s")
 				C.ptype = 0
@@ -919,11 +920,11 @@
 
 // *** TEST verb
 //client/verb/dispstop()
-//	for(var/obj/structure/disposalholder/H in world)
+//	for(var/obj/structure/disposal/holder/H in world)
 //		H.active = 0
 
 // a straight or bent segment
-/obj/structure/disposalpipe/segment
+/obj/structure/disposal/pipe/segment
 	icon_state = "pipe-s"
 
 	New()
@@ -937,7 +938,7 @@
 		return
 
 
-/obj/structure/disposalpipe/crossZ
+/obj/structure/disposal/pipe/crossZ
 
 	New()
 		..()
@@ -954,14 +955,14 @@
 			return dpdir & (NORTH|WEST|EAST|SOUTH)
 		return dpdir & (UP|DOWN)
 
-/obj/structure/disposalpipe/crossZ/up
+/obj/structure/disposal/pipe/crossZ/up
 	icon_state = "pipe-u"
 
-/obj/structure/disposalpipe/crossZ/down
+/obj/structure/disposal/pipe/crossZ/down
 	icon_state = "pipe-d"
 
 //a three-way junction with dir being the dominant direction
-/obj/structure/disposalpipe/junction
+/obj/structure/disposal/pipe/junction
 	icon_state = "pipe-j1"
 
 	New()
@@ -1008,7 +1009,7 @@
 
 
 //a trunk joining to a disposal bin or outlet on the same turf
-/obj/structure/disposalpipe/trunk
+/obj/structure/disposal/pipe/trunk
 	icon_state = "pipe-t"
 	var/obj/linked 	// the linked obj/machinery/disposal or obj/disposaloutlet
 
@@ -1027,7 +1028,7 @@
 		if(D)
 			linked = D
 
-		var/obj/structure/disposaloutlet/O = locate() in src.loc
+		var/obj/structure/disposal/outlet/O = locate() in src.loc
 		if(O)
 			linked = O
 
@@ -1038,13 +1039,13 @@
 	// if not entering from disposal bin,
 	// transfer to linked object (outlet or bin)
 
-	transfer(var/obj/structure/disposalholder/H)
+	transfer(var/obj/structure/disposal/holder/H)
 
 		if(H.dir == 64)		// we just entered from a disposer
 			return ..()		// so do base transfer proc
 		// otherwise, go to the linked object
 		if(linked)
-			var/obj/structure/disposaloutlet/O = linked
+			var/obj/structure/disposal/outlet/O = linked
 			if(istype(O))
 				O.expel(H)	// expel at outlet
 			else
@@ -1063,7 +1064,7 @@
 			return 0
 
 // a broken pipe
-/obj/structure/disposalpipe/broken
+/obj/structure/disposal/pipe/broken
 	icon_state = "pipe-b"
 	dpdir = 0		// broken pipes have dpdir=0 so they're not found as 'real' pipes
 					// i.e. will be treated as an empty turf
@@ -1082,10 +1083,9 @@
 
 // the disposal outlet machine
 
-/obj/structure/disposaloutlet
+/obj/structure/disposal/outlet
 	name = "disposal outlet"
 	desc = "An outlet for the pneumatic disposal system."
-	icon = 'disposal.dmi'
 	icon_state = "outlet"
 	density = 1
 	anchored = 1
@@ -1101,7 +1101,7 @@
 
 	// expel the contents of the holder object, then delete it
 	// called when the holder exits the outlet
-	proc/expel(var/obj/structure/disposalholder/H)
+	proc/expel(var/obj/structure/disposal/holder/H)
 
 		flick("outlet-open", src)
 		playsound(src, 'warning-buzzer.ogg', 50, 0, 0)
@@ -1142,7 +1142,7 @@
 				if(do_after(user,20))
 					if(!src || !W.isOn()) return
 					user << "You sliced the floorweld off the disposal outlet."
-					var/obj/structure/disposalconstruct/C = new (src.loc)
+					var/obj/structure/disposal/construct/C = new (src.loc)
 					C.ptype = 7 // 7 =  outlet
 					C.update()
 					C.anchored = 1

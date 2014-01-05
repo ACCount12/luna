@@ -13,6 +13,7 @@ Note: Must be placed west/left of and R&D console to function.
 	flags = OPENCONTAINER
 
 	var/max_material_storage = 100000 //All this could probably be done better with a list but meh.
+
 	var/m_amount = 0.0
 	var/g_amount = 0.0
 	var/gold_amount = 0.0
@@ -23,17 +24,19 @@ Note: Must be placed west/left of and R&D console to function.
 	var/clown_amount = 0.0
 	var/adamantine_amount = 0.0
 
+	var/efficiency_coeff
+
 
 /obj/machinery/r_n_d/protolathe/New()
 	..()
 	component_parts = list()
-	component_parts += new /obj/item/weapon/circuitboard/machine/protolathe(src)
-	component_parts += new /obj/item/weapon/stock_parts/matter_bin(src)
-	component_parts += new /obj/item/weapon/stock_parts/matter_bin(src)
-	component_parts += new /obj/item/weapon/stock_parts/manipulator(src)
-	component_parts += new /obj/item/weapon/stock_parts/manipulator(src)
-	component_parts += new /obj/item/weapon/reagent_containers/glass/beaker(src)
-	component_parts += new /obj/item/weapon/reagent_containers/glass/beaker(src)
+	component_parts += new /obj/item/weapon/circuitboard/machine/protolathe(null)
+	component_parts += new /obj/item/weapon/stock_parts/matter_bin(null)
+	component_parts += new /obj/item/weapon/stock_parts/matter_bin(null)
+	component_parts += new /obj/item/weapon/stock_parts/manipulator(null)
+	component_parts += new /obj/item/weapon/stock_parts/manipulator(null)
+	component_parts += new /obj/item/weapon/reagent_containers/glass/beaker(null)
+	component_parts += new /obj/item/weapon/reagent_containers/glass/beaker(null)
 	RefreshParts()
 
 /obj/machinery/r_n_d/protolathe/proc/TotalMaterials() //returns the total of all the stored materials. Makes code neater.
@@ -46,10 +49,17 @@ Note: Must be placed west/left of and R&D console to function.
 	var/datum/reagents/R = new/datum/reagents(T)		//Holder for the reagents used as materials.
 	reagents = R
 	R.my_atom = src
+
 	T = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 		T += M.rating
 	max_material_storage = T * 75000
+
+	T = 0
+	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+		T += M.rating
+	efficiency_coeff = T-1
+
 
 /obj/machinery/r_n_d/protolathe/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (shocked)

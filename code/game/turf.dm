@@ -1,19 +1,6 @@
 /turf/DblClick()
 	if(istype(usr, /mob/living/silicon/ai))
 		return move_camera_by_click()
-	if(usr.stat || usr.restrained() || usr.lying)
-		return ..()
-
-	if(usr.hand && istype(usr.l_hand, /obj/item/weapon/flamethrower))
-		var/turflist = getline(usr,src)
-		var/obj/item/weapon/flamethrower/F = usr.l_hand
-		F.flame_turf(turflist)
-		..()
-	else if(!usr.hand && istype(usr.r_hand, /obj/item/weapon/flamethrower))
-		var/turflist = getline(usr,src)
-		var/obj/item/weapon/flamethrower/F = usr.r_hand
-		F.flame_turf(turflist)
-		..()
 	return ..()
 
 /turf/New()
@@ -92,6 +79,7 @@
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(0)
+
 /turf/proc/ReplaceWithOpen()
 	if(!icon_old) icon_old = icon_state
 	var/turf/simulated/floor/W
@@ -536,15 +524,12 @@
 /turf/simulated/floor/blob_act()
 	return
 
-turf/simulated/floor/proc/update_icon()
-
-
 /turf/simulated/floor/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
 /turf/simulated/floor/attack_hand(mob/user as mob)
 
-	if ((!( user.canmove ) || user.restrained() || !( user.pulling )))
+	if (!user.canmove || user.restrained() || !user.pulling)
 		return
 	if (user.pulling.anchored)
 		return
@@ -586,31 +571,6 @@ turf/simulated/floor/proc/update_icon()
 	burnt = 0
 	levelupdate()
 
-/turf/simulated/floor/proc/break_tile_to_plating()
-	if(intact) to_plating()
-	break_tile()
-
-/turf/simulated/floor/proc/break_tile()
-	if(istype(src,/turf/simulated/floor/engine)) return
-	if(broken) return
-	if(!icon_old) icon_old = icon_state
-	if(intact)
-		src.icon_state = "damaged[pick(1,2,3,4,5)]"
-		broken = 1
-	else
-		src.icon_state = "platingdmg[pick(1,2,3)]"
-		broken = 1
-
-/turf/simulated/floor/proc/burn_tile()
-	if(istype(src,/turf/simulated/floor/engine)) return
-	if(broken || burnt) return
-	if(!icon_old) icon_old = icon_state
-	if(intact)
-		src.icon_state = "floorscorched[pick(1,2)]"
-	else
-		src.icon_state = "panelscorched"
-	burnt = 1
-
 /turf/simulated/floor/proc/restore_tile()
 	if(intact) return
 	intact = 1
@@ -623,66 +583,114 @@ turf/simulated/floor/proc/update_icon()
 	levelupdate()
 
 /turf/simulated/floor/attackby(obj/item/C as obj, mob/user as mob)
-
 	if(!C || !user)
 		return 0
 
-	if(istype(C, /obj/item/weapon/crowbar) && intact)
+	if(istype(C,/obj/item/weapon/light/bulb)) //only for light tiles
+		if(is_light_floor())
+			var/obj/item/stack/tile/light/T = floor_tile
+			if(T.state)
+				user.drop_item(C)
+				del(C)
+				T.state = C //fixing it by bashing it with a light bulb, fun eh?
+				update_icon()
+				user << "\blue You replace the light bulb."
+			else
+				user << "\blue The lightbulb seems fine, no need to replace it."
+
+	if(istype(C, /obj/item/weapon/crowbar) && (!(is_plating())))
 		if(broken || burnt)
 			user << "\red You remove the broken plating."
 		else
-			new /obj/item/stack/tile/metal(src)
+			if(is_wood_floor())
+				user << "\red You forcefully pry off the planks, destroying them in the process."
+			else
+				user << "\red You remove the [floor_tile.name]."
+				new floor_tile.type(src)
 
-		to_plating()
-		playsound(src.loc, 'Crowbar.ogg', 80, 1)
+		make_plating()
+		playsound(src.loc, 'sound/items/Crowbar.ogg', 80, 1)
+
+		return
+
+	if(istype(C, /obj/item/weapon/screwdriver) && is_wood_floor())
+		if(broken || burnt)
+			return
+		else
+			if(is_wood_floor())
+				user << "\red You unscrew the planks."
+				new floor_tile.type(src)
+
+		make_plating()
+		playsound(src.loc, 'sound/items/Screwdriver.ogg', 80, 1)
 
 		return
 
 	if(istype(C, /obj/item/stack/rods))
-		if (!src.intact)
-			if (C:amount >= 2)
-				if (istype(src,/turf/simulated/floor/open))
-					ReplaceWithLattice()
+		var/obj/item/stack/rods/R = C
+		if (is_plating())
+			if (R.amount >= 2)
+				user << "\blue Reinforcing the floor..."
+				if(do_after(user, 30) && R && R.amount >= 2 && is_plating())
+					ChangeTurf(/turf/simulated/floor/engine)
+					playsound(src.loc, 'sound/items/Deconstruct.ogg', 80, 1)
+					R.use(2)
 					return
-				else
-					user << "\blue Reinforcing the floor..."
-					if(do_after(user, 30))
-						ReplaceWithEngineFloor()
-						C:amount -= 2
-						if (C:amount <= 0)
-							user.u_equip(C)
-							del(C) //wtf
-						playsound(src.loc, 'Deconstruct.ogg', 80, 1)
 			else
 				user << "\red You need more rods."
 		else
 			user << "\red You must remove the plating first."
 		return
 
-	if(istype(C, /obj/item/stack/tile/metal) && !intact)
-		if(istype(src,/turf/simulated/floor/open)) //Act like space if open.
-			if(locate(/obj/structure/lattice, src))
-				var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
-				del(L)
-				playsound(src.loc, 'Genhit.ogg', 50, 1)
-				C:build(src)
-				C:amount--
-
-				if (C:amount < 1)
-					user.u_equip(C)
-					del(C)
-					return
-				return
+	if(istype(C, /obj/item/stack/tile))
+		if(is_plating())
+			if(!broken && !burnt)
+				var/obj/item/stack/tile/T = C
+				floor_tile = new T.type
+				intact = 1
+				if(istype(T,/obj/item/stack/tile/light))
+					var/obj/item/stack/tile/light/L = T
+					var/obj/item/stack/tile/light/F = floor_tile
+					F.state = L.state
+					F.on = L.on
+				if(istype(T,/obj/item/stack/tile/grass))
+					for(var/direction in cardinal)
+						if(istype(get_step(src,direction),/turf/simulated/floor))
+							var/turf/simulated/floor/FF = get_step(src,direction)
+							FF.update_icon() //so siding gets updated properly
+				else if(istype(T,/obj/item/stack/tile/carpet))
+					for(var/direction in list(1,2,4,8,5,6,9,10))
+						if(istype(get_step(src,direction),/turf/simulated/floor))
+							var/turf/simulated/floor/FF = get_step(src,direction)
+							FF.update_icon() //so siding gets updated properly
+				T.use(1)
+				update_icon()
+				levelupdate()
+				playsound(src.loc, 'sound/weapons/Genhit.ogg', 50, 1)
 			else
-				user << "\red The plating is going to need some support."
+				user << "\blue This section is too damaged to support a tile. Use a welder to fix the damage."
+
+	if(istype(C, /obj/item/weapon/shovel))
+		if(is_grass_floor())
+			new /obj/item/weapon/ore/glass(src)
+			new /obj/item/weapon/ore/glass(src) //Make some sand if you shovel grass
+			user << "\blue You shovel the grass."
+			make_plating()
 		else
-			restore_tile()
-			var/obj/item/stack/tile/metal/T = C
-			playsound(src.loc, 'Genhit.ogg', 50, 1)
-			if(--T.amount < 1)
-				user.u_equip(C)
-				del(T)
-				return
+			user << "\red You cannot shovel this."
+
+	if(istype(C, /obj/item/weapon/weldingtool))
+		var/obj/item/weapon/weldingtool/welder = C
+		if(welder.isOn() && (is_plating()))
+			if(broken || burnt)
+				if(welder.remove_fuel(0,user))
+					user << "\red You fix some dents on the broken plating."
+					playsound(src.loc, 'sound/items/Welder.ogg', 80, 1)
+					icon_state = "plating"
+					burnt = 0
+					broken = 0
+				else
+					user << "\blue You need more welding fuel to complete this task."
 
 	if(istype(C, /obj/item/weapon/table_parts))
 		spawn()
@@ -692,7 +700,7 @@ turf/simulated/floor/proc/update_icon()
 				new /datum/construction_UI/table(src, user, C)
 
 	if(istype(C, /obj/item/weapon/cable_coil))
-		if(!intact)
+		if(is_plating())
 			var/obj/item/weapon/cable_coil/coil = C
 			coil.LayOnTurf(src, user)
 		else
@@ -781,7 +789,7 @@ turf/simulated/floor/proc/update_icon()
 	if (!A.last_move)
 		return
 
-	if (istype(A, /mob/) && src.x > 2 && src.x < world.maxx - 1)
+	if (istype(A, /mob) && src.x > 2 && src.x < world.maxx - 1)
 		var/mob/M = A
 		var/prob_slip = 5
 
@@ -808,7 +816,7 @@ turf/simulated/floor/proc/update_icon()
 
 		else //not by a wall or anything or can't move, they just keep going
 			spawn(5)
-				if (A && !A.anchored && A.loc == src)
+				if (A && !A.anchored && A.loc == src && !A.pulledby)
 					if(!M.inertia_dir && M.last_move) //they keep moving the same direction
 						M.inertia_dir = M.last_move
 
@@ -836,14 +844,14 @@ turf/simulated/floor/proc/update_icon()
 			A.y = 3
 
 		if(A.z == 5)
-			if(prob(30))
+			if(prob(60))
 				A.z = getZLevel(Z_SPACE)
 			else
 				A.z = getZLevel(Z_STATION)
 		else
 			A.z = getZLevel(Z_SPACE)
-		spawn (0)
-			if ((A && A.loc))
+		spawn(0)
+			if (A && A.loc)
 				A.loc.Entered(A)
 
 //Copied from old code
@@ -851,7 +859,7 @@ turf/simulated/floor/proc/update_icon()
 	if(level==Z_STATION)
 		return pick(1, 2, 3, 4)
 	else if(level==Z_SPACE)
-		return pick(5, 8)
+		return pick(5, 7, 8)
 	return 1//Default
 
 	//Old function:
@@ -868,7 +876,7 @@ turf/simulated/floor/proc/update_icon()
 
 
 //attempted bugfix for engine vent being derp, probably has other uses too
-turf/proc/RebuildZone()
+/turf/proc/RebuildZone()
 	var/zone/Z = src.zone
 	var/turf/T = Z.starting_tile
 	del Z

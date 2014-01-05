@@ -422,7 +422,7 @@
 			reagents.add_reagent("nutriment", 1+round((potency / 6), 1))
 			bitesize = 1+round(reagents.total_volume / 2, 1)
 
-/*obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
+/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
 	seed = "/obj/item/seeds/pumpkinseed"
 	name = "pumpkin"
 	desc = "It's large and scary."
@@ -437,11 +437,11 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if(istype(W, /obj/item/weapon/surgical/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife) || istype(W, /obj/item/weapon/kitchenknife) || istype(W, /obj/item/weapon/melee/energy))
+	if(istype(W, /obj/item/weapon/surgical/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife) || /*istype(W, /obj/item/weapon/kitchenknife) ||*/ istype(W, /obj/item/weapon/melee/energy))
 		user.show_message("<span class='notice'>You carve a face into [src]!</span>", 1)
 		new /obj/item/clothing/head/pumpkinhead (user.loc)
 		del(src)
-		return*/
+		return
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/lime
 	seed = "/obj/item/seeds/limeseed"
@@ -668,7 +668,7 @@
 			reagents.add_reagent("nutriment", 1+round((potency / 25), 1))
 			bitesize = 1+round(reagents.total_volume / 2, 1)
 
-/*obj/item/weapon/reagent_containers/food/snacks/grown/grass
+/obj/item/weapon/reagent_containers/food/snacks/grown/grass
 	seed = "/obj/item/seeds/grassseed"
 	name = "grass"
 	desc = "Green and lush."
@@ -682,7 +682,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/grass/attack_self(mob/user as mob)
 	user << "<span class='notice'>You prepare the astroturf.</span>"
 	new/obj/item/stack/tile/grass(user.loc)
-	del(src)*/
+	del(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod
 	seed = "/obj/item/seeds/kudzuseed"

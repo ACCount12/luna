@@ -105,8 +105,8 @@
 			name += " - Missing Gloves"
 			desc += " This poster is about the uproar that followed Nanotrasen's financial cuts towards insulated-glove purchases."
 		if(10)
-			name += " - Hacking Guide"
-			desc += " This poster details the internal workings of the common Nanotrasen airlock."
+			name += " - Hacking Guide" // SUPERPRIZE!
+			desc += " This poster details the internal workings of the common Nanotrasen airlock.[get_airlock_wires_text()]"
 		else
 			name = "This shit just bugged. Report it to Agouri - polyxenitopalidou@gmail.com"
 			desc = "Why are you still here?"

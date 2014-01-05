@@ -56,7 +56,7 @@
 /area/proc/firealert()
 	if(src.name == "Space") //no fire alarms in space
 		return
-	if (!( src.fire ))
+	if (!src.fire)
 		src.fire = 1
 		//src.update_icon()				//Commented by Strumpetplaya - Alarm Change, no longer necessary.
 		src.mouse_opacity = 0
@@ -167,7 +167,7 @@
 /area/proc/partyalert()
 	if(src.name == "Space") //no parties in space!!!
 		return
-	if (!( src.party ))
+	if (!src.party)
 		src.party = 1
 		src.update_icon()
 		src.mouse_opacity = 0

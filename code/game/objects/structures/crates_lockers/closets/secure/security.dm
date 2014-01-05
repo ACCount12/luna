@@ -17,7 +17,7 @@
 		new /obj/item/weapon/gun/energy/gun/newgun(src)
 		new /obj/item/weapon/storage/box/id(src)
 //		new /obj/item/clothing/suit/captunic(src)
-//		new /obj/item/clothing/head/helmet/cap(src)
+		new /obj/item/clothing/head/helmet/cap(src)
 		new /obj/item/clothing/under/rank/captain(src)
 		new /obj/item/clothing/under/rank/captain/suit(src)
 		new /obj/item/clothing/suit/armor/vest(src)

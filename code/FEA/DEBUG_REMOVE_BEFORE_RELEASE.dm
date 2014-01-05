@@ -513,7 +513,7 @@ mob
 		fire_report()
 			set category = "Debug"
 			usr << "\b \red Fire Report"
-			for(var/obj/hotspot/flame in world)
+			for(var/obj/effect/hotspot/flame in world)
 				usr << "[flame.x],[flame.y]: [flame.temperature]K, [flame.volume] L - [flame.loc:air:temperature]"
 
 		process_cycle()

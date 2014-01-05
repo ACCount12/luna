@@ -490,7 +490,7 @@
 
 	new /obj/item/weapon/storage/firstaid(Tsec)
 
-	new /obj/item/device/prox_sensor(Tsec)
+	new /obj/item/device/assembly/prox_sensor(Tsec)
 
 	new /obj/item/device/healthanalyzer(Tsec)
 
@@ -562,14 +562,14 @@
  */
 
 /obj/item/weapon/robot_assembly/firstaid_arm/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if ((istype(W, /obj/item/device/healthanalyzer)) && (!src.build_step))
+	if (istype(W, /obj/item/device/healthanalyzer) && (!src.build_step))
 		src.build_step++
 		user << "You add the health sensor to [src]!"
 		src.name = "First aid/robot arm/health analyzer assembly"
 		src.overlays += image('aibots.dmi', "na_scanner")
 		del(W)
 
-	else if ((istype(W, /obj/item/device/prox_sensor)) && (src.build_step == 1))
+	else if (isprox(W) && (src.build_step == 1))
 		src.build_step++
 		user << "You complete the Medibot! Beep boop."
 		var/obj/machinery/bot/medbot/S = new /obj/machinery/bot/medbot

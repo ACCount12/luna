@@ -5,18 +5,6 @@
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "ore"
 
-/obj/item/weapon/ore/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if (istype(O, /obj/item/weapon/satchel/ore))
-		var/obj/item/weapon/satchel/ore/S = O
-		for (var/obj/item/weapon/ore/G in src.loc)
-			if (S.contents.len < S.capacity)
-				S.contents += G;
-			else
-				user << "\blue The mining satchel is full."
-				return
-		return
-	..()
-
 /obj/item/weapon/ore/uranium
 	name = "uranium ore"
 	icon_state = "Uranium ore"

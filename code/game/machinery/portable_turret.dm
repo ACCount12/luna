@@ -52,7 +52,6 @@
 
 /obj/machinery/porta_turret/New()
 	..()
-	icon_state = "[lasercolor]grey_target_prism"
 	//Sets up a spark system
 	spark_system = new /datum/effect/effect/system/spark_spread
 	spark_system.set_up(5, 0, src)
@@ -134,6 +133,36 @@
 	del(cover)
 	..()
 
+/obj/machinery/porta_turret/update_icon()
+	if(!anchored)
+		icon_state = "turretCover"
+		return
+	if(stat & BROKEN)
+		icon_state = "[lasercolor]destroyed_target_prism"
+		return
+
+	if(powered())
+		if(on)
+			if(iconholder)
+				//lasers have a orange icon
+				icon_state = "[lasercolor]orange_target_prism"
+			else
+				//almost everything has a blue icon
+				icon_state = "[lasercolor]target_prism"
+		else
+			icon_state = "[lasercolor]grey_target_prism"
+
+/obj/machinery/porta_turret/power_change()
+	if(stat & BROKEN)
+		update_icon()
+		return
+
+	if(powered())
+		stat &= ~NOPOWER
+	else
+		sleep(rand(0, 15))
+		stat |= NOPOWER
+	update_icon()
 
 /obj/machinery/porta_turret/attack_ai(mob/user)
 	return attack_hand(user)
@@ -209,31 +238,6 @@
 		if("shootall")
 			stun_all = !stun_all
 	updateUsrDialog()
-
-
-/obj/machinery/porta_turret/power_change()
-
-	if(!anchored)
-		icon_state = "turretCover"
-		return
-	if(stat & BROKEN)
-		icon_state = "[lasercolor]destroyed_target_prism"
-	else
-		if( powered() )
-			if(on)
-				if(iconholder)
-					//lasers have a orange icon
-					icon_state = "[lasercolor]orange_target_prism"
-				else
-					//almost everything has a blue icon
-					icon_state = "[lasercolor]target_prism"
-			else
-				icon_state = "[lasercolor]grey_target_prism"
-			stat &= ~NOPOWER
-		else
-			spawn(rand(0, 15))
-				icon_state = "[lasercolor]grey_target_prism"
-				stat |= NOPOWER
 
 
 
@@ -337,6 +341,7 @@
 			del (Proj)
 			sleep(100)
 			disabled = 0
+	update_icon()
 
 
 /obj/machinery/porta_turret/emp_act(severity)
@@ -367,7 +372,7 @@
 	health = 0
 	density = 0
 	stat |= BROKEN	//enables the BROKEN bit
-	icon_state = "[lasercolor]destroyed_target_prism"
+	update_icon()
 	invisibility = 0
 	spark_system.start()	//creates some sparks because they look cool
 	density = 1
@@ -375,12 +380,50 @@
 
 
 
+
+/obj/machinery/porta_turret/proc/is_target(var/mob/living/M)
+	var/dst = get_dist(src, M)	//if it's too far away, why bother?
+	if(dst > 7)
+		return 0
+
+	if(M.stat == DEAD || (FAKEDEATH in M.status_flags))
+		return 0
+
+	if(emagged)
+		return 1
+
+	if(istype(M, /mob/living/carbon/alien) && check_anomalies) //get those fukken xenos
+		return 1
+
+	if(M.stat || M.handcuffed)
+		return 0
+
+	if(ai)	//If it's set to attack all nonsilicons, target them!
+		if(M.lying)
+			if(lasercolor)
+				return 0
+			else
+				return 2
+		else
+			return 1
+
+	if(istype(M, /mob/living/carbon/human))	//if the target is a human, analyze threat level
+		if(assess_perp(M) < 4)
+			return 0
+
+	else if(istype(M, /mob/living/carbon/monkey))
+		return 0
+
+	if(M.lying)	//if the perp is lying down, it's still a target but a less-important target
+		return 2
+
+	return 1	//if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
+
 /obj/machinery/porta_turret/process()
 	//the main machinery process
-
 	set background = 1
 
-	if(cover == null && anchored)	//if it has no cover and is anchored
+	if(cover == null && anchored && !istype(src, /obj/machinery/porta_turret/machinegun))	//if it has no cover and is anchored
 		if(stat & BROKEN)	//if the turret is borked
 			del(cover)	//delete its cover, assuming it has one. Workaround for a pesky little bug
 		else
@@ -406,45 +449,12 @@
 			if(!C.stat)
 				targets += C*/
 
-	for(var/mob/living/carbon/C in view(7,src))	//loops through all living carbon-based lifeforms in view(12)
-		if(istype(C, /mob/living/carbon/alien) && check_anomalies) //git those fukken xenos
-			if(!C.stat)	//if it's dead/dying, there's no need to keep shooting at it.
+	for(var/mob/living/carbon/C in view(7,src))	//loops through all living carbon-based lifeforms in view
+		switch(is_target(C))
+			if(1)
 				targets += C
-
-		else
-			if(emagged)	//if emagged, HOLY SHIT EVERYONE IS DANGEROUS beep boop beep
-				targets += C
-			else
-				if(C.stat || C.handcuffed)	//if the perp is handcuffed or dead/dying, no need to bother really
-					continue				//move onto next potential victim!
-
-				var/dst = get_dist(src, C)	//if it's too far away, why bother?
-				if(dst > 7)
-					continue
-
-				if(ai)	//If it's set to attack all nonsilicons, target them!
-					if(C.lying)
-						if(lasercolor)
-							continue
-						else
-							secondarytargets += C
-							continue
-					else
-						targets += C
-						continue
-
-				if(istype(C, /mob/living/carbon/human))	//if the target is a human, analyze threat level
-					if(assess_perp(C) < 4)
-						continue	//if threat level < 4, keep going
-
-				else if(istype(C, /mob/living/carbon/monkey))
-					continue	//Don't target monkeys or borgs/AIs you dumb shit
-
-				if(C.lying)		//if the perp is lying down, it's still a target but a less-important target
-					secondarytargets += C
-					continue
-
-				targets += C	//if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
+			if(2)
+				secondarytargets += C
 
 	if(targets.len > 0)	//if there are targets to shoot
 
@@ -504,7 +514,7 @@
 	cover.icon_state = "turretCover"
 	raised = 0
 	invisibility = 2
-	icon_state = "[lasercolor]grey_target_prism"
+	update_icon()
 
 
 /obj/machinery/porta_turret/proc/assess_perp(mob/living/carbon/human/perp)
@@ -594,12 +604,14 @@
 		return
 
 	//any emagged turrets will shoot extremely fast! This not only is deadly, but drains a lot power!
-	if(iconholder)
-		icon_state = "[lasercolor]orange_target_prism"
-	else
-		icon_state = "[lasercolor]target_prism"
+	update_icon()
+
 	if(sound)
-		playsound(loc, 'sound/weapons/Taser.ogg', 75, 1)
+		switch(sound)
+			if(1)
+				playsound(loc, 'sound/weapons/Taser.ogg', 75, 1)
+			if(2)
+				playsound(loc, 'sound/weapons/Gunshot_smg.ogg', 75, 1)
 	var/obj/item/projectile/A
 	if(emagged)
 		A = new eprojectile(loc)
@@ -614,6 +626,7 @@
 	A.current = T
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
+	A.original = target
 	spawn( 1 )
 		A.process()
 
@@ -719,7 +732,7 @@
 				return
 
 		if(4)
-			if(istype(I, /obj/item/device/prox_sensor))
+			if(isprox(I))
 				build_step = 5
 				user << "<span class='notice'>You add the prox sensor to the turret.</span>"
 				user.before_take_item(I)
@@ -1000,3 +1013,77 @@ Status: []<BR>"},
 	New()
 		installation = new/obj/item/weapon/gun/energy/laser(loc)
 		..()
+
+
+/obj/machinery/porta_turret/machinegun
+	name = "machine gun turret"
+	desc = "It really packs a bunch."
+
+	icon_state = "syndieturret0"
+	layer = 4
+	invisibility = 0
+	emagged = 1
+	req_access = list(access_syndicate)
+
+	raised = 1
+	health = 160
+
+	reqpower = 0
+	sound = 2
+
+/obj/machinery/porta_turret/machinegun/popDown()
+	return
+/obj/machinery/porta_turret/machinegun/popUp()
+	return
+
+/obj/machinery/porta_turret/machinegun/update_icon()
+	if(stat & BROKEN)
+		icon_state = "syndieturret2"
+	else if(health > 40)
+		icon_state = "syndieturret0"
+	else
+		icon_state = "syndieturret1"
+
+/obj/machinery/porta_turret/machinegun/attack_ai(mob/user)
+	return
+
+/obj/machinery/porta_turret/machinegun/attack_hand(mob/user)
+	return
+
+/obj/machinery/porta_turret/machinegun/New()
+	..()
+	del(cover)
+	installation = /obj/item/weapon/gun/projectile/automatic/l6_saw
+	projectile = /obj/item/projectile/bullet/midbullet
+	eprojectile = /obj/item/projectile/bullet/midbullet
+
+/obj/machinery/porta_turret/machinegun/is_target(var/mob/living/M)
+	if(get_dist(src, M) > 7)
+		return 0
+
+	if(M.stat == DEAD || (FAKEDEATH in M.status_flags))
+		return 0
+
+	if(istype(M, /mob/living/carbon/human))
+		var/mob/living/carbon/human/C = M
+		if(istype(C.wear_id, /obj/item/weapon/card/id/syndicate) || istype(C.wear_id, /obj/item/device/pda/syndicate))
+			return 0
+
+		if(istype(C.belt, /obj/item/device/pda/syndicate))
+			return 0
+
+		if(istype(C.wear_suit, /obj/item/clothing/suit/space/rig/syndi) || istype(C.wear_suit, /obj/item/clothing/suit/space/syndicate))
+			return 0
+
+		if(istype(C.head, /obj/item/clothing/head/helmet/space/rig/syndi) || istype(C.head, /obj/item/clothing/head/helmet/space/syndicate))
+			return 0
+
+		if(istype(C.wear_suit, /obj/item/clothing/suit/syndicatefake) && prob(90))
+			return 0
+
+		if(istype(C.head, /obj/item/clothing/head/syndicatefake) && prob(90)) // Almost like real!
+			return 0
+
+		return 1
+	else
+		return 1 // Safety first!

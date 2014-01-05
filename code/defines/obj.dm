@@ -194,7 +194,7 @@
 	icon = 'device.dmi'
 
 /obj/item/device/detective_scanner
-	name = "Scanner"
+	name = "scanner"
 	desc = "Used to scan objects for DNA and fingerprints"
 	icon_state = "forensic0"
 	var/amount = 20.0
@@ -203,19 +203,6 @@
 	item_state = "electronic"
 	flags = FPRINT | CONDUCT | USEDELAY | NOHIT
 	slot_flags = SLOT_BELT
-
-
-/obj/item/device/infra
-	name = "Infrared Beam (Security)"
-	desc = "Emits a visible or invisible beam and is triggered when the beam is interrupted."
-	icon_state = "infrared0"
-	var/obj/beam/i_beam/first = null
-	var/state = 0.0
-	var/visible = 0.0
-	flags = FPRINT | CONDUCT
-	w_class = 2.0
-	item_state = "electronic"
-	m_amt = 150
 
 /obj/item/device/infra_sensor
 	name = "Infrared Sensor"
@@ -238,20 +225,6 @@
 	origin_tech = "magnets=2;engineering=2"
 	m_amt = 150
 
-/obj/item/device/multitool
-	name = "multitool"
-	icon_state = "multitool"
-	flags = FPRINT | CONDUCT
-	force = 5.0
-	w_class = 2.0
-	throwforce = 5.0
-	throw_range = 15
-	throw_speed = 3
-	origin_tech = "magnets=1;engineering=1"
-	desc = "You can use this on airlocks or APCs to try to hack them without cutting wires."
-	m_amt = 50
-	g_amt = 20
-
 // So far, its functionality is found only in code/game/machinery/doors/airlock.dm
 /obj/item/device/hacktool
 	name = "hacktool"
@@ -267,34 +240,22 @@
 	m_amt = 60
 	g_amt = 20
 
-/obj/item/device/prox_sensor
-	name = "Proximity Sensor"
-	icon_state = "motion0"
-	var/state = 0.0
-	var/timing = 0.0
-	var/time = null
-	flags = FPRINT | CONDUCT
-	w_class = 2.0
-	item_state = "electronic"
-	m_amt = 300
-
-
-/obj/item/device/timer
-	name = "timer"
-	icon_state = "timer0"
-	item_state = "electronic"
-	var/timing = 0.0
-	var/time = null
-	flags = FPRINT | CONDUCT
-	w_class = 2.0
-	m_amt = 100
-
-
 /obj/effect/landmark
 	name = "landmark"
 	icon = 'screen1.dmi'
 	icon_state = "x2"
 	anchored = 1.0
+
+var/list/ai_cam_marks = list()
+
+/obj/effect/landmark/aicam/New()
+	..()
+	spawn(5)
+		ai_cam_marks[src.name] = src
+
+/obj/effect/landmark/aicam/Del()
+	ai_cam_marks -= src.name
+	..()
 
 /obj/effect/landmark/tunderdome
 

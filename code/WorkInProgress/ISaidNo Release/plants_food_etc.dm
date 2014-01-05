@@ -1305,35 +1305,7 @@
 			src.icon_state = "donut2"
 			src.name = "frosted donut"
 
-/obj/item/weapon/reagent_containers/food/snacks/mushroom
-	name = "space mushroom"
-	desc = "A mushroom cap of Space Fungus. Probably tastes pretty bad."
-	icon_state = "mushroom"
-	amount = 1
-	//heal_amt = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/mushroom/amanita
-	name = "space mushroom"
-	desc = "A mushroom cap of Space Fungus. This one is quite different."
-	icon_state = "mushroom-M1"
-	amount = 1
-	//heal_amt = 3
-	New()
-		..()
-		reagents.add_reagent("amanitin", rand(5,50))
-
-/obj/item/weapon/reagent_containers/food/snacks/mushroom/psilocybin
-	name = "space mushroom"
-	desc = "A mushroom cap of Space Fungus. It's slightly more vibrant than usual."
-	icon_state = "mushroom-M2"
-	amount = 1
-	//heal_amt = 1
-	New()
-		..()
-		reagents.add_reagent("psylocybin", rand(5,50))
-
 // Foods
-
 /obj/item/weapon/reagent_containers/food/snacks/sandwich/meat_h
 	name = "manwich"
 	desc = "Human meat between two loaves of bread."
@@ -1469,30 +1441,6 @@
 	icon_state = "breadslice"
 	amount = 1
 	//heal_amt = 1
-
-	New()
-		..()
-		src.pixel_x += rand(-3,3)
-		src.pixel_y += rand(-3,3)
-
-/obj/item/weapon/reagent_containers/food/snacks/toastslice
-	name = "slice of toast"
-	desc = "Crispy cooked bread."
-	icon_state = "toast"
-	amount = 2
-	//heal_amt = 1
-
-	New()
-		..()
-		src.pixel_x += rand(-3,3)
-		src.pixel_y += rand(-3,3)
-
-/obj/item/weapon/reagent_containers/food/snacks/toastcheese
-	name = "cheese on toast"
-	desc = "A quick cheesy snack."
-	icon_state = "cheesetoast"
-	amount = 2
-	//heal_amt = 2
 
 	New()
 		..()
@@ -1667,33 +1615,6 @@
 	needspoon = 1
 	amount = 6
 	//heal_amt = 1
-
-/obj/item/weapon/reagent_containers/food/snacks/yoghurt/frozen
-	name = "frozen yoghurt"
-	desc = "A delightful tub of frozen yoghurt."
-	//heal_amt = 2
-
-	New()
-		var/datum/reagents/R = new/datum/reagents(20)
-		reagents = R
-		R.my_atom = src
-		R.add_reagent("cryostylane", 20)
-
-// Bad food
-
-/obj/item/weapon/reagent_containers/food/snacks/yuck
-	name = "?????"
-	desc = "How the hell did they manage to cook this abomination..?!"
-	icon_state = "yuck"
-	amount = 1
-	//heal_amt = 0
-
-/obj/item/weapon/reagent_containers/food/snacks/yuckburn
-	name = "smoldering mess"
-	desc = "This looks more like charcoal than food..."
-	icon_state = "burnt"
-	amount = 1
-	//heal_amt = 0
 
 // Misc Shit
 

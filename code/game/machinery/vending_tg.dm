@@ -378,7 +378,7 @@
 	return 1
 
 
-/obj/machinery/vending_tg/proc/shock(mob/user, prb)
+/obj/machinery/vending_tg/shock(mob/user, prb)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
 		return 0
 	if(!prob(prb))
@@ -386,10 +386,7 @@
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 	s.set_up(5, 1, src)
 	s.start()
-//	if(electrocute_mob(user, get_area(src), src, 0.7))
-//		return 1
-//	else
-//		return 0
+	return Electrocute(user)
 
 /*
  * Vending machine types
@@ -407,17 +404,6 @@
 	contraband = list()
 	premium = list()
 
-*/
-
-/*
-/obj/machinery/vending_tg/atmospherics //Commenting this out until someone ponies up some actual working, broken, and unpowered sprites - Quarxink
-	name = "Tank Vendor"
-	desc = "A vendor with a wide variety of masks and gas tanks."
-	icon = 'icons/obj/objects.dmi'
-	icon_state = "dispenser"
-	product_paths = "/obj/item/weapon/tank/oxygen;/obj/item/weapon/tank/plasma;/obj/item/weapon/tank/emergency_oxygen;/obj/item/weapon/tank/emergency_oxygen/engi;/obj/item/clothing/mask/breath"
-	product_amounts = "10;10;10;5;25"
-	vend_delay = 0
 */
 
 /obj/machinery/vending_tg/boozeomat
@@ -444,7 +430,7 @@
 /obj/machinery/vending_tg/assist
 	products = list(	/obj/item/device/assembly/prox_sensor = 5,/obj/item/device/assembly/igniter = 5,/obj/item/device/assembly/signaler = 5,
 						/obj/item/weapon/wirecutters = 2, /obj/item/weapon/cartridge/signal = 4)
-	contraband = list(/obj/item/device/flashlight = 5,/obj/item/device/assembly/timer = 2/*, /obj/item/device/assembly/voice = 2*/)
+	contraband = list(/obj/item/device/flashlight = 5,/obj/item/device/assembly/timer = 2, /obj/item/device/assembly/voice = 2)
 	product_ads = "Only the finest!;Have some tools.;The most robust equipment.;The finest gear in space!"
 
 /obj/machinery/vending_tg/coffee
@@ -550,10 +536,10 @@
 	icon_state = "sec"
 	icon_deny = "sec-deny"
 	req_access_txt = "1"
-	products = list(/obj/item/weapon/handcuffs = 16,/obj/item/weapon/grenade/flashbang = 8,/obj/item/device/flash = 8,/obj/item/weapon/melee/baton = 4,/obj/item/clothing/glasses/sunglasses = 2,
-					/obj/item/weapon/gun/energy/taser = 2, /obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,/obj/item/weapon/storage/box/evidence = 2)
+	products = list(/obj/item/weapon/handcuffs = 16,/obj/item/weapon/grenade/flashbang = 4, /obj/item/weapon/grenade/chem_grenade/teargas =4, /obj/item/device/flash = 8,/obj/item/weapon/melee/baton = 4,/obj/item/clothing/glasses/sunglasses = 2,
+					/obj/item/weapon/gun/energy/taser = 4, /obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,/obj/item/weapon/storage/box/evidence = 2)
 	contraband = list(/obj/item/kitchen/donut_box = 2, /obj/item/weapon/gun/energy/gun = 1)
-/*
+
 /obj/machinery/vending_tg/hydronutrients
 	name = "\improper NutriMax"
 	desc = "A plant nutrients vendor"
@@ -562,7 +548,7 @@
 	icon_state = "nutri"
 	icon_deny = "nutri-deny"
 	products = list(/obj/item/nutrient/ez = 35,/obj/item/nutrient/l4z = 25,/obj/item/nutrient/rh = 15,/obj/item/weapon/pestspray = 20,
-					/obj/item/weapon/reagent_containers/syringe = 5,/obj/item/weapon/storage/bag/plants = 5)
+					/obj/item/weapon/reagent_containers/syringe = 5,/obj/item/weapon/satchel/plants = 5)
 	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/ammonia = 10,/obj/item/weapon/reagent_containers/glass/bottle/diethylamine = 5)
 
 /obj/machinery/vending_tg/hydroseeds
@@ -580,7 +566,7 @@
 	contraband = list(/obj/item/seeds/amanitamycelium = 2,/obj/item/seeds/glowshroom = 2,/obj/item/seeds/libertymycelium = 2,/obj/item/seeds/nettleseed = 2,
 						/obj/item/seeds/plumpmycelium = 2,/obj/item/seeds/reishimycelium = 2)
 	premium = list(/obj/item/weapon/reagent_containers/spray/waterflower = 1)
-*/
+
 
 /obj/machinery/vending_tg/magivend
 	name = "\improper MagiVend"

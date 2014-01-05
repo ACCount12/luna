@@ -33,11 +33,11 @@
 		del(O)
 		return 1
 
-	/*else if(istype(O, /obj/item/stack/tile/grass))
+	else if(istype(O, /obj/item/stack/tile/grass))
 		var/obj/item/stack/tile/grass/S = O
 		new /obj/item/seeds/grassseed(O.loc)
 		S.use(1)
-		return 1*/
+		return 1
 
 	else
 		return 0
@@ -51,7 +51,7 @@
 	density = 1
 	anchored = 1
 
-obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(isrobot(user))
 		return
 	user.drop_item()

@@ -16,6 +16,8 @@
 	var/temperature_resistance = 1000 + T0C
 	volume = 1000
 	var/release_log = ""
+	var/obj/item/device/attached_device
+	var/attacher
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent
 	name = "Canister: \[N2O\]"
@@ -53,7 +55,6 @@
 
 	if (src.destroyed)
 		src.icon_state = text("[]-1", src.canister_color)
-
 	else
 		icon_state = "[canister_color]"
 		if(holding)
@@ -176,6 +177,23 @@
 	return
 
 /obj/machinery/portable_atmospherics/canister/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
+	if(isassembly(W))
+		var/obj/item/device/assembly/A = W
+		if(A.secured)
+			user << "<span class='notice'>The device is secured.</span>"
+			return
+		if(attached_device)
+			user << "<span class='warning'>There is already an device attached to the valve, remove it first.</span>"
+			return
+		user.remove_from_mob(W)
+		attached_device = A
+		A.loc = src
+		user << "<span class='notice'>You attach [W] to the valve controls and secure it.</span>"
+		A.holder = src
+		attacher = user
+		A.toggle_secure()
+		return
+
 	if(!istype(W, /obj/item/weapon/wrench) && !istype(W, /obj/item/weapon/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda))
 		visible_message("\red [user] hits the [src] with a [W]!")
 		src.health -= W.force
@@ -213,14 +231,17 @@
 	user.set_machine(src)
 	var/holding_text
 	if(holding)
-		holding_text = {"<BR><B>Tank Pressure</B>: [holding.air_contents.return_pressure()] KPa<BR>
+		holding_text = {"<B>Tank Pressure</B>: [holding.air_contents.return_pressure()] KPa<BR>
 <A href='?src=\ref[src];remove_tank=1'>Remove Tank</A><BR>
 "}
+	if(attached_device)
+		holding_text += "<A href='?src=\ref[src];device=1'>[attached_device]</A> <A href='?src=\ref[src];remove_device=1'>Remove</A><BR>"
+
 	var/output_text = {"<TT><B>[name]</B>[can_label?" <A href='?src=\ref[src];relabel=1'><small>relabel</small></a>":""]<BR>
 Pressure: [air_contents.return_pressure()] KPa<BR>
-Port Status: [(connected_port)?("Connected"):("Disconnected")]
+Port Status: [(connected_port)?("Connected"):("Disconnected")]<BR>
 [holding_text]
-<BR>
+
 Release Valve: <A href='?src=\ref[src];toggle=1'>[valve_open?("Open"):("Closed")]</A><BR>
 Release Pressure: <A href='?src=\ref[src];pressure_adj=-1000'>-</A> <A href='?src=\ref[src];pressure_adj=-100'>-</A> <A href='?src=\ref[src];pressure_adj=-10'>-</A> <A href='?src=\ref[src];pressure_adj=-1'>-</A> [release_pressure] <A href='?src=\ref[src];pressure_adj=1'>+</A> <A href='?src=\ref[src];pressure_adj=10'>+</A> <A href='?src=\ref[src];pressure_adj=100'>+</A> <A href='?src=\ref[src];pressure_adj=1000'>+</A><BR>
 <HR>
@@ -232,14 +253,13 @@ Release Pressure: <A href='?src=\ref[src];pressure_adj=-1000'>-</A> <A href='?sr
 	return
 
 /obj/machinery/portable_atmospherics/canister/Topic(href, href_list)
-
 	//Do not use "if(..()) return" here, canisters will stop working in unpowered areas like space or on the derelict.
 	if(!usr.canmove || usr.stat || usr.restrained() || !in_range(loc, usr))
 		usr << browse(null, "window=canister")
 		onclose(usr, "canister")
 		return
 
-	if (((get_dist(src, usr) <= 1) && istype(src.loc, /turf)))
+	if ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))
 		usr.set_machine(src)
 
 		if(href_list["toggle"])
@@ -259,6 +279,13 @@ Release Pressure: <A href='?src=\ref[src];pressure_adj=-1000'>-</A> <A href='?sr
 			if(holding)
 				holding.loc = loc
 				holding = null
+
+		if (href_list["remove_device"])
+			if(attached_device)
+				attached_device.loc = loc
+				attached_device:holder = null
+				attached_device:secured = 0
+				attached_device = null
 
 		if (href_list["pressure_adj"])
 			var/diff = text2num(href_list["pressure_adj"])
@@ -292,31 +319,25 @@ Release Pressure: <A href='?src=\ref[src];pressure_adj=-1000'>-</A> <A href='?sr
 	return
 
 /obj/machinery/portable_atmospherics/canister/toxins/New()
-
 	..()
 
 	src.air_contents.toxins = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-
 	src.update_icon()
 	return 1
 
 /obj/machinery/portable_atmospherics/canister/oxygen/New()
-
 	..()
 
 	src.air_contents.oxygen = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-
 	src.update_icon()
 	return 1
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent/New()
-
 	..()
 
 	var/datum/gas/sleeping_agent/trace_gas = new
 	air_contents.trace_gases += trace_gas
 	trace_gas.moles = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
-
 	src.update_icon()
 	return 1
 
@@ -335,16 +356,13 @@ Release Pressure: <A href='?src=\ref[src];pressure_adj=-1000'>-</A> <A href='?sr
 	return 1
 
 /obj/machinery/portable_atmospherics/canister/nitrogen/New()
-
 	..()
-
 	src.air_contents.nitrogen = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 
 	src.update_icon()
 	return 1
 
 /obj/machinery/portable_atmospherics/canister/carbon_dioxide/New()
-
 	..()
 	src.air_contents.carbon_dioxide = (src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 
@@ -353,10 +371,32 @@ Release Pressure: <A href='?src=\ref[src];pressure_adj=-1000'>-</A> <A href='?sr
 
 
 /obj/machinery/portable_atmospherics/canister/air/New()
-
 	..()
 	src.air_contents.oxygen = (O2STANDARD*src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 	src.air_contents.nitrogen = (N2STANDARD*src.maximum_pressure*filled)*air_contents.volume/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 
 	src.update_icon()
 	return 1
+
+
+
+// Assembly stuff
+
+/obj/machinery/portable_atmospherics/canister/IsAssemblyHolder()
+	return 1
+
+/obj/machinery/portable_atmospherics/canister/HasProximity(atom/movable/AM as mob|obj)
+	if(attached_device)
+		attached_device.HasProximity(AM)
+
+/obj/machinery/portable_atmospherics/canister/hear_talk(mob/living/M, msg)
+	if(attached_device)
+		attached_device.hear_talk(M, msg)
+
+// this doesn't do anything but the timer etc. expects it to be here
+// eventually maybe have it update icon to show state (timer, prox etc.) like old bombs
+/obj/machinery/portable_atmospherics/canister/proc/c_state()
+	return
+
+/obj/machinery/portable_atmospherics/canister/proc/process_activation(var/obj/item/device/D)
+	valve_open = !valve_open

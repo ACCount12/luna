@@ -264,7 +264,7 @@
 
 /obj/machinery/door/proc/autoclose()
 	var/obj/machinery/door/airlock/A = src
-	if ((!A.density) && !( A.operating ) && !(A.locked) && !( A.welded ))
+	if (!A.density && !A.operating && !A.locked && !A.welded)
 		close()
 	else return
 
@@ -333,6 +333,21 @@
 		else
 			close()
 
+/obj/machinery/door/unpowered/shuttle/dark
+	icon_state = "gdoor1"
+
+/obj/machinery/door/unpowered/shuttle/dark/update_icon()
+	if(density)	icon_state = "gdoor1"
+	else		icon_state = "gdoor0"
+
+	return
+
+/obj/machinery/door/unpowered/shuttle/dark/do_animate(animation)
+	switch(animation)
+		if("opening") flick("gdoorc0", src)
+		if("closing") flick("gdoorc1", src)
+	return
+
 // ***************************************
 // Networking Support
 // ***************************************
@@ -356,5 +371,4 @@
 				close()
 				return 1
 	return 0
-
 */

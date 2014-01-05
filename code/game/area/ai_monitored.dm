@@ -21,11 +21,10 @@
 		motioncamera.lostTarget(O)
 
 /obj/machinery/camera/motion
-	name = "Motion Security Camera"
+	name = "motion camera"
 	desc = "A motion security camera with a closed panel."
 	var/list/motionTargets = list()
 	var/detectTime = 0
-	var/locked = 1
 
 /obj/machinery/camera/motion/process()
 	// motion camera event loop
@@ -66,17 +65,7 @@
 	return 1
 
 /obj/machinery/camera/motion/attackby(W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/wirecutters) && locked == 1) return
-	if (istype(W, /obj/item/weapon/screwdriver))
-		var/turf/T = user.loc
-		user << text("\blue []ing the access hatch... (this is a long process)", (locked) ? "Open" : "Clos")
-		sleep(100)
-		if ((user.loc == T && user.equipped() == W && !( user.stat )))
-			src.locked ^= 1
-			user << text("\blue The access hatch is now [].", (locked) ? "closed" : "open")
-
 	..() // call the parent to (de|re)activate
-
 	if (istype(W, /obj/item/weapon/wirecutters)) // now handle alarm on/off...
 		if (status) // ok we've just been reconnected... send an alarm!
 			detectTime = world.time - 301

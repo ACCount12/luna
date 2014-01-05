@@ -355,7 +355,7 @@
 
 /proc/enable_prison_shuttle(var/mob/user)
 	for(var/obj/machinery/computer/prison_shuttle/PS in world)
-		PS.allowedtocall = !(PS.allowedtocall)
+		PS.allowedtocall = !PS.allowedtocall
 
 
 /proc/call_shuttle_proc(var/mob/user)
@@ -366,11 +366,11 @@
 		user << "\red Launch process already started!"
 		return
 
-	if(ticker.mode.name == "blob" || ticker.mode.name == "Corporate Restructuring" || ticker.mode.name == "Sandbox")
+	if(ticker.mode.name == "blob" || ticker.mode.name == "Corporate Restructuring")
 		user << "Under directive 7-10, [station_name()] is quarantined until further notice."
 		return
 	if(ticker.mode.name == "revolution" || ticker.mode.name == "rp-revolution" || ticker.mode.name == "AI malfunction" || ticker.mode.name == "confliction")
-		user << "Centcom will not allow the shuttle to be called."
+		user << "Centcomm will not allow the shuttle to be called."
 		return
 	if(ticker.mode.name == "nuclear emergency" && world.time < 36000)
 		// on nuke, only allow evacuation after an hour
@@ -384,7 +384,7 @@
 	LaunchControl.start()
 
 //	main_shuttle.incall()
-	world << "\blue <B>Alert: Escape pods launching in [round(LaunchControl.timeleft()/60)] minutes.</B>"
+	captain_announce("Escape pods launching in [round(LaunchControl.timeleft()/60)] minutes.")
 	playsound('sound/announcer/shuttlecalled.ogg')
 
 	return
@@ -395,7 +395,7 @@
 	if( ticker.mode.name == "blob" )
 		return
 
-	world << "\blue <B>Alert: Escape pods launch sequence aborted</B>" //marker4
+	captain_announce("Escape pods launch sequence aborted!")
 	playsound('sound/announcer/shuttlerecalled.ogg')
 
 	LaunchControl.stop()

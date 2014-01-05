@@ -137,39 +137,10 @@
 /obj/item/weapon/storage/proc/show_to(mob/living/user as mob)
 	if(!user.client) return
 
-	for(var/obj/item/device/assembly/mousetrap/MT in src)
-		if(MT.armed)
-			for(var/mob/O in viewers(user, null))
-				if(O == user)
-					user.show_message(text("\red <B>You reach into the [src.name], but there was a live mousetrap in there!</B>"), 1)
-				else
-					user.show_message(text("\red <B>[user] reaches into the [src.name] and sets off a hidden mousetrap!</B>"), 1)
-			MT.loc = user.loc
-			MT.triggered(user, user.hand ? "l_hand" : "r_hand")
-			MT.layer = OBJ_LAYER
-			return
-
-
-	if(ishuman(user))
-		for(var/obj/item/device/assembly_holder/AH in list(user:l_store, user:r_store))
-			var/obj/item/device/assembly/mousetrap/MT
-			if(istype(AH.a_left, /obj/item/device/assembly/mousetrap) && AH.a_left:armed)
-				MT = AH.a_left
-			else if(istype(AH.a_right, /obj/item/device/assembly/mousetrap) && AH.a_right:armed)
-				MT = AH.a_right
-
-			if(MT)
-				for(var/mob/O in viewers(user, null))
-					if(O == user)
-						user.show_message(text("\red <B>You reach into the [src.name], but there was a live mousetrap in there!</B>"), 1)
-					else
-						user.show_message(text("\red <B>[user] reaches into the [src.name] and sets off a hidden mousetrap!</B>"), 1)
-				AH.loc = user.loc
-				MT.triggered(user, user.hand ? "l_hand" : "r_hand")
-				AH.layer = OBJ_LAYER
-				return
-
 	hide_from(user)
+
+	for(var/obj/item/I in src)
+		if(I.on_found(user)) return
 
 	user.client.screen += src.boxes
 	user.client.screen += src.closer

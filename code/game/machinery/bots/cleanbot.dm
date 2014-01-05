@@ -16,7 +16,6 @@
 /obj/machinery/bot/cleanbot
 	name = "Cleanbot"
 	desc = "A little cleaning robot, he looks so excited!"
-	icon = 'aibots.dmi'
 	icon_state = "cleanbot0"
 	layer = 5.0
 	density = 0

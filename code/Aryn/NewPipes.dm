@@ -1102,7 +1102,6 @@
 
 
 /obj/machinery/meter/Click()
-
 	if(stat & (NOPOWER|BROKEN))
 		return
 

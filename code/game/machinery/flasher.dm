@@ -1,7 +1,7 @@
 // It is a gizmo that flashes a small area
 
 /obj/machinery/flasher
-	name = "Mounted flash"
+	name = "mounted flash"
 	desc = "A wall-mounted flashbulb device."
 	icon = 'stationobjs.dmi'
 	icon_state = "mflash1"
@@ -44,7 +44,7 @@
 		src.disable = !src.disable
 		if (src.disable)
 			user.visible_message("\red [user] has disconnected the [src]'s flashbulb!", "\red You disconnect the [src]'s flashbulb!")
-		if (!src.disable)
+		else
 			user.visible_message("\red [user] has connected the [src]'s flashbulb!", "\red You connect the [src]'s flashbulb!")
 
 //Let the AI trigger them directly.

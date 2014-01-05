@@ -1114,7 +1114,6 @@
 	attackby(obj/item/weapon/W as obj, mob/user as mob)
 		var/load = 1
 		if (istype(W,/obj/item/weapon/reagent_containers/food/snacks/plant/)) src.reagents.add_reagent("poo", 20)
-		else if (istype(W,/obj/item/weapon/reagent_containers/food/snacks/mushroom/)) src.reagents.add_reagent("poo", 25)
 		else if (istype(W,/obj/item/weapon/seed/)) src.reagents.add_reagent("poo", 2)
 		else if (istype(W,/obj/item/weapon/plant/)) src.reagents.add_reagent("poo", 15)
 		//else if (istype(W,/obj/item/weapon/reagent_containers/poo)) src.reagents.add_reagent("poo", 20)	 Strumpetplaya - commenting this out as it has components we don't support.
@@ -1131,7 +1130,7 @@
 		else ..()
 
 	MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-		if (istype(O, /obj/item/weapon/reagent_containers/food/snacks/plant/) || istype(O, /obj/item/weapon/reagent_containers/food/snacks/mushroom/) || istype(O, /obj/item/weapon/seed/) || istype(O, /obj/item/weapon/plant/))
+		if (istype(O, /obj/item/weapon/reagent_containers/food/snacks/plant/) || istype(O, /obj/item/weapon/seed/) || istype(O, /obj/item/weapon/plant/))
 			for(var/mob/V in viewers(user, null)) V.show_message(text("\blue [] begins quickly stuffing items into []!", user, src), 1)
 			var/staystill = user.loc
 			for(var/obj/item/weapon/P in view(1,user))
@@ -1141,11 +1140,6 @@
 				if (user.loc != staystill) break
 				if (istype(P,/obj/item/weapon/reagent_containers/food/snacks/plant/))
 					src.reagents.add_reagent("poo", 20)
-					playsound(src.loc, 'blobattack.ogg', 50, 1)
-					del P
-					sleep(3)
-				else if (istype(P,/obj/item/weapon/reagent_containers/food/snacks/mushroom/))
-					src.reagents.add_reagent("poo", 25)
 					playsound(src.loc, 'blobattack.ogg', 50, 1)
 					del P
 					sleep(3)
@@ -1181,7 +1175,6 @@
 	var/working = 0
 	var/pcount = 0
 	var/list/allowed = list(/obj/item/weapon/reagent_containers/food/snacks/plant/,\
-	/obj/item/weapon/reagent_containers/food/snacks/mushroom/,\
 	/obj/item/weapon/plant/,\
 	/obj/item/stack/medical/ointment,\
 	/obj/item/weapon/dnainjector)
@@ -1252,9 +1245,6 @@
 					else if(istype(I,/obj/item/weapon/dnainjector)) G.reagents.add_reagent("mutagen", 20)
 					else if(istype(I,/obj/item/weapon/plant/sugar)) G.reagents.add_reagent("sugar", 20)
 					else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/ingredient/sugar)) G.reagents.add_reagent("sugar", 20)
-					else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/mushroom/psilocybin)) G.reagents.add_reagent("psilocybin", 20)
-					else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/mushroom/amanita)) G.reagents.add_reagent("amanitin", 20)
-					else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/mushroom)) G.reagents.add_reagent("space_fungus", 20)
 					else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/plant/slurryfruit)) G.reagents.add_reagent("toxic_slurry", 20)
 					else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/plant/slurryfruit/omega))
 						G.reagents.add_reagent("toxic_slurry", 20)
@@ -1813,15 +1803,6 @@
 				if (src.working) src.working = 0
 				else src.working = 1
 
-/obj/machinery/vending/seeds
-	name = "Seed Vendor"
-	desc = "Gardening made easy."
-	icon_state = "seeds"
-	product_paths = "/obj/item/weapon/seed/tomato;/obj/item/weapon/seed/orange;/obj/item/weapon/seed/grape;/obj/item/weapon/seed/melon;/obj/item/weapon/seed/chili;/obj/item/weapon/seed/apple;/obj/item/weapon/seed/banana;/obj/item/weapon/seed/lemon;/obj/item/weapon/seed/lime;/obj/item/weapon/seed/carrot;/obj/item/weapon/seed/wheat;/obj/item/weapon/seed/synthmeat;/obj/item/weapon/seed/sugar;/obj/item/weapon/seed/contusine;/obj/item/weapon/seed/nureous;/obj/item/weapon/seed/asomna;/obj/item/weapon/seed/commol;/obj/item/weapon/seed/venne"
-	product_amounts = "20;20;20;20;20;20;20;20;20;20;20;20;20;20;20;20;20;20;20;20"
-	vend_delay = 10
-	product_hidden = "/obj/item/weapon/seed/cannabis;/obj/item/weapon/seed/pumpkin"
-	vend_delay = 1
 
 /obj/item/weapon/plantanalyzer/
 	name = "Plant Analyzer"
@@ -1895,8 +1876,8 @@
 			if(null) return
 			else user << "\red ERROR: Seed type not recognised."
 
-// CRYSTAL
 
+// CRYSTAL
 /obj/item/weapon/shard/crystal
 	name = "crystal shard"
 	icon = 'shards.dmi'
@@ -1921,12 +1902,10 @@
 				src.pixel_y = rand(1, 5)
 			else
 		return
-	//attackby(obj/item/weapon/W as obj, mob/user as mob)			Rawr, I don't like hydroponicists welding plants! - CN
-	//	..()
-	//	if (!( istype(W, /obj/item/weapon/weldingtool) && W:welding )) return
-	//	W:eyecheck(user)
-	//	user << "\red The crystal shard resists the heat!"
-	//	return
+
+	attackby(obj/item/weapon/W as obj, mob/user as mob)
+		return
+
 	HasEntered(AM as mob|obj)
 		if(ismob(AM))
 			var/mob/M = AM

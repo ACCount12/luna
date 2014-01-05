@@ -784,7 +784,7 @@
 	potency = 10
 	plant_type = 0
 	growthstages = 6
-	mutatelist = list(/obj/item/seeds/goldappleseed)
+	mutatelist = list(/obj/item/seeds/goldappleseed, /obj/item/seeds/poisonedappleseed)
 
 
 /obj/item/seeds/poisonedappleseed
@@ -901,7 +901,7 @@
 	plant_type = 0
 	growthstages = 6
 
-/*obj/item/seeds/pumpkinseed
+/obj/item/seeds/pumpkinseed
 	name = "pack of pumpkin seeds"
 	desc = "These seeds grow into pumpkin vines."
 	icon_state = "seed-pumpkin"
@@ -915,7 +915,7 @@
 	yield = 3
 	potency = 10
 	plant_type = 0
-	growthstages = 3*/
+	growthstages = 3
 
 
 /obj/item/seeds/limeseed
@@ -1016,7 +1016,7 @@
 	plant_type = 0
 	growthstages = 6
 
-/*obj/item/seeds/grassseed
+/obj/item/seeds/grassseed
 	name = "pack of grass seeds"
 	desc = "These seeds grow into grass. Yummy!"
 	icon_state = "seed-grass"
@@ -1030,7 +1030,7 @@
 	yield = 5
 	potency = 10
 	plant_type = 0
-	growthstages = 2*/
+	growthstages = 2
 
 /obj/item/seeds/cocoapodseed
 	name = "pack of cocoa pod seeds"

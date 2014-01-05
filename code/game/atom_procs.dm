@@ -265,7 +265,7 @@
 	if (((usr.paralysis || usr.stunned || usr.weakened) && !istype(usr, /mob/living/silicon/ai)) || usr.stat != 0)
 		return
 
-	if ((!( src in usr.contents ) && (((!isturf(src) && (!isturf(src.loc) && (src.loc && !isturf(src.loc.loc)))) || !isturf(usr.loc)) && (src.loc != usr.loc && (!istype(src, /obj/effect/screen) && !( usr.contents.Find(src.loc) ))))))
+	if (!(src in usr.contents) && (((!isturf(src) && !isturf(src.loc) && src.loc && !isturf(src.loc.loc)) || !isturf(usr.loc)) && src.loc != usr.loc && !istype(src, /obj/effect/screen) && !usr.contents.Find(src.loc)))
 		return
 
 	var/t5 = in_range(src, usr) || src.loc == usr
@@ -279,7 +279,7 @@
 	if (istype(src, /datum/organ) && src in usr.contents)
 		return
 
-	if (((t5 || (W && (W.flags & 16))) && !( istype(src, /obj/effect/screen) )))
+	if ((t5 || (W && (W.flags & USEDELAY))) && !istype(src, /obj/effect/screen))
 		if (usr.next_move < world.time)
 			usr.prev_move = usr.next_move
 			usr.next_move = world.time + 10
@@ -324,10 +324,10 @@
 
 				ok = CanReachThrough(get_turf(usr), get_turf(src), src)
 
-			if (!( ok ))
+			if (!ok)
 				return 0
 
-		if ( !(usr.restrained()) )
+		if (!usr.restrained())
 			if (W)
 				if (t5)
 					src.alog(W,usr)
@@ -366,8 +366,8 @@
 				usr.next_move = world.time + 10
 			else
 				return
-			if (!( usr.restrained() ))
-				if ((W && !( istype(src, /obj/effect/screen) )))
+			if (!usr.restrained())
+				if (W && !istype(src, /obj/effect/screen))
 					src.alog(W,usr)
 					src.attackby(W, usr)
 

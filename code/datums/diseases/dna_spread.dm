@@ -35,8 +35,8 @@
 					affected_mob.updatehealth()
 		if(4)
 			if(!src.transformed)
-				if ((!strain_data["name"]) || (!strain_data["UI"]) || (!strain_data["SE"]))
-					affected_mob.virus = null
+				if (!strain_data["name"] || !strain_data["UI"] || !strain_data["SE"])
+					src.cure(0)
 					return
 
 				//Save original dna for when the disease is cured.
@@ -57,11 +57,14 @@
 	return
 
 /datum/disease/dnaspread/Del()
-	if ((original_dna["name"]) && (original_dna["UI"]) && (original_dna["SE"]))
+	if(original_dna["UI"])
 		affected_mob.dna.uni_identity = original_dna["UI"]
-		updateappearance(affected_mob, affected_mob.dna.uni_identity)
+	if(original_dna["SE"])
 		affected_mob.dna.struc_enzymes = original_dna["SE"]
+	if(original_dna["name"])
 		affected_mob.real_name = original_dna["name"]
 
-		affected_mob << "\blue You feel more like yourself."
+	updateappearance(affected_mob, affected_mob.dna.uni_identity)
+	domutcheck(affected_mob)
+	affected_mob << "\blue You feel more like yourself."
 	..()

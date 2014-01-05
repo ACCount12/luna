@@ -30,7 +30,7 @@
 		else
 			user.show_message("\blue The electric pads have been reinserted!")
 		src.add_fingerprint(user)
-	else
+/*	else
 		if (istype(W, /obj/item/clothing/head/helmet))
 			var/obj/item/assembly/shock_kit/A = new /obj/item/assembly/shock_kit( user )
 			W.loc = A
@@ -55,7 +55,7 @@
 			A.layer = 20
 			src.add_fingerprint(user)
 			A.add_fingerprint(user)
-	return
+	return*/
 
 /obj/item/device/radio/electropack/Topic(href, href_list)
 	//..()

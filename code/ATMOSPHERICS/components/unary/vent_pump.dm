@@ -220,7 +220,7 @@
 	icon = 'vent_pump.dmi'
 	icon_state = "equal"
 
-	name = "Air Vent"
+	name = "air vent"
 	desc = "Has a valve and pump attached to it"
 
 	level = 1
@@ -232,7 +232,7 @@
 		layer = TURF_LAYER
 
 	high_volume
-		name = "Large Air Vent"
+		name = "large air vent"
 
 		New()
 			..()

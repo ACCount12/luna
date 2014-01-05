@@ -129,8 +129,9 @@ var/const/RADIO_MULEBOT = "8"
 
 var/global/datum/controller/radio/radio_controller
 
-datum/controller/radio
+/datum/controller/radio
 	var/list/datum/radio_frequency/frequencies = list()
+	var/list/scramblers = list()
 
 	proc/add_object(obj/device as obj, var/new_frequency as num, var/filter = null as text|null)
 		var/f_text = num2text(new_frequency)
@@ -161,7 +162,7 @@ datum/controller/radio
 		var/f_text = num2text(frequency)
 		return frequencies[f_text]
 
-datum/radio_frequency
+/datum/radio_frequency
 	var/frequency as num
 	var/list/list/obj/devices = list()
 
@@ -177,6 +178,15 @@ datum/radio_frequency
 				if(!start_point)
 					del(signal)
 					return 0
+			for(var/datum/signal_scrambler/signal_scrambler in radio_controller.scramblers)
+				if(!(frequency in signal_scrambler.freqs))
+					continue
+
+				if(filter && filter != signal_scrambler.filter)
+					continue
+
+				signal_scrambler.process_signal(signal)
+
 			if (filter) // here goes some copypasta. It is for optimisation. -rastaf0
 				for(var/obj/device in devices[filter])
 					if(device == source)
@@ -248,18 +258,16 @@ datum/radio_frequency
 					del(devices_line)
 
 
-obj/proc
-	receive_signal(datum/signal/signal, receive_method, receive_param)
-		return null
+/obj/proc/receive_signal(datum/signal/signal, receive_method, receive_param)
+	return null
 
-datum/signal
+/datum/signal
 	var/obj/source
+	var/transmission_method = TRANSMISSION_WIRE
+	//0 = TRANSMISSION_WIRE
+	//1 = TRANSMISSION_RADIO
 
-	var/transmission_method = 0
-	//0 = wire
-	//1 = radio transmission
-
-	var/data = list()
+	var/list/data = list()
 	var/encryption
 
 	proc/copy_from(datum/signal/model)
@@ -275,3 +283,38 @@ datum/signal
 			. = "signal = {source = '[source]' ()\n"
 		for (var/i in data)
 			. += "data\[\"[i]\"\] = \"[data[i]]\"\n"
+
+
+/datum/signal_scrambler
+	var/power = 80 // 1 to 100
+	var/list/scramble_vars = list("message", "vmessage", "name", "vname", "job")
+	// vars in signal's var/list/data to affect
+
+	var/list/freqs = list(1459,1351,1355,1357,1359,1353,1441,1349,1347)
+	var/filter = RADIO_CHAT
+	var/transmission_method = TRANSMISSION_RADIO
+	var/headsets_only = 1 // For radio chat scramblers
+
+/*	var/range = 0 // for item-scramblers
+	var/loc	*/
+
+/datum/signal_scrambler/New()
+	..()
+	if(radio_controller)
+		radio_controller.scramblers += src
+
+/datum/signal_scrambler/Del()
+	if(radio_controller)
+		radio_controller.scramblers -= src
+	..()
+
+/datum/signal_scrambler/proc/process_signal(var/datum/signal/signal)
+	/*if(range && !(get_turf(signal.source) in range(get_turf(loc), range)))
+		return*/
+
+	if(signal.transmission_method != transmission_method)
+		return
+
+	for(var/i in scramble_vars)
+		if(signal.data[i])
+			signal.data[i] = Gibberish(signal.data[i], power)

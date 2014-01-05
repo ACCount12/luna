@@ -154,8 +154,7 @@
 //
 //
 
-/obj/machinery/conveyor_switch
-
+/obj/machinery/switch/conveyor_switch
 	name = "conveyor switch"
 	desc = "A conveyor control switch."
 	icon = 'icons/obj/recycling.dmi'
@@ -164,14 +163,12 @@
 	var/last_pos = -1			// last direction setting
 	var/operated = 1			// true if just operated
 
-	var/id = "" 				// must match conveyor IDs to control them
-
 	var/list/conveyors		// the list of converyors that are controlled by this switch
 	anchored = 1
 
 
 
-/obj/machinery/conveyor_switch/New()
+/obj/machinery/switch/conveyor_switch/New()
 	..()
 	update()
 
@@ -183,7 +180,7 @@
 
 // update the icon depending on the position
 
-/obj/machinery/conveyor_switch/proc/update()
+/obj/machinery/switch/conveyor_switch/proc/update()
 	if(position<0)
 		icon_state = "switch-rev"
 	else if(position>0)
@@ -195,7 +192,7 @@
 // timed process
 // if the switch changed, update the linked conveyors
 
-/obj/machinery/conveyor_switch/process()
+/obj/machinery/switch/conveyor_switch/process()
 	if(!operated)
 		return
 	operated = 0
@@ -205,7 +202,7 @@
 		C.setmove()
 
 // attack with hand, switch position
-/obj/machinery/conveyor_switch/attack_hand(mob/user)
+/obj/machinery/switch/conveyor_switch/attack_hand(mob/user)
 	if(position == 0)
 		if(last_pos < 0)
 			position = 1
@@ -221,17 +218,17 @@
 	update()
 
 	// find any switches with same id as this one, and set their positions to match us
-	for(var/obj/machinery/conveyor_switch/S in world)
+	for(var/obj/machinery/switch/conveyor_switch/S in world)
 		if(S.id == src.id)
 			S.position = position
 			S.update()
 
-/obj/machinery/conveyor_switch/oneway
+/obj/machinery/switch/conveyor_switch/oneway
 	var/convdir = 1 //Set to 1 or -1 depending on which way you want the convayor to go. (In other words keep at 1 and set the proper dir on the belts.)
 	desc = "A conveyor control switch. It appears to only go in one direction."
 
 // attack with hand, switch position
-/obj/machinery/conveyor_switch/oneway/attack_hand(mob/user)
+/obj/machinery/switch/conveyor_switch/oneway/attack_hand(mob/user)
 	if(position == 0)
 		position = convdir
 	else
@@ -241,7 +238,7 @@
 	update()
 
 	// find any switches with same id as this one, and set their positions to match us
-	for(var/obj/machinery/conveyor_switch/S in world)
+	for(var/obj/machinery/switch/conveyor_switch/S in world)
 		if(S.id == src.id)
 			S.position = position
 			S.update()

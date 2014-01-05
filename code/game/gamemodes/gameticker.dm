@@ -85,7 +85,6 @@ var/list/postsetuphooks = list()
 	add_minds()
 
 
-
 	//Equip characters
 	equip_characters()
 
@@ -273,4 +272,3 @@ var/list/postsetuphooks = list()
 			return
 //Anything else, like sandbox, return.
 */
-

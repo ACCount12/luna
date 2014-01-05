@@ -30,8 +30,6 @@
 	if(!Length)
 		Length = Maxamount
 	amount = Length
-	item_state     = "[CoilColour]coil"
-	icon_state     = "[CoilColour]coil"
 	pixel_x = rand(-4,4)
 	pixel_y = rand(-4,4)
 	update_icon()
@@ -49,7 +47,7 @@
 		item_state = "[CoilColour]coil3"
 
 /obj/item/weapon/cable_coil/examine()
-	if (amount == 1)
+	if(amount == 1)
 		usr << "A short piece of power cable."
 	else if(amount == 2)
 		usr << "A piece of power cable."

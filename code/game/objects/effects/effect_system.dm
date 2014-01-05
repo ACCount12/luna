@@ -114,7 +114,6 @@ steam.start() -- spawns the effect
 	density = 0
 
 /datum/effect/effect/system/steam_spread
-
 	set_up(n = 3, c = 0, turf/loc)
 		if(n > 10)
 			n = 10
@@ -843,11 +842,9 @@ steam.start() -- spawns the effect
 		carried_reagents = list()
 		metal = metalfoam
 
-
 		// bit of a hack here. Foam carries along any reagent also present in the glass it is mixed
 		// with (defaults to water if none is present). Rather than actually transfer the reagents,
 		// this makes a list of the reagent ids and spawns 1 unit of that reagent when the foam disolves.
-
 
 		if(carry && !metal)
 			for(var/datum/reagent/R in carry.reagent_list)
@@ -864,11 +861,11 @@ steam.start() -- spawns the effect
 			F.amount = amount
 
 			if(!metal)			// don't carry other chemicals if a metal foam
-				F.create_reagents(10)
+				F.create_reagents(20)
 
 				if(carried_reagents)
 					for(var/id in carried_reagents)
-						F.reagents.add_reagent(id,1)
+						F.reagents.add_reagent(id, 3)
 				else
 					F.reagents.add_reagent("water", 1)
 

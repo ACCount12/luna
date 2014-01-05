@@ -1,9 +1,7 @@
 /obj/machinery/meter/New()
 	..()
-
-	src.target = locate(/obj/machinery/atmospherics/pipe) in loc
-
-	return 1
+	spawn(5)
+		src.target = locate(/obj/machinery/atmospherics/pipe) in loc
 
 /obj/machinery/meter/process()
 	if(!target)

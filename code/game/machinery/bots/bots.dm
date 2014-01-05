@@ -15,7 +15,7 @@
 	D.close()
 
 /obj/machinery/bot/process()
-	if (!src.on)
+	if (!on)
 		return
 
 // calculates a path to the specified destination

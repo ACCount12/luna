@@ -105,11 +105,12 @@
 			return src.loc
 		return 0
 
-	proc/shock()
+	shock()
 		var/obj/mecha/M = in_mecha()
 		if(M)
 			M.emp_act(2)
-		del(src)
+		if(prob(40))
+			del(src)
 
 	proc/get_mecha_log()
 		if(!src.in_mecha())

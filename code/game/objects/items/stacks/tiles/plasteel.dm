@@ -3,14 +3,10 @@
 	singular_name = "floor tile"
 	desc = "Those could work as a pretty decent throwing weapon"
 	icon_state = "tile"
-	w_class = 3.0
 	force = 6.0
 	m_amt = 937.5
 	throwforce = 15.0
-	throw_speed = 5
-	throw_range = 20
 	flags = FPRINT | CONDUCT
-	max_amount = 60
 
 /obj/item/stack/tile/metal/New(var/loc, var/amount=null)
 	..()

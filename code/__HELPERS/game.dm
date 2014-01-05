@@ -295,14 +295,14 @@ proc/isInSight(var/atom/A, var/atom/B)
 		else
 			return get_step(start, EAST)
 
-/*
+
 /proc/get_mob_by_key(var/key)
 	for(var/mob/M in mob_list)
 		if(M.ckey == lowertext(key))
 			return M
 	return null
 
-/proc/ScreenText(obj/O, maptext="", screen_loc="CENTER-7,CENTER-7", maptext_height=480, maptext_width=480)
+/*/proc/ScreenText(obj/O, maptext="", screen_loc="CENTER-7,CENTER-7", maptext_height=480, maptext_width=480)
 	if(!isobj(O))	O = new /obj/effect/screen/text()
 	O.maptext = maptext
 	O.maptext_height = maptext_height

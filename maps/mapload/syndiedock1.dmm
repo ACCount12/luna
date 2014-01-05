@@ -1,0 +1,104 @@
+"aa" = (/turf/space/hull,/area)
+"ab" = (/turf/space,/area)
+"ac" = (/turf/simulated/wall/r_wall,/area/syndicate_station2)
+"ad" = (/obj/structure/lattice,/obj/machinery/porta_turret/machinegun{tag = "icon-syndieturret0 (NORTHEAST)"; icon_state = "syndieturret0"; dir = 5},/obj/cabling/power{icon_state = "0-2"},/turf/space/hull,/area)
+"ae" = (/turf/simulated/floor/plating,/area/syndicate_station2)
+"af" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor/plating,/area/syndicate_station2)
+"ag" = (/obj/structure/lattice,/obj/cabling/power{icon_state = "1-2"},/turf/space/hull,/area)
+"ah" = (/obj/structure/lattice,/turf/space/hull,/area)
+"ai" = (/obj/structure/lattice,/obj/machinery/porta_turret/machinegun{tag = "icon-syndieturret0 (EAST)"; icon_state = "syndieturret0"; dir = 4},/obj/cabling/power{icon_state = "0-2"},/turf/space/hull,/area)
+"aj" = (/obj/cabling/power{icon_state = "1-2"},/turf/simulated/floor/plating/airless{tag = "icon-plating (NORTH)"; icon_state = "plating"; dir = 1},/area)
+"ak" = (/obj/cabling/power{icon_state = "4-8"},/turf/simulated/floor/plating,/area/syndicate_station2)
+"al" = (/obj/machinery/door/poddoor/newicon/black,/obj/cabling/power{icon_state = "4-8"},/turf/simulated/floor/plating,/area/syndicate_station2)
+"am" = (/obj/cabling/power{icon_state = "4-8"},/obj/machinery/light/small,/turf/simulated/floor/plating,/area/syndicate_station2)
+"an" = (/obj/machinery/door/poddoor/newicon/black,/obj/cabling/power{icon_state = "4-8"},/turf/simulated/floor/plating/airless{tag = "icon-plating (NORTH)"; icon_state = "plating"; dir = 1},/area/syndicate_station2)
+"ao" = (/obj/cabling/power{icon_state = "4-8"},/turf/simulated/floor/plating/airless{tag = "icon-plating (NORTH)"; icon_state = "plating"; dir = 1},/area)
+"ap" = (/obj/cabling/power{icon_state = "4-8"},/obj/cabling/power{icon_state = "1-8"},/obj/cabling/power{icon_state = "2-8"},/turf/simulated/floor/plating/airless{tag = "icon-plating (NORTH)"; icon_state = "plating"; dir = 1},/area)
+"aq" = (/obj/cabling/power{icon_state = "4-8"},/obj/cabling/power{icon_state = "2-8"},/obj/cabling/power{icon_state = "1-8"},/turf/simulated/floor/plating/airless{tag = "icon-plating (NORTH)"; icon_state = "plating"; dir = 1},/area)
+"ar" = (/obj/structure/lattice,/obj/cabling/power{icon_state = "4-8"},/turf/space/hull,/area)
+"as" = (/obj/structure/lattice,/obj/machinery/porta_turret/machinegun{tag = "icon-syndieturret0 (EAST)"; icon_state = "syndieturret0"; dir = 4},/obj/cabling/power{icon_state = "0-8"},/turf/space/hull,/area)
+"at" = (/obj/structure/lattice,/obj/machinery/porta_turret/machinegun{tag = "icon-syndieturret0 (EAST)"; icon_state = "syndieturret0"; dir = 4},/obj/cabling/power,/turf/space/hull,/area)
+"au" = (/obj/machinery/light/small,/turf/simulated/floor/plating,/area/syndicate_station2)
+"av" = (/obj/structure/lattice,/obj/machinery/porta_turret/machinegun{tag = "icon-syndieturret0 (SOUTHEAST)"; icon_state = "syndieturret0"; dir = 6},/obj/cabling/power,/turf/space/hull,/area)
+"aw" = (/obj/structure/lattice,/obj/machinery/porta_turret/machinegun{tag = "icon-syndieturret0 (NORTHEAST)"; icon_state = "syndieturret0"; dir = 5},/obj/cabling/power{icon_state = "0-2"},/turf/space,/area)
+"ax" = (/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"ay" = (/obj/cabling/power{icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/syndicate_station2)
+"az" = (/obj/machinery/porta_turret/machinegun,/obj/cabling/power{icon_state = "0-2"},/turf/simulated/floor{tag = "icon-vault (WEST)"; icon_state = "vault"; dir = 8},/area/syndicate_station2)
+"aA" = (/obj/cabling/power{icon_state = "1-2"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aB" = (/obj/structure/table/reinforced{tag = "icon-reinf_tabledir (NORTHEAST)"; icon_state = "reinf_tabledir"; dir = 5},/obj/item/weapon/syndie/c4explosive/heavy,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aC" = (/obj/effect/landmark/synd_spawn{name = "Syndicate-Boarding-Spawn"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aD" = (/obj/cabling/power{icon_state = "1-2"},/obj/structure/rack,/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aE" = (/obj/structure/table/reinforced{tag = "icon-reinf_tabledir (NORTHWEST)"; icon_state = "reinf_tabledir"; dir = 9},/obj/item/ammo_magazine/external/m762,/obj/item/weapon/gun/projectile/automatic/l6_saw,/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aF" = (/obj/machinery/light{tag = "icon-tube1 (WEST)"; icon_state = "tube1"; dir = 8},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aG" = (/obj/structure/stool/bed/chair/office/dark{tag = "icon-officechair_dark (EAST)"; icon_state = "officechair_dark"; dir = 4},/obj/cabling/power{icon_state = "1-2"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aH" = (/obj/structure/frame/computer,/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aI" = (/obj/structure/window/reinforced{tag = "icon-rwindow (WEST)"; icon_state = "rwindow"; dir = 8},/obj/structure/window/reinforced{tag = "icon-rwindow (EAST)"; icon_state = "rwindow"; dir = 4},/obj/structure/grille,/obj/structure/window/reinforced{tag = "icon-rwindow (NORTH)"; icon_state = "rwindow"; dir = 1},/turf/simulated/floor/plating,/area/syndicate_station2)
+"aJ" = (/obj/cabling/power{icon_state = "1-2"},/obj/machinery/light{tag = "icon-tube1 (EAST)"; icon_state = "tube1"; dir = 4},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aK" = (/obj/structure/table/reinforced{dir = 4; icon_state = "reinf_tabledir"; layer = 2; tag = "icon-reinf_tabledir (EAST)"},/obj/machinery/light{tag = "icon-tube1 (WEST)"; icon_state = "tube1"; dir = 8},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aL" = (/obj/cabling/power{icon_state = "1-2"},/obj/structure/rack,/obj/item/clothing/suit/space/rig/syndi,/obj/item/clothing/mask/breath,/obj/item/clothing/head/helmet/space/rig/syndi,/obj/item/clothing/suit/space/rig/syndi,/obj/item/clothing/mask/breath,/obj/item/clothing/head/helmet/space/rig/syndi,/obj/item/clothing/suit/space/rig/syndi,/obj/item/clothing/mask/breath,/obj/item/clothing/head/helmet/space/rig/syndi,/obj/item/clothing/suit/space/rig/syndi,/obj/item/clothing/mask/breath,/obj/item/clothing/head/helmet/space/rig/syndi,/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aM" = (/obj/structure/table/reinforced{tag = "icon-reinf_tabledir (WEST)"; icon_state = "reinf_tabledir"; dir = 8},/obj/item/ammo_magazine/external/m12mm,/obj/item/ammo_magazine/external/m12mm,/obj/item/ammo_magazine/external/m12mm,/obj/item/ammo_magazine/external/m12mm,/obj/item/weapon/gun/projectile/automatic/c20r,/obj/item/weapon/gun/projectile/automatic/c20r,/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aN" = (/obj/structure/table/reinforced,/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aO" = (/obj/structure/window/reinforced{tag = "icon-rwindow (WEST)"; icon_state = "rwindow"; dir = 8},/obj/structure/window/reinforced{tag = "icon-rwindow (EAST)"; icon_state = "rwindow"; dir = 4},/obj/structure/grille,/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/syndicate_station2)
+"aP" = (/obj/structure/table/reinforced{tag = "icon-reinf_tabledir (SOUTHEAST)"; icon_state = "reinf_tabledir"; dir = 6},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aQ" = (/obj/item/ammo_magazine/external/m12mm,/obj/item/ammo_magazine/external/m12mm,/obj/item/ammo_magazine/external/m12mm,/obj/item/ammo_magazine/external/m12mm,/obj/item/weapon/gun/projectile/automatic/c20r,/obj/item/weapon/gun/projectile/automatic/c20r,/obj/structure/table/reinforced{tag = "icon-reinf_tabledir (SOUTHWEST)"; icon_state = "reinf_tabledir"; dir = 10},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aR" = (/obj/machinery/door/poddoor/newicon/black{id = "docking"; name = "docking control room"},/obj/cabling/power{icon_state = "1-2"},/obj/machinery/switch/door_control/area{id = "docking"; name = "docking control room"; pixel_x = -24; req_access = 101},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aS" = (/obj/machinery/door/poddoor/newicon/black,/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aT" = (/obj/machinery/light{dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aU" = (/obj/machinery/door/poddoor/newicon/black{density = 0; icon_state = "pdoor0"; name = "airlock"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aV" = (/turf/simulated/floor{tag = "icon-vault (NORTHEAST)"; icon_state = "vault"; dir = 5},/area/syndicate_station2)
+"aW" = (/obj/cabling/power{icon_state = "1-2"},/obj/machinery/switch/door_control/area{id = "airlock"; name = "airlock control"; pixel_x = 0; pixel_y = 28},/turf/simulated/floor{tag = "icon-vault (NORTHEAST)"; icon_state = "vault"; dir = 5},/area/syndicate_station2)
+"aX" = (/obj/machinery/door/poddoor/newicon/black{id = "airlock"; name = "airlock"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"aY" = (/obj/cabling/power{icon_state = "4-8"},/turf/simulated/floor{tag = "icon-vault (NORTHEAST)"; icon_state = "vault"; dir = 5},/area/syndicate_station2)
+"aZ" = (/obj/cabling/power{icon_state = "4-8"},/obj/cabling/power{icon_state = "1-8"},/obj/cabling/power{icon_state = "2-8"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"ba" = (/obj/machinery/door/poddoor/newicon/black,/obj/cabling/power{icon_state = "4-8"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"bb" = (/obj/cabling/power{icon_state = "4-8"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"bc" = (/obj/cabling/power{icon_state = "4-8"},/obj/cabling/power{icon_state = "1-8"},/obj/cabling/power{icon_state = "2-8"},/turf/simulated/floor{tag = "icon-vault (NORTHEAST)"; icon_state = "vault"; dir = 5},/area/syndicate_station2)
+"bd" = (/obj/cabling/power{icon_state = "4-8"},/obj/cabling/power{icon_state = "2-8"},/obj/cabling/power{icon_state = "1-8"},/turf/simulated/floor{tag = "icon-vault (NORTHEAST)"; icon_state = "vault"; dir = 5},/area/syndicate_station2)
+"be" = (/obj/cabling/power{icon_state = "4-8"},/obj/machinery/door/poddoor/newicon/black{density = 0; icon_state = "pdoor0"; name = "airlock"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"bf" = (/obj/cabling/power{icon_state = "2-8"},/obj/cabling/power{icon_state = "1-8"},/obj/machinery/porta_turret/machinegun{tag = "icon-syndieturret0 (EAST)"; icon_state = "syndieturret0"; dir = 4},/obj/cabling/power{icon_state = "0-8"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"bg" = (/obj/machinery/light,/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"bh" = (/obj/cabling/power{icon_state = "1-2"},/obj/machinery/light,/turf/simulated/floor{tag = "icon-vault (NORTHEAST)"; icon_state = "vault"; dir = 5},/area/syndicate_station2)
+"bi" = (/obj/structure/table/reinforced{tag = "icon-reinf_tabledir (NORTHEAST)"; icon_state = "reinf_tabledir"; dir = 5},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"bj" = (/obj/item/ammo_magazine/external/m12mm,/obj/item/ammo_magazine/external/m12mm,/obj/item/ammo_magazine/external/m12mm,/obj/item/ammo_magazine/external/m12mm,/obj/item/weapon/gun/projectile/automatic/c20r,/obj/item/weapon/gun/projectile/automatic/c20r,/obj/structure/table/reinforced{dir = 9; icon_state = "reinf_tabledir"; tag = "icon-reinf_tabledir (SOUTHWEST)"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"bk" = (/obj/machinery/door/poddoor/newicon/black,/obj/cabling/power{icon_state = "1-2"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"bl" = (/obj/effect/landmark/synd_spawn{name = "Syndicate-Mech-Spawn"},/turf/simulated/floor{tag = "icon-vault (WEST)"; icon_state = "vault"; dir = 8},/area/syndicate_station2)
+"bm" = (/obj/cabling/power{icon_state = "1-4"},/obj/cabling/power{icon_state = "1-2"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"bn" = (/obj/machinery/cyborgcharger,/obj/cabling/power{icon_state = "0-8"},/turf/simulated/floor{tag = "icon-vault (WEST)"; icon_state = "vault"; dir = 8},/area/syndicate_station2)
+"bo" = (/obj/structure/lattice,/obj/machinery/porta_turret/machinegun{tag = "icon-syndieturret0 (SOUTHEAST)"; icon_state = "syndieturret0"; dir = 6},/obj/cabling/power,/turf/space,/area)
+"bp" = (/obj/structure/table/reinforced{tag = "icon-reinf_tabledir (SOUTHEAST)"; icon_state = "reinf_tabledir"; dir = 6},/obj/item/weapon/syndie/c4explosive/heavy,/obj/item/weapon/plastique,/obj/item/weapon/plastique,/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"bq" = (/obj/structure/table/reinforced{tag = "icon-reinf_tabledir (SOUTHWEST)"; icon_state = "reinf_tabledir"; dir = 10},/obj/item/ammo_magazine/external/m762,/obj/item/weapon/gun/projectile/automatic/l6_saw,/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"br" = (/obj/machinery/light{tag = "icon-tube1 (WEST)"; icon_state = "tube1"; dir = 8},/obj/effect/landmark/synd_spawn{name = "Syndicate-Mech-Spawn"},/turf/simulated/floor{tag = "icon-vault (WEST)"; icon_state = "vault"; dir = 8},/area/syndicate_station2)
+"bs" = (/obj/cabling/power{icon_state = "1-2"},/obj/cabling/power{icon_state = "1-4"},/turf/simulated/floor{icon_state = "dark"},/area/syndicate_station2)
+"bt" = (/obj/machinery/porta_turret/machinegun{tag = "icon-syndieturret0 (NORTH)"; icon_state = "syndieturret0"; dir = 1},/obj/cabling/power,/turf/simulated/floor{tag = "icon-vault (WEST)"; icon_state = "vault"; dir = 8},/area/syndicate_station2)
+
+(1,1,1) = {"
+aaaaabababaaaaaaaaaaabababababababababab
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababab
+acacacacaaaaaaadaaaaaaaaaaaaaaababababab
+aeafaeacaaaaaaagaaaaaaaaaaaaaaababababab
+aeaeaeacaaaaaaagaaaaaaahaiahaaaaaaaaaaaa
+aeaeacacacahahagahahahahajahaaaaaaaaaaaa
+akakalamanaoaoapaoaoaoaoaqararararasaaaa
+aeaeacacacahahagahahahahajahaaaaaaaaaaaa
+aeaeaeacaaaaaaagaaaaaaahatahaaaaaaaaaaaa
+aeauaeacaaaaaaagaaaaaaaaaaaaaaababababab
+acacacacaaaaaaavaaaaaaaaaaaaaaababababab
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaababababab
+aaaaabababaaaaaaaaaaabababababababababab
+"}
+
+(1,1,2) = {"
+acacabawabacacacacacababawababababababab
+axacacayacacaxazaxacacacayacacababababab
+axaxaxaAacaBaCaDaCaEacaFaGaHaIababababab
+axaxaxaJacaKaxaLaxaMacaxaAaNaOababawabab
+axaxaxaAacaPaCaDaCaQacacaRacacacacayacac
+axaxaxaAaSaxaxaAaxaxaxaxaAaTaxaUaVaWaVaX
+aYaYaYaZbabbaYbcaYbbbbaYbdaYbbbeaYbfaVaX
+axaxaxaAaSaxaxaAaxaxaxaxaAbgaxaUaVbhaVaX
+axaxaxaAacbiaCaDaCbjacacbkacacacacayacac
+axaxaxaJacaKaxaLaxaMacblbmbnacababboabab
+axaxaxaAacbpaCaDaCbqacbrbsbnacababababab
+axacacayacacaxbtaxacacacayacacababababab
+acacabboabacacacacacababboababababababab
+"}

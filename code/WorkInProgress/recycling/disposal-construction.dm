@@ -1,10 +1,8 @@
 // Disposal pipe construction
 
-/obj/structure/disposalconstruct
-
+/obj/structure/disposal/construct
 	name = "disposal pipe segment"
 	desc = "A huge pipe segment used for constructing disposal systems."
-	icon = 'disposal.dmi'
 	icon_state = "conpipe-s"
 	anchored = 0
 	density = 0
@@ -63,15 +61,15 @@
 	proc/dpipetype()
 		switch(ptype)
 			if(0,1)
-				return /obj/structure/disposalpipe/segment
+				return /obj/structure/disposal/pipe/segment
 			if(2,3,4)
-				return /obj/structure/disposalpipe/junction
+				return /obj/structure/disposal/pipe/junction
 			if(5)
-				return /obj/structure/disposalpipe/trunk
+				return /obj/structure/disposal/pipe/trunk
 			if(6)
 				return /obj/machinery/disposal
 			if(7)
-				return /obj/structure/disposaloutlet
+				return /obj/structure/disposal/outlet
 			if(8)
 				return /obj/machinery/disposal/deliveryChute
 
@@ -137,10 +135,10 @@
 			user << "You can only attach the [nicetype] if the floor plating is removed."
 			return
 
-		var/obj/structure/disposalpipe/CP = locate() in T
+		var/obj/structure/disposal/pipe/CP = locate() in T
 		if(!ispipe) // Disposal or outlet
 			if(CP) // There's something there
-				if(!istype(CP,/obj/structure/disposalpipe/trunk))
+				if(!istype(CP,/obj/structure/disposal/pipe/trunk))
 					user << "The [nicetype] requires a trunk underneath it in order to work."
 					return
 			else // Nothing under, fuck.
@@ -150,7 +148,7 @@
 			if(CP)
 				update()
 				var/pdir = CP.dpdir
-				if(istype(CP, /obj/structure/disposalpipe/broken))
+				if(istype(CP, /obj/structure/disposal/pipe/broken))
 					pdir = CP.dir
 				if(pdir & dpdir)
 					user << "There is already a [nicetype] at that location."
@@ -180,7 +178,7 @@
 						update() // TODO: Make this neat
 						if(ispipe) // Pipe
 							var/pipetype = dpipetype()
-							var/obj/structure/disposalpipe/P = new pipetype(src.loc)
+							var/obj/structure/disposal/pipe/P = new pipetype(src.loc)
 							P.base_icon_state = base_state
 							P.dir = dir
 							P.dpdir = dpdir
@@ -191,9 +189,9 @@
 							P.mode = 0 // start with pump off
 
 						if(ptype==7) // Disposal outlet
-							var/obj/structure/disposaloutlet/P = new /obj/structure/disposaloutlet(src.loc)
+							var/obj/structure/disposal/outlet/P = new /obj/structure/disposal/outlet(src.loc)
 							P.dir = dir
-							var/obj/structure/disposalpipe/trunk/Trunk = CP
+							var/obj/structure/disposal/pipe/trunk/Trunk = CP
 							Trunk.linked = P
 
 						if(ptype==8) // Disposal inlet

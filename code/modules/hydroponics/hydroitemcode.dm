@@ -77,13 +77,13 @@
 
 
 //Corncob
-/*obj/item/weapon/corncob/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/corncob/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/weapon/surgical/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
 		user << "<span class='notice'>You use [W] to fashion a pipe out of the corn cob!</span>"
 		new /obj/item/clothing/mask/cigarette/pipe/cobpipe (user.loc)
 		del(src)
-		return*/
+		return
 
 //Bluespace Tomatoes
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato/throw_impact(atom/hit_atom)

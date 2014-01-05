@@ -456,8 +456,10 @@
 	else
 		update_body()
 		pale = 0
+
+
 /mob/living/carbon/human/handle_disabilities()
-	if(zombie == 1)
+	if(zombie)
 		return
 
 	if(mSmallsize in mutations)
@@ -479,8 +481,7 @@
 		if(!(/mob/living/carbon/human/proc/remotesay in src.verbs))
 			src.verbs += /mob/living/carbon/human/proc/remotesay
 
-	if(hallucination > 0)
-
+	/*if(hallucination > 0)
 		if(hallucinations.len == 0 && hallucination >= 40 && health > 0)
 			if(prob(5))
 				fake_attack(src)
@@ -493,7 +494,7 @@
 	else
 		halloss = 0
 		for(var/obj/a in hallucinations)
-			del a
+			del a*/
 
 	if(mHallucination in mutations)
 		hallucination = 100
@@ -525,7 +526,7 @@
 
 
 	if (disabilities & 2)
-		if ((prob(1) && paralysis < 1 && r_epil < 1))
+		if (prob(1) && paralysis < 1 && r_epil < 1)
 			src << "\red You have a seizure!"
 			for(var/mob/O in viewers(src, null))
 				if(O == src)
@@ -534,13 +535,13 @@
 			paralysis = max(10, paralysis)
 			make_jittery(1000)
 	if (disabilities & 4)
-		if ((prob(5) && paralysis <= 1 && r_ch_cou < 1))
+		if (prob(5) && paralysis <= 1 && r_ch_cou < 1)
 			drop_item()
 			spawn( 0 )
 				emote("cough")
 				return
 	if (disabilities & 8)
-		if ((prob(5) && !stunned && r_Tourette < 1))
+		if (prob(5) && !stunned && r_Tourette < 1)
 			spawn( 0 )
 				switch(rand(1, 3))
 					if(1)

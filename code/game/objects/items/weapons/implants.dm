@@ -289,8 +289,12 @@ No Implant Specifics"}
 	var/mob/living/carbon/implanted = null
 	var/allow_reagents = 0
 
-/obj/item/weapon/implant/catchMessage(msg,mob/source)
+/obj/item/weapon/implant/catchMessage(msg, mob/source)
 	hear(msg,source)
+	return
+
+/obj/item/weapon/implant/hear_talk(mob/living/M as mob, msg)
+	hear(msg, M)
 	return
 
 /obj/item/weapon/implant/proc/hear(message, source as mob)

@@ -88,7 +88,6 @@ atom
 				var/DeltaBlue = LuminosityBlue - Falloff
 
 				if(ul_IsLuminous(DeltaRed, DeltaGreen, DeltaBlue))
-
 					Affected.LightLevelRed += max(DeltaRed, 0)
 					Affected.LightLevelGreen += max(DeltaGreen, 0)
 					Affected.LightLevelBlue += max(DeltaBlue, 0)
@@ -104,10 +103,15 @@ atom
 
 						for(var/atom/AffectedAtom in Affected)
 							AffectedAtom.ul_LightLevelChanged()
+
+				if(istype(Affected, /turf/space))
+					Affected.MaxRed = list(7)
+					Affected.MaxGreen = list(7)
+					Affected.MaxBlue = list(7)
+
 			return
 
 		ul_Extinguish()
-
 			if (ul_Extinguished != UL_I_LIT)
 				return
 
@@ -173,7 +177,6 @@ atom
 					T:LightLevelBlue = 0
 
 				ul_UnblankLocal(Blanked)
-
 			return
 
 		ul_UnblankLocal(var/list/ReApply = view(ul_TopLuminosity, src))
@@ -195,7 +198,6 @@ atom
 			return Blanked
 
 		ul_UpdateTopLuminosity()
-
 			if (ul_TopLuminosity < LuminosityRed)
 				ul_TopLuminosity = LuminosityRed
 

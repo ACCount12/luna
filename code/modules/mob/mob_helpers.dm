@@ -212,7 +212,7 @@ proc/iszombie(A)
 		t = text("[t][n_letter]")//since the above is ran through for each letter, the text just adds up back to the original word.
 		p++//for each letter p is increased to find where the next letter will be.
 	return copytext(sanitize(t),1,MAX_MESSAGE_LEN)
-
+*/
 
 proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 for p will cause letters to be replaced instead of added
 	/* Turn text into complete gibberish! */
@@ -225,13 +225,13 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 				letter = ""
 
 			for(var/j = 1, j <= rand(0, 2), j++)
-				letter += pick("#","@","*","&","%","$","/", "<", ">", ";","*","*","*","*","*","*","*")
+				letter += pick("#","@","^","{","}","&","%","$","/", "<", ">", ";","*","*","*","*","*","*","*","*")
 
 		returntext += letter
 
 	return returntext
 
-
+/*
 /proc/ninjaspeak(n)
 /*
 The difference with stutter is that this proc can stutter more than 1 letter

@@ -53,12 +53,12 @@
 ///////////////////////////////////////////////////////***
 
 /////////////////////////////////////////////////////green
-/obj/item/weapon/vial/green/drink(user)
+/obj/item/weapon/vial/green/drink(mob/living/carbon/user)
 	var/A = src
 	src = null
 	del(A)
 	if(prob(50)) user:weakened += 5
-	user:contract_disease(new /datum/disease/gbs)
+	user.contract_disease(new /datum/disease/gbs)
 
 /obj/item/weapon/vial/green/shatter()
 	var/A = src
@@ -78,11 +78,11 @@
 	O2.icon = 'objects.dmi'
 	O2.icon_state = "shards"
 	for(var/mob/living/carbon/human/H in view(5, sourceloc))
-		if(!H.virus) H.contract_disease(new /datum/disease/gbs)
+		H.contract_disease(new /datum/disease/gbs)
 	var/i
 	for(i=0, i<5, i++)
 		for(var/mob/living/carbon/human/H in view(5, sourceloc))
-			if(!H.virus) H.contract_disease(new /datum/disease/gbs)
+			H.contract_disease(new /datum/disease/gbs)
 		sleep(20)
 	flick("greenshatter2",O)
 	O.icon_state = "nothing"

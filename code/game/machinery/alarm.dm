@@ -230,9 +230,7 @@
 		var/unknown_concentration =  1-(o2_concentration+n2_concentration+co2_concentration+plasma_concentration)
 
 		readouts += "\blue [pick(fake_gases)]: [round(n2_concentration*100)]%<br>"
-
 		readouts += "\blue [pick(fake_gases)]: [round(o2_concentration*100)]%<br>"
-
 		readouts += "\blue [pick(fake_gases)]: [round(co2_concentration*100)]%<br>"
 
 		if(plasma_concentration > 0.01)

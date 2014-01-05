@@ -187,9 +187,6 @@
 	return
 
 /obj/item/weapon/tank/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	var/obj/item/weapon/icon = src
-	if (istype(src.loc, /obj/item/assembly))
-		icon = src.loc
 	if ((istype(W, /obj/item/device/analyzer) || (istype(W, /obj/item/device/pda))) && get_dist(user, src) <= 1)
 
 		for (var/mob/O in viewers(user, null))
@@ -200,7 +197,7 @@
 		var/total_moles = air_contents.total_moles()
 
 		user << "\blue Results of analysis of \icon[icon]"
-		if (total_moles>0)
+		if(total_moles>0)
 			var/o2_concentration = air_contents.oxygen/total_moles
 			var/n2_concentration = air_contents.nitrogen/total_moles
 			var/co2_concentration = air_contents.carbon_dioxide/total_moles
@@ -220,6 +217,8 @@
 			user << "\blue Tank is empty!"
 
 		src.add_fingerprint(user)
+	if(istype(W, /obj/item/device/assembly_holder))
+		bomb_assemble(W,user)
 	return
 
 /obj/item/weapon/tank/New()
@@ -244,7 +243,7 @@
 /obj/item/weapon/tank/examine()
 	..()
 	var/obj/item/weapon/icon = src
-	if (istype(src.loc, /obj/item/assembly))
+	if (istype(src.loc, /obj/item/device))
 		icon = src.loc
 
 		var/celsius_temperature = src.air_contents.temperature-T0C
@@ -400,219 +399,4 @@
 	..()
 
 	src.air_contents.toxins = (3*ONE_ATMOSPHERE)*70/(R_IDEAL_GAS_EQUATION*T20C)
-	return
-
-
-/obj/item/weapon/tank/proc/release()
-	var/datum/gas_mixture/removed = air_contents.remove(air_contents.total_moles())
-
-	loc.assume_air(removed)
-
-/obj/item/weapon/tank/plasma/proc/ignite()
-	var/fuel_moles = air_contents.toxins + air_contents.oxygen/6
-	var/strength = 1
-
-	var/turf/ground_zero = get_turf(loc)
-	loc = null
-
-	if(air_contents.temperature > (T0C + 400))
-		strength = fuel_moles/10
-
-		explosion(ground_zero, strength, strength*2, strength*3, strength*4, 1)
-
-	else if(air_contents.temperature > (T0C + 250))
-		strength = fuel_moles/15
-
-		explosion(ground_zero, 0, strength, strength*2, strength*3, 1)
-
-	else if(air_contents.temperature > (T0C + 100))
-		strength = fuel_moles/20
-
-		explosion(ground_zero, 0, 0, strength, strength*3, 1)
-
-	else
-		ground_zero.assume_air(air_contents)
-		ground_zero.hotspot_expose(1000, 125)
-
-	if(src.master) del(src.master)
-	del(src)
-
-/obj/item/weapon/tank/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	..()
-	if (istype(W, /obj/item/assembly/rad_ignite))
-		var/obj/item/assembly/rad_ignite/S = W
-		if (!( S.status ))
-			return
-		var/obj/item/assembly/r_i_ptank/R = new /obj/item/assembly/r_i_ptank( user )
-		R.part1 = S.part1
-		S.part1.loc = R
-		S.part1.master = R
-		R.part2 = S.part2
-		S.part2.loc = R
-		S.part2.master = R
-		S.layer = initial(S.layer)
-		if (user.client)
-			user.client.screen -= S
-		if (user.r_hand == S)
-			user.u_equip(S)
-			user.r_hand = R
-		else
-			user.u_equip(S)
-			user.l_hand = R
-		src.master = R
-		src.layer = initial(src.layer)
-		user.u_equip(src)
-		if (user.client)
-			user.client.screen -= src
-		src.loc = R
-		R.part3 = src
-		R.layer = 20
-		R.loc = user
-		S.part1 = null
-		S.part2 = null
-		//S = null
-		del(S)
-	if (istype(W, /obj/item/assembly/prox_ignite))
-		var/obj/item/assembly/prox_ignite/S = W
-		if (!( S.status ))
-			return
-		var/obj/item/assembly/m_i_ptank/R = new /obj/item/assembly/m_i_ptank( user )
-		R.part1 = S.part1
-		S.part1.loc = R
-		S.part1.master = R
-		R.part2 = S.part2
-		S.part2.loc = R
-		S.part2.master = R
-		S.layer = initial(S.layer)
-		if (user.client)
-			user.client.screen -= S
-		if (user.r_hand == S)
-			user.u_equip(S)
-			user.r_hand = R
-		else
-			user.u_equip(S)
-			user.l_hand = R
-		src.master = R
-		src.layer = initial(src.layer)
-		user.u_equip(src)
-		if (user.client)
-			user.client.screen -= src
-		src.loc = R
-		R.part3 = src
-		R.layer = 20
-		R.loc = user
-		S.part1 = null
-		S.part2 = null
-		//S = null
-		del(S)
-
-	if (istype(W, /obj/item/assembly/time_ignite))
-		var/obj/item/assembly/time_ignite/S = W
-		if (!( S.status ))
-			return
-		var/obj/item/assembly/t_i_ptank/R = new /obj/item/assembly/t_i_ptank( user )
-		R.part1 = S.part1
-		S.part1.loc = R
-		S.part1.master = R
-		R.part2 = S.part2
-		S.part2.loc = R
-		S.part2.master = R
-		S.layer = initial(S.layer)
-		if (user.client)
-			user.client.screen -= S
-		if (user.r_hand == S)
-			user.u_equip(S)
-			user.r_hand = R
-		else
-			user.u_equip(S)
-			user.l_hand = R
-		src.master = R
-		src.layer = initial(src.layer)
-		user.u_equip(src)
-		if (user.client)
-			user.client.screen -= src
-		src.loc = R
-		R.part3 = src
-		R.layer = 20
-		R.loc = user
-		S.part1 = null
-		S.part2 = null
-		//S = null
-		del(S)
-	if (istype(W, /obj/item/assembly/a_i_a))
-		var/obj/item/assembly/a_i_a/S = W
-		if (!( S.status ))
-			return
-		var/obj/item/clothing/suit/armor/a_i_a_ptank/R = new /obj/item/clothing/suit/armor/a_i_a_ptank( user )
-		R.part1 = S.part1
-		S.part1.loc = R
-		S.part1.master = R
-		R.part2 = S.part2
-		S.part2.loc = R
-		S.part2.master = R
-		R.part3 = S.part3
-		S.part3.loc = R
-		S.part3.master = R
-		S.layer = initial(S.layer)
-		if (user.client)
-			user.client.screen -= S
-		if (user.r_hand == S)
-			user.u_equip(S)
-			user.r_hand = R
-		else
-			user.u_equip(S)
-			user.l_hand = R
-		src.master = R
-		src.layer = initial(src.layer)
-		user.u_equip(src)
-		if (user.client)
-			user.client.screen -= src
-		src.loc = R
-		R.part4 = src
-		R.layer = 20
-		R.loc = user
-		S.part1 = null
-		S.part2 = null
-		S.part3 = null
-		//S = null
-		del(S)
-// PantsNote: More flamethrower assembly code. WOO!
-	if (istype(W, /obj/item/assembly/w_r_ignite))
-		var/obj/item/assembly/w_r_ignite/S = W
-		if (!( S.status ))
-			return
-		var/obj/item/weapon/flamethrower/R = new /obj/item/weapon/flamethrower( user )
-		R.part1 = S.part1
-		S.part1.loc = R
-		S.part1.master = R
-		R.part2 = S.part2
-		S.part2.loc = R
-		S.part2.master = R
-		R.part3 = S.part3
-		S.part3.loc = R
-		S.part3.master = R
-		S.layer = initial(S.layer)
-		if (user.client)
-			user.client.screen -= S
-		if (user.r_hand == S)
-			user.u_equip(S)
-			user.r_hand = R
-		else
-			user.u_equip(S)
-			user.l_hand = R
-		src.master = R
-		src.layer = initial(src.layer)
-		user.u_equip(src)
-		if (user.client)
-			user.client.screen -= src
-		src.loc = R
-		R.part4 = src
-		R.layer = 20
-		R.loc = user
-		S.part1 = null
-		S.part2 = null
-		S.part3 = null
-		//S = null
-		del(S)
-
 	return

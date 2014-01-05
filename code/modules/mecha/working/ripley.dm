@@ -121,7 +121,7 @@
 	lights_power = 60
 	wreckage = /obj/structure/mecha_wreckage/ripley/deathripley
 	cargo_capacity = 10
-	var/thrusters = 0
+	has_thrusters = 1
 
 /obj/mecha/working/ripley/syndie/New()
 	..()
@@ -133,20 +133,6 @@
 	D.attach(src)
 	for(var/obj/item/mecha_parts/mecha_tracking/B in src.contents)//Deletes the beacon so it can't shut down easily
 		del (B)
-
-/obj/mecha/working/ripley/syndie/verb/toggle_thrusters()
-	set category = "Exosuit Interface"
-	set name = "Toggle thrusters"
-	set src = usr.loc
-	set popup_menu = 0
-	if(usr!=src.occupant)
-		return
-	if(src.occupant)
-		if(get_charge() > 0)
-			thrusters = !thrusters
-			src.log_message("Toggled thrusters.")
-			src.occupant_message("<font color='[src.thrusters?"blue":"red"]'>Thrusters [thrusters?"en":"dis"]abled.")
-	return
 
 /obj/mecha/working/ripley/syndie/relaymove(mob/user,direction)
 	if(user != src.occupant) //While not "realistic", this piece is player friendly.

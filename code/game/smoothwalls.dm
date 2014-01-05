@@ -63,8 +63,7 @@ turf/proc/update_nearby_tiles(need_rebuild)
 
 /atom/proc/relativewall() //atom because it should be useable both for walls and false walls
 //	if(istype(src,/turf/simulated/floor/vault)||istype(src,/turf/simulated/wall/vault)) //HACK!!!
-	if(istype(src,/turf/simulated/wall/heatshield))
-		return
+//		return
 
 	var/junction = 0 //will be used to determine from which side the wall is connected to other walls
 
@@ -122,8 +121,7 @@ turf/proc/update_nearby_tiles(need_rebuild)
 
 /turf/simulated/wall/relativewall()
 //	if(istype(src,/turf/simulated/wall/vault)) //HACK!!!
-	if(istype(src,/turf/simulated/wall/heatshield))
-		return
+//		return
 
 	var/junction = 0 //will be used to determine from which side the wall is connected to other walls
 

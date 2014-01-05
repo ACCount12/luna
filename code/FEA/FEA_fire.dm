@@ -18,7 +18,7 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 					active_hotspot.volume = exposed_volume
 		return 1*/
 	var/igniting = 0
-	if(locate(/obj/fire) in src)
+	if(locate(/obj/effect/fire) in src)
 		return 1
 
 	if((exposed_temperature > PLASMA_MINIMUM_BURN_TEMPERATURE) && air_contents.toxins > 0.5)
@@ -30,7 +30,7 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 		if(parent&&parent.group_processing)
 			parent.suspend_group_processing()
 
-		var/obj/fire/F = new(src)
+		var/obj/effect/fire/F = new(src)
 		F.temperature = exposed_temperature
 		F.volume = exposed_volume
 
@@ -39,7 +39,7 @@ turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh)
 
 	return igniting
 
-obj/hotspot
+obj/effect/hotspot
 	//Icon for fire on turfs, also helps for nurturing small fires until they are full tile
 
 	anchored = 1
@@ -61,7 +61,7 @@ obj/hotspot
 
 		bypassing = 0
 
-obj/hotspot/proc/perform_exposure()
+obj/effect/hotspot/proc/perform_exposure()
 	var/turf/simulated/floor/location = loc
 	if(!istype(location))
 		return 0
@@ -89,7 +89,7 @@ obj/hotspot/proc/perform_exposure()
 		for(var/atom/item in loc)
 			item.temperature_expose(null, temperature, volume)
 
-obj/hotspot/proc/process(turf/simulated/list/possible_spread)
+obj/effect/hotspot/proc/process(turf/simulated/list/possible_spread)
 	if(just_spawned)
 		just_spawned = 0
 		return 0
@@ -129,19 +129,19 @@ obj/hotspot/proc/process(turf/simulated/list/possible_spread)
 
 	return 1
 
-obj/hotspot/New()
+obj/effect/hotspot/New()
 	..()
 	dir = pick(cardinal)
 	ul_SetLuminosity(3)
 
-obj/hotspot/Del()
+obj/effect/hotspot/Del()
 	loc:active_hotspot = null
 	src.ul_SetLuminosity(0)
 	loc = null
 	..()
 
 
-obj/fire
+obj/effect/fire
 	anchored = 1
 	mouse_opacity = 0
 	icon = 'fire.dmi'
@@ -157,7 +157,7 @@ obj/fire
 	//				for(var/atom/item in loc)
 	//				item.temperature_expose(null, temperature, volume)
 
-obj/fire/proc/process()
+obj/effect/fire/proc/process()
 	if(just_spawned)
 		just_spawned = 0
 		return
@@ -182,14 +182,14 @@ obj/fire/proc/process()
 			continue
 		if(!TS || !TS.air)
 			continue
-		if(locate(/obj/fire) in TS)
+		if(locate(/obj/effect/fire) in TS)
 			continue
 		if(TS.air.temperature >= 250  && TS.air.toxins > 0.5 && TS.air.oxygen > 0.5 )
-			new/obj/fire(TS)
+			new/obj/effect/fire(TS)
 	for(var/atom/item in loc)
 		item.temperature_expose(null, T.air.temperature, volume)
 
-obj/fire/proc/burn(tox,oxy)
+obj/effect/fire/proc/burn(tox,oxy)
 	var/turf/simulated/floor/T = src.loc
 //	var/datum/gas_mixture/affected = T.air.remove_ratio(volume/T.air.volume)
 	T.air.oxygen -= round(oxy)
@@ -200,16 +200,16 @@ obj/fire/proc/burn(tox,oxy)
 
 /*mob/verb/createfire()
 	src.loc:air:temperature += round(FIRE_MINIMUM_TEMPERATURE_TO_EXIST)
-	new/obj/fire(src.loc)*/
+	new/obj/effect/fire(src.loc)*/
 
-obj/fire/New()
+obj/effect/fire/New()
 	..()
 	var/turf/simulated/floor/T = src.loc
 	T.air.temperature += temperature
 	dir = pick(cardinal)
 	ul_SetLuminosity(7,3,0)
 
-obj/fire/Del()
+obj/effect/fire/Del()
 	ul_SetLuminosity(0)
 	loc = null
 	..()

@@ -184,14 +184,6 @@
 
 //Monkey/infected mode
 	var/list/resistances = list()
-	var/datum/disease/virus = null
-
-//Changeling mode stuff
-	var/changeling_absorbing = 0
-	var/changeling_level = 0
-	var/list/absorbed_dna = list()
-
-//List of active diseases
 	var/list/viruses = list() // replaces var/datum/disease/virus
 
 	// Weird shit from tg
@@ -477,6 +469,7 @@ mob/verb/turnwest()
 		return null
 
 	spawn(0) del(src)
+	affecting.Move(get_turf(src))
 	return affecting
 
 /obj/item/weapon/grab/proc/synch()
@@ -949,7 +942,7 @@ mob/verb/turnwest()
 					usr.hud_used.move_intent.icon_state = "running"
 
 		if("intent")
-			if (!( usr.intent ))
+			if (!usr.intent)
 				switch(usr.a_intent)
 					if("help")
 						usr.intent = "13,15"
@@ -1103,7 +1096,7 @@ mob/verb/turnwest()
 							usr << pick(//"You hear something click, but it doesn't open yet.",	// - Uristqwerty
 										//"The latch resists!",									// - IRC: BowlSoldier
 										//"The chain is starting to give!",						// - IRC: BowlSoldier
-										//"The chain bends a little.",							// - IRC: STALKER
+										"The chain bends a little.",							// - IRC: STALKER
 										"Your wrist hurts.",									// - IRC: STALKER
 										"Unnng")												// - IRC: Doug_H_Nuts
 
@@ -1144,7 +1137,10 @@ mob/verb/turnwest()
 
 /mob/New()
 	health = health_full
+	mob_list += src
 	..()
+
+
 
 /mob/living/carbon/human/Topic(href, href_list)
 	if (href_list["mach_close"])
@@ -1337,8 +1333,8 @@ mob/verb/turnwest()
 
 
 /mob/living/carbon/proc/swap_hand()
-	hand = !( hand )
-	if (!( hand ))
+	hand = !hand
+	if (!hand)
 		hands.dir = NORTH
 	else
 		hands.dir = SOUTH
@@ -1818,13 +1814,51 @@ mob/verb/turnwest()
 
 	set src in oview(1)
 
-	if(!usr) return
+	if(!ismob(usr)) return
 	if(src in usr) return
 	if(anchored) return
 
 	if(src in oview(1))	// Extra check, added because ctrl-click
-		usr.pulling = src
+		usr.start_pulling(src)
 	return
+
+/mob/verb/stop_pulling()
+	set name = "Stop Pulling"
+	set category = "IC"
+
+	if(pulling)
+		pulling.pulledby = null
+		pulling = null
+
+/mob/proc/start_pulling(var/atom/movable/AM)
+	if (!AM || !src || src==AM || !isturf(src.loc))	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
+		return
+
+	if (AM.anchored)
+		return
+
+/*	var/mob/M = AM
+	if(ismob(AM))
+		if(!iscarbon(src))
+			M.LAssailant = null
+		else
+			M.LAssailant = usr*/
+
+	if(pulling)
+		var/pulling_old = pulling
+		stop_pulling()
+		// Are we pulling the same thing twice? Just stop pulling.
+		if(pulling_old == AM)
+			return
+
+	pulling = AM
+	AM.pulledby = src
+
+	//Attempted fix for people flying away through space when cuffed and dragged.
+	if(ismob(AM))
+		var/mob/pulled = AM
+		pulled.inertia_dir = 0
+
 
 /atom/verb/examine()
 	set name = "Examine"
@@ -1857,9 +1891,7 @@ mob/verb/turnwest()
 	if (istype(mob, /mob/dead/observer) && mob.z > 1)
 		mob.Move(locate(mob.x, mob.y, mob.z - 1))
 	else if (istype(mob, /mob/living/silicon/ai))
-		var/mob/living/silicon/ai/M = mob
-		if ((!M.current && M.loc.z > 1) || M.current.z > 1)
-			AIMoveZ(UP, mob)
+		AIMoveZ(UP, mob)
 	else if(isobj(mob.loc))
 		mob.loc:relaymove(mob,UP)
 	else if(istype(mob, /mob/living/carbon))
@@ -1877,9 +1909,7 @@ mob/verb/turnwest()
 	if (istype(mob, /mob/dead/observer) && mob.z < 4)
 		mob.Move(locate(mob.x, mob.y, mob.z + 1))
 	else if (istype(mob, /mob/living/silicon/ai))
-		var/mob/living/silicon/ai/M = mob
-		if ((!M.current && M.loc.z < 4) || M.current.z < 4)
-			AIMoveZ(DOWN, mob)
+		AIMoveZ(DOWN, mob)
 	else if(istype(mob, /mob/living/carbon) && mob:back && istype(mob:back, /obj/item/weapon/tank/jetpack))
 		mob:back:move_z(DOWN, mob)
 	else if(istype(mob, /mob/living/carbon) && mob:belt && istype(mob:belt, /obj/item/weapon/tank/jetpack))
@@ -1998,7 +2028,7 @@ mob/verb/turnwest()
 
 			if (mob.restrained())
 				for(var/mob/M in range(mob, 1))
-					if (((M.pulling == mob && (!( M.restrained() ) && M.stat == 0)) || locate(/obj/item/weapon/grab, mob.grabbed_by.len)))
+					if (((M.pulling == mob && !M.restrained() && !M.stat) || locate(/obj/item/weapon/grab, mob.grabbed_by.len)))
 						src << "\blue You're restrained! You can't move!"
 						return 0
 			if(ishuman(mob))
@@ -2074,7 +2104,7 @@ mob/verb/turnwest()
 	if(IsGuestKey(src.key))
 		alert(src,"Animus doesn't allow guest accounts to play. Please go to http://www.byond.com/ and register for a key.","Guest","OK")
 		del(src)
-	if (((world.address == address || !(address)) && !(host)))
+	if ((world.address == address || !address) && !host)
 		host = key
 		world.update_status()
 
@@ -2118,7 +2148,7 @@ mob/verb/turnwest()
 /mob/proc/can_use_hands()
 	if(handcuffed)
 		return 0
-	if(buckled && istype(buckled, /obj/structure/stool/bed) && !istype(buckled, /obj/structure/stool/bed/chair)) // buckling does not restrict hands
+	if(buckled && istype(buckled, /obj/structure/stool/bed) && !istype(buckled, /obj/structure/stool/bed/chair))
 		return 0
 	return ..()
 
@@ -2422,14 +2452,6 @@ mob/verb/turnwest()
 /mob/proc/log_m(var/text)
 	if(mind)
 		mind.log.log_m(text,src)
-
-/mob/verb/stop_pulling()
-	set name = "Stop Pulling"
-	set category = "IC"
-
-	if(pulling)
-		pulling = null
-
 
 /mob/proc/Stun(amount)
 	stunned = max(max(stunned,amount),0) //can't go below 0, getting a low amount of stun doesn't lower your current stun

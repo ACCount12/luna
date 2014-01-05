@@ -7,8 +7,6 @@
 
 	origin_tech = "magnets=1;biotech=1"
 
-	secured = 1
-
 	var/scanning = 0
 	var/transmitting = 1
 
@@ -61,17 +59,24 @@
 		if(!scanning || !secured)
 			return
 
-		if(istype(loc, /mob/living/carbon) || (holder && istype(holder.loc, /mob/living/carbon)) )
-			var/mob/living/carbon/mob
-			if(holder)
-				mob = holder.loc
-			else
-				mob = loc
+		if(istype(loc, /mob/living/carbon))
+			var/mob/living/carbon/mob = loc
 
 			health_scan = mob.health
 			if(health_scan < 0)
 				sense()
 				scanning = 0
+			return
+		else
+			var/turf/T = get_turf(src)
+			for(var/mob/living/carbon/C in T)
+				if(recurs_find_in(C, src))
+					health_scan = C.health
+					if(health_scan < 0)
+						sense()
+						scanning = 0
+					break
+
 		return
 
 	toggle_scan()
@@ -113,3 +118,16 @@
 			attack_self(usr)
 
 		return
+
+	open
+		secured = 0
+
+
+proc/recurs_find_in(atom/A, atom/find) // finds A in B
+	if(A == find)
+		return 1
+
+	for(var/i=1, i<=A.contents.len, i++)
+		var/atom/B = A.contents[i]
+		if(.(B, find))
+			return 1

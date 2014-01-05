@@ -7,7 +7,7 @@
 //Inverts the colour of an HTML string
 /proc/invertHTML(HTMLstring)
 
-	if (!( istext(HTMLstring) ))
+	if (!istext(HTMLstring))
 		CRASH("Given non-text argument!")
 		return
 	else
@@ -294,10 +294,10 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return 1*/
 
 
-/*
+
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
 //Last modified by Carn
-/mob/proc/rename_self(var/role, var/allow_numbers=0)
+/*mob/proc/rename_self(var/role, var/allow_numbers=0)
 	spawn(0)
 		var/oldname = real_name
 
@@ -1058,7 +1058,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 					for(var/mob/M in T)
 
-						if(!istype(M,/mob) || istype(M, /mob/aiEye)) continue // If we need to check for more mobs, I'll add a variable
+						if(!istype(M,/mob) || istype(M, /mob/camera/aiEye)) continue // If we need to check for more mobs, I'll add a variable
 						mobs += M
 
 					for(var/mob/M in mobs)
@@ -1294,8 +1294,8 @@ Checks if that loc and dir has a item on the wall
 var/list/WALLITEMS = list(
 	"/obj/machinery/power/apc", "/obj/machinery/alarm", "/obj/item/device/radio/intercom",
 	"/obj/structure/extinguisher_cabinet", "/obj/structure/reagent_dispensers/peppertank",
-	"/obj/machinery/status_display", "/obj/machinery/requests_console", "/obj/machinery/light_switch", "/obj/effect/sign",
-	"/obj/machinery/newscaster", "/obj/machinery/firealarm", "/obj/structure/noticeboard", "/obj/machinery/door_control",
+	"/obj/machinery/status_display", "/obj/machinery/requests_console", "/obj/machinery/switch/light_switch", "/obj/effect/sign",
+	"/obj/machinery/newscaster", "/obj/machinery/firealarm", "/obj/structure/noticeboard", "/obj/machinery/switch/door_control",
 	"/obj/machinery/computer/security/telescreen", "/obj/machinery/embedded_controller/radio/simple_vent_controller",
 	"/obj/item/weapon/storage/secure/safe", "/obj/machinery/door_timer", "/obj/machinery/flasher", "/obj/machinery/keycard_auth",
 	"/obj/structure/mirror", "/obj/structure/closet/fireaxecabinet", "/obj/machinery/computer/security/telescreen/entertainment"

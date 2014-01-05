@@ -61,22 +61,6 @@ FLASHBANG
 	spawn(20)
 		del(pulse)
 
-	for(var/obj/item/weapon/W in range(world.view-1, T))
-
-		if (istype(W, /obj/item/assembly/m_i_ptank) || istype(W, /obj/item/assembly/r_i_ptank) || istype(W, /obj/item/assembly/t_i_ptank))
-
-			var/fuckthis
-			if(istype(W:part1,/obj/item/weapon/tank/plasma))
-				fuckthis = W:part1
-				fuckthis:ignite()
-			if(istype(W:part2,/obj/item/weapon/tank/plasma))
-				fuckthis = W:part2
-				fuckthis:ignite()
-			if(istype(W:part3,/obj/item/weapon/tank/plasma))
-				fuckthis = W:part3
-				fuckthis:ignite()
-
-
 	for(var/mob/living/M in viewers(world.view-1, T))
 
 		if(!istype(M, /mob/living)) continue
@@ -187,30 +171,6 @@ FLASHBANG
 			spawn(600)
 				A:equipment = 3
 				A:environ = 3
-
-		if(istype(A, /obj/machinery/camera))
-			A.icon_state = "cameraemp"
-			A:network = null                   //Not the best way but it will do. I think.
-
-			var/initial_status = A:status	   //So that motion cameras get disabled and won't send any messages when EMPed
-			A:status = 0
-
-			spawn(900)
-				A:network = initial(A:network)
-				A:icon_state = initial(A:icon_state)
-				A:status = initial_status
-			for(var/mob/living/silicon/ai/O in world)
-				if (O.current == A)
-					O.cancel_camera()
-					O << "Your connection to the camera has been lost."
-			for(var/mob/O in world)
-				if (istype(O.machine, /obj/machinery/computer/security))
-					var/obj/machinery/computer/security/S = O.machine
-					if (S.current == A)
-						O.machine = null
-						S.current = null
-						O.reset_view(null)
-						O << "The screen bursts into static."
 
 		if(istype(A, /obj/machinery/clonepod))
 			A:malfunction()

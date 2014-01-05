@@ -238,7 +238,7 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 		var/datum/disease/v = new virus.type(1, virus, 0)
 		src.viruses += v
 		v.affected_mob = src
-		v.strain_data = v.strain_data.Copy()
+		v.strain_data = virus.strain_data.Copy()
 		v.holder = src
 		if(v.can_carry && prob(5))
 			v.carrier = 1

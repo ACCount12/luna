@@ -15,9 +15,7 @@
 		return
 
 	New()
-		var/datum/reagents/R = new/datum/reagents(3000)
-		reagents = R
-		R.my_atom = src
+		create_reagents(3000)
 		if (!possible_transfer_amounts)
 			src.verbs -= /obj/structure/reagent_dispensers/verb/set_APTFT
 		..()

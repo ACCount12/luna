@@ -1,5 +1,5 @@
 /obj/item/device/assembly_holder
-	name = "Assembly"
+	name = "assembly"
 	icon = 'icons/obj/assemblies/new_assemblies.dmi'
 	icon_state = "holder"
 	item_state = "assembly"
@@ -30,9 +30,8 @@
 
 
 	attach(var/obj/item/device/D, var/obj/item/device/D2, var/mob/user)
-		if((!D)||(!D2))	return 0
-		if((!isassembly(D))||(!isassembly(D2)))	return 0
-		if((D:secured)||(D2:secured))	return 0
+		if(!isassembly(D)|| !isassembly(D2))	return 0
+		if( D:secured || D2:secured)	return 0
 		if(user)
 			user.remove_from_mob(D)
 			user.remove_from_mob(D2)
@@ -85,6 +84,13 @@
 		if(special_assembly)
 			special_assembly.HasProximity(AM)
 
+	HasProximity(atom/movable/AM as mob|obj)
+		if(a_left)
+			a_left.HasProximity(AM)
+		if(a_right)
+			a_right.HasProximity(AM)
+		if(special_assembly)
+			special_assembly.HasProximity(AM)
 
 	HasEntered(atom/movable/AM as mob|obj)
 		if(a_left)
@@ -94,16 +100,26 @@
 		if(special_assembly)
 			special_assembly.HasEntered(AM)
 
+	hear_talk(mob/living/M, msg)
+		if(a_left)
+			a_left.hear_talk(M, msg)
+		if(a_right)
+			a_right.hear_talk(M, msg)
+		if(special_assembly)
+			special_assembly.hear_talk(M, msg)
+
 
 	on_found(mob/finder as mob)
-		if(a_left)
-			a_left.on_found(finder)
-		if(a_right)
-			a_right.on_found(finder)
-		if(special_assembly)
-			if(istype(special_assembly, /obj/item))
-				var/obj/item/S = special_assembly
-				S.on_found(finder)
+		var/found = 0
+		if(a_left && a_left.on_found(finder))
+			found = 1
+		if(a_right && a_right.on_found(finder))
+			found = 1
+		if(istype(special_assembly, /obj/item))
+			var/obj/item/S = special_assembly
+			if(S.on_found(finder))
+				found = 1
+		return found
 
 
 	Move()
@@ -173,7 +189,7 @@
 
 	process_activation(var/obj/D, var/normal = 1, var/special = 1)
 		if(!D)	return 0
-		if((normal) && (a_right) && (a_left))
+		if(normal && a_right && a_left)
 			if(a_right != D)
 				a_right.pulsed(0)
 			if(a_left != D)
@@ -183,11 +199,9 @@
 		return 1
 
 
-
-
-
-
-
-
-
-
+/obj/item/device/assembly_holder/time_ignite/New()
+	..()
+	src.attach(new /obj/item/device/assembly/timer(src), new /obj/item/device/assembly/igniter(src))
+	a_left.toggle_secure()
+	a_right.toggle_secure()
+	secured = 1

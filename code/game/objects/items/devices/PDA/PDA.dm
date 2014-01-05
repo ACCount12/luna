@@ -540,7 +540,7 @@
 					if(L)
 						L << "\icon[P] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)"
 
-					if (prob(15)) //Give the AI a chance of intercepting the message
+					if (prob(5)) //Give the AI a chance of intercepting the message
 						for (var/mob/living/silicon/ai/A in world)
 							A.show_message("<i>Intercepted message from <b>[P:owner]</b>: [t]</i>")
 
@@ -757,48 +757,6 @@
 			user << "<span class='notice'>You slide \the [C] into \the [src].</span>"
 	else ..()
 	return
-/*
-	if (istype(C, /obj/item/weapon/cartridge) && isnull(src.cartridge))
-		user.drop_item()
-		C.loc = src
-		user << "\blue You insert [C] into [src]."
-		cartridge = C
-		if (cartridge.radio)
-			cartridge.radio.hostpda = src
-
-	else if (istype(C, /obj/item/weapon/card/id) && C:registered)
-		if(!owner)
-			owner = C:registered
-			ownjob = C:assignment
-			name = "PDA-[owner] ([ownjob])"
-			user << "\blue Card scanned."
-		else
-			var/input=alert("Would you like to insert the card or update owner information?",,"Insert","Update")
-			//Basic safety check. If either both objects are held by user or PDA is on ground and card is in hand.
-
-			if ( ( (src in user.contents) && (C in user.contents)) || (istype(loc, /turf) && in_range(src, user) && (C in user.contents)) )
-				if ( !(user.stat || user.restrained()) )//If they can still act.
-					if(input=="Insert")
-						id_check(user, 2)
-					else
-						if(!(owner == C:registered))
-							user << "\blue Name on card does not match registered name. Please try again."
-						else if((owner == C:registered) && (ownjob == C:assignment))
-							user << "\blue Rank is up to date."
-						else if((owner == C:registered) && (ownjob != C:assignment))
-							ownjob = C:assignment
-							name = "PDA-[owner] ([ownjob])"
-							user << "\blue Rank updated."
-					updateSelfDialog()//Update self dialog on success.
-			return//Return in case of failed check or when successful.
-		updateSelfDialog()//For the non-input related code.
-	/*else if (istype(C, /obj/item/device/paicard) && !src.pai)
-		user.drop_item()
-		C.loc = src
-		pai = C
-		user << "\blue You slot \the [C] into [src]."
-		updateUsrDialog()*/
-	return*/
 
 /obj/item/device/pda/attack(mob/living/M as mob, mob/living/user as mob)
 	if (istype(M, /mob/living/carbon))
@@ -855,6 +813,7 @@
 								user.show_message("\blue Blood Level Normal: [calc]% [amt]cl")
 					src.add_fingerprint(user)
 					return
+
 /obj/item/device/pda/afterattack(atom/A as mob|obj|turf|area, mob/user as mob)
 	switch(scanmode)
 		if(1) // medical scanner
@@ -897,7 +856,6 @@
 		user << "\blue Paper scanned." //concept of scanning paper copyright brainoblivion 2009
 
 /obj/item/device/pda/proc/explode() //This needs tuning.
-
 	var/turf/T = get_turf(src.loc)
 
 	if (ismob(loc))
@@ -960,24 +918,25 @@
 		usr << "<span class='notice'>You cannot do this while restrained.</span>"
 
 //AI verb and proc for sending PDA messages.
-
 /mob/living/silicon/ai/verb/cmd_send_pdamesg()
 	set category = "AI Commands"
-	set name = "Send PDA Message"
+	set name = "PDA - Send Message"
 	var/list/names = list()
 	var/list/plist = list()
 	var/list/namecounts = list()
 
-	if(usr.stat == 2)
+	if(usr.stat == DEAD)
 		usr << "You can't send PDA messages because you are dead!"
 		return
 
-	for (var/obj/item/device/pda/P in world)
-		if (!P.owner)
+	if(src.aiPDA.toff)
+		usr << "Turn on your receiver in order to send messages."
+		return
+
+	for (var/obj/item/device/pda/P in get_viewable_pdas())
+		if (P == src)
 			continue
-		else if (P == src)
-			continue
-		else if (P.toff)
+		else if (P == src.aiPDA)
 			continue
 
 		var/name = P.owner
@@ -990,34 +949,77 @@
 
 		plist[text("[name]")] = P
 
-	var/c = input(usr, "Please select a PDA") as null|anything in plist
+	var/c = input(usr, "Please select a PDA") as null|anything in sortList(plist)
 
 	if (!c)
 		return
 
-	var/selected = plist[c]
-	ai_send_pdamesg(selected)
+	var/obj/item/device/pda/selected = plist[c]
+//	src.aiPDA.create_message(src, selected)
 
-/mob/living/silicon/ai/proc/ai_send_pdamesg(obj/selected as obj)
-	var/t = input(usr, "Please enter message", src.name, null) as text
-	var/t_chat = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
-	t = copytext(sanitize_spec(t), 1, MAX_MESSAGE_LEN)
-	if (!t)
+	var/t = input(usr, "Please enter message", name, null) as text
+	t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
+
+	if (!t || usr.stat)
 		return
 
-	if (selected:toff)
+	if (isnull(selected) || selected.toff)
 		return
 
-	usr.show_message("<i>PDA message to <b>[selected:owner]</b>: [t_chat]</i>")
-	selected:tnote += "<i><b>&larr; From (AI) [usr.name]:</b></i><br>[t]<br>"
+	for (var/obj/machinery/message_server/MS in world)
+		MS.send_pda_message("[selected.owner]","[aiPDA.owner]","[t]")
 
-	if (!selected:silent)
-		playsound(selected.loc, 'twobeep.ogg', 50, 1)
-		for (var/mob/O in hearers(3, selected.loc))
-			O.show_message(text("\icon[selected] *[selected:ttone]*"))
+	aiPDA.tnote += "<i><b>&rarr; To [selected.owner]:</b></i><br>[sanitize(t)]<br>"
+	selected.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[selected];choice=Message;target=\ref[aiPDA]'>[aiPDA.owner]</a>:</b></i><br>[sanitize(t)]<br>"
 
-	selected.overlays = null
-	selected.overlays += image('pda.dmi', "pda-r")
+	//Search for holder of the PDA.
+	var/mob/living/L = null
+	if(selected.loc && isliving(selected.loc))
+		L = selected.loc
+	//Maybe they are a pAI!
+	else
+		L = get(selected, /mob/living/silicon)
+
+	if(L)
+		L << "\icon[selected] <b>Message from [aiPDA.owner] ([aiPDA.ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[selected];choice=Message;skiprefresh=1;target=\ref[aiPDA]'>Reply</a>)"
+
+
+/mob/living/silicon/ai/verb/cmd_toggle_pda_receiver()
+	set category = "AI Commands"
+	set name = "PDA - Toggle Sender/Receiver"
+	if(usr.stat == DEAD)
+		usr << "You can't do that because you are dead!"
+		return
+	if(!isnull(aiPDA))
+		aiPDA.toff = !aiPDA.toff
+		usr << "<span class='notice'>PDA sender/receiver toggled [(aiPDA.toff ? "Off" : "On")]!</span>"
+	else
+		usr << "You do not have a PDA. You should make an issue report about this."
+
+/mob/living/silicon/ai/verb/cmd_toggle_pda_silent()
+	set category = "AI Commands"
+	set name = "PDA - Toggle Ringer"
+	if(usr.stat == 2)
+		usr << "You can't do that because you are dead!"
+		return
+	if(!isnull(aiPDA))
+		//0
+		aiPDA.silent = !aiPDA.silent
+		usr << "<span class='notice'>PDA ringer toggled [(aiPDA.silent ? "Off" : "On")]!</span>"
+	else
+		usr << "You do not have a PDA. You should make an issue report about this."
+
+/mob/living/silicon/ai/verb/cmd_show_message_log()
+	set category = "AI Commands"
+	set name = "PDA - Show Message Log"
+	if(usr.stat == 2)
+		usr << "You can't do that because you are dead!"
+		return
+	if(!isnull(aiPDA))
+		var/HTML = "<html><head><title>AI PDA Message Log</title></head><body>[aiPDA.tnote]</body></html>"
+		usr << browse(HTML, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
+	else
+		usr << "You do not have a PDA. You should make an issue report about this."
 
 
 //Some spare PDAs in a box
@@ -1054,3 +1056,11 @@
 /obj/item/device/pda/emp_act(severity)
 	for(var/atom/A in src)
 		A.emp_act(severity)
+
+/proc/get_viewable_pdas()
+	. = list()
+	// Returns a list of PDAs which can be viewed from another PDA/message monitor.
+	for(var/obj/item/device/pda/P in world)
+		if(!P.owner || P.toff) continue
+		. += P
+	return .

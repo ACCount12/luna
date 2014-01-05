@@ -1,5 +1,5 @@
 /obj/machinery/biogenerator
-	name = "Biogenerator"
+	name = "biogenerator"
 	desc = ""
 	icon = 'icons/obj/biogenerator.dmi'
 	icon_state = "biogen-stand"
@@ -40,7 +40,7 @@
 			updateUsrDialog()
 	else if(processing)
 		user << "\red The biogenerator is currently processing."
-	else if(istype(O, /obj/item/weapon/storage/bag/plants))
+	else if(istype(O, /obj/item/weapon/satchel/plants))
 		var/i = 0
 		for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in contents)
 			i++
@@ -119,9 +119,9 @@
 	interact(user)
 
 /obj/machinery/biogenerator/proc/activate()
-	if (usr.stat != 0)
+	if (usr.stat)
 		return
-	if (src.stat != 0) //NOPOWER etc
+	if (src.stat) //NOPOWER etc
 		return
 	if(src.processing)
 		usr << "\red The biogenerator is in the process of working."
@@ -146,7 +146,7 @@
 		menustat = "void"
 	return
 
-/obj/machinery/biogenerator/proc/create_product(var/item,var/cost)
+/obj/machinery/biogenerator/proc/create_product(var/item, var/cost)
 	if(cost > points)
 		menustat = "nopoints"
 		return 0

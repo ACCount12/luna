@@ -199,9 +199,9 @@ GAS ANALYZER
 			for(var/datum/organ/external/org in damaged)
 				user.show_message(text("\blue \t []: [][]\blue - []",	\
 				capitalize(org.display_name),					\
-				(org.brute_dam > 0)	?	"\red [org.brute_dam]"							:0,		\
-				(org.isbleeding())?"\red <b>\[Bleeding\]</b>":"\t", 		\
-				(org.burn_dam > 0)	?	"<font color='#FFA500'>[org.burn_dam]</font>"	:0),1)
+				(org.brute_dam > 0)	?	"\red [org.brute_dam]"							:"0",		\
+				(org.isbleeding())?"\red <b>\[Bleeding\]</b>":"",\
+				(org.burn_dam > 0)	?	"<font color='#FFA500'>[org.burn_dam]</font>"	:"0"),1)
 		else
 			user.show_message("\blue \t Limbs are OK.",1)
 

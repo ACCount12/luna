@@ -7,3 +7,5 @@
 	world << "<span class='alert'>[sanitize(text)]</span>"
 	world << "<br>"
 
+/proc/captain_announce(var/text)
+	command_alert(text, null, "Priority Announcement")

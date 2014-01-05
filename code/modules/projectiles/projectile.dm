@@ -117,7 +117,7 @@
 
 
 	CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
-		if(air_group || (height==0)) return 1
+		if(air_group || height == 0) return 1
 
 		if(istype(mover, /obj/item/projectile))
 			return prob(95)
@@ -131,9 +131,9 @@
 			return
 		kill_count--
 		spawn while(src && src.loc)
-			if((!( current ) || loc == current))
+			if(!current || loc == current)
 				current = locate(min(max(x + xo, 1), world.maxx), min(max(y + yo, 1), world.maxy), z)
-			if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
+			if(x == 1 || x == world.maxx || y == 1 || y == world.maxy)
 				delete()
 				return
 			step_towards(src, current)

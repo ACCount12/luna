@@ -1,7 +1,6 @@
 /obj/machinery/bot/secbot
 	name = "Securitron"
 	desc = "A little security robot. He looks less than thrilled."
-	icon = 'aibots.dmi'
 	icon_state = "secbot0"
 	layer = 5.0
 	density = 1
@@ -795,7 +794,7 @@ Auto Patrol: []"},
 	Sa.overlays += image('aibots.dmi', "hs_hole")
 	Sa.created_name = src.name
 
-	new /obj/item/device/prox_sensor(Loc) // Dropping a prox sensor
+	new /obj/item/device/assembly/prox_sensor(Loc) // Dropping a prox sensor
 
 	new /obj/item/weapon/melee/baton(Loc) // Dropping a baton
 
@@ -836,19 +835,16 @@ Auto Patrol: []"},
 	var/build_step = 0
 	var/created_name = "Securitron" //To preserve the name if it's a unique securitron I guess
 
-/obj/item/clothing/head/helmet/attackby(var/obj/item/device/radio/signaler/S, mob/user as mob)
-	if (!istype(S, /obj/item/device/radio/signaler))
+/obj/item/clothing/head/helmet/attackby(var/obj/item/device/S, mob/user as mob)
+	if (!issignaler(S))
 		..()
 		return
 
 	if (src.type != /obj/item/clothing/head/helmet) //Eh, but we don't want people making secbots out of space helmets.
 		return
 
-	if (!S.b_stat)
-		return
-	else
-		src.assemble(src, S, user, /obj/item/weapon/robot_assembly/secbot)
-		user << "You add the signaler to the helmet."
+	src.assemble(src, S, user, /obj/item/weapon/robot_assembly/secbot)
+	user << "You add the signaler to the helmet."
 
 /obj/item/weapon/robot_assembly/secbot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if ((istype(W, /obj/item/weapon/weldingtool)) && (!src.build_step))
@@ -858,7 +854,7 @@ Auto Patrol: []"},
 			src.overlays += image('aibots.dmi', "hs_hole")
 			user << "You weld a hole in [src]!"
 
-	else if ((istype(W, /obj/item/device/prox_sensor)) && (src.build_step == 1))
+	else if (isprox(W) && (src.build_step == 1))
 		src.build_step++
 		user << "You add the prox sensor to [src]!"
 		src.overlays += image('aibots.dmi', "hs_eye")

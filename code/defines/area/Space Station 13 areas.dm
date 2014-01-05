@@ -59,8 +59,6 @@
 	var/list/alldoors         // Doors which are not in the area, but should still be closed in case of emergency.
 	var/auxdoors = list()		//Added by Strumpetplaya - Alarm Change - Contains a list of doors adjacent to this area
 
-/area/engine/
-
 /area/bengine/
 	name = "Backup Engine"
 	icon_state = "engine"
@@ -115,6 +113,14 @@
 
 /area/shuttle/arrival/station
 	icon_state = "shuttle1_1"
+
+/area/shuttle/aipod
+	name = "Escape Pod"
+	icon_state = "shuttle2"
+
+/area/shuttle/aipod/sat
+/area/shuttle/aipod/transit
+/area/shuttle/aipod/luna
 
 /area/shuttle/escape
 	name = "Escape Pod"
@@ -664,36 +670,38 @@
 	name = "Courtroom"
 	icon_state = "courtroom"
 
+/area/engine
+	icon_state = "engine"
 
 /area/engine/engine_smes
 	name = "Engine SMES Room"
-	icon_state = "engine"
+
+/area/engine/engine_vent
+	name = "Engine Vent"
+	applyalertstatus = 0
+	luminosity = 1
+	ul_Lighting = 0
 
 
 /area/engine/engine_walls
 	name = "Engine Walls"
-	icon_state = "engine"
 
 /area/engine/engine_gas_storage
 	name = "Engine Storage"
 	icon_state = "engine_gas_storage"
 
-
 /area/engine/engine_hallway
 	name = "Engine Hallway"
 	icon_state = "engine_hallway"
-
 
 /area/engine/engine_mon
 	name = "Engine Monitoring"
 	icon_state = "engine_monitoring"
 
-
 /area/engine/combustion
 	name = "Engine Combustion Chamber"
 	icon_state = "engine"
 	music = "signal"
-
 
 /area/engine/engine_control
 	name = "Engine Control"
@@ -884,7 +892,6 @@
 	icon_state = "interrogation"
 
 /area/solar
-	requires_power = 0
 	luminosity = 1
 	ul_Lighting = 0
 
@@ -893,7 +900,7 @@
 	icon_state = "yellow"
 
 
-/area/solar/
+/area/solar
 	name = "Mining Base Solar Array"
 	icon_state = "yellow"
 
@@ -926,10 +933,17 @@
 	icon_state = "aft"
 
 /area/syndicate_station
+	name = "Syndicate Ship"
+	icon_state = "yellow"
+	requires_power = 0
+	ul_Lighting = 0
+
+/area/syndicate_station2
 	name = "Syndicate Station"
 	icon_state = "yellow"
 	requires_power = 0
 	ul_Lighting = 0
+
 
 /area/wizard_station
 	name = "Wizard's Den"
@@ -1124,8 +1138,12 @@
 	name = "Derelict Secondary Hallway"
 	icon_state = "hallS"
 
-/area/derelict/arrival
-	name = "Arrival Centre"
+/area/derelict/hangar
+	name = "Pod Hangar B"
+	icon_state = "yellow"
+
+/area/derelict/trash
+	name = "Garbage Disposal"
 	icon_state = "yellow"
 
 /area/derelict/storage/equipment
@@ -1251,25 +1269,16 @@
 	icon_state = "ai"
 	applyalertstatus = 0
 
-/area/turret_protected/AIsatextFP
+/area/turret_protected/AIsatext
 	name = "AI Sat Ext"
 	icon_state = "storage"
 	applyalertstatus = 0
+	ul_Lighting = 0
 
-/area/turret_protected/AIsatextFS
-	name = "AI Sat Ext"
-	icon_state = "storage"
-	applyalertstatus = 0
-
-/area/turret_protected/AIsatextAS
-	name = "AI Sat Ext"
-	icon_state = "storage"
-	applyalertstatus = 0
-
-/area/turret_protected/AIsatextAP
-	name = "AI Sat Ext"
-	icon_state = "storage"
-	applyalertstatus = 0
+/area/turret_protected/AIsatext/RL
+/area/turret_protected/AIsatext/RU
+/area/turret_protected/AIsatext/LL
+/area/turret_protected/AIsatext/LU
 
 /area/dockingbay/admin
 	name = "Docking Bay D"

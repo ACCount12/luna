@@ -42,9 +42,10 @@
 	access_HoSoffice = 42
 	access_mining = 43
 
-// these are big, seperate numbers
-	access_syndicate = 70
-	access_nanotrasen = 80
+// these are big numbers
+	access_syndicate = 101
+	access_nanotrasen = 100
+	access_admins = 100
 
 	password_firedoor = 100 //Stubs from networking 1.0, may be removed, may be used... for now, just avoid them but leave them in -Sukasa
 	password_smeg = 101
@@ -54,10 +55,11 @@
 	password_filterinlets = 105
 	password_filtervents = 106
 
-/obj/var/list/req_access = null
-/obj/var/req_access_txt = "0"
-/obj/New()
+/obj
+	var/list/req_access = null
+	var/req_access_txt = "0"
 
+/obj/New()
 	if(src.req_access_txt)
 		var/req_access_str = params2list(req_access_txt)
 		var/req_access_changed = 0

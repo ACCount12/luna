@@ -1,23 +1,36 @@
 /mob/living/silicon/ai
 	name = "AI"
 	voice_name = "synthesized voice"
-	icon = 'mob.dmi'//
+	icon = 'icons/mob/ai.dmi'
 	icon_state = "ai"
 	anchored = 1
+
 	var/network = "Luna"
-	var/obj/machinery/camera/current = null
 	var/list/connected_robots = list()
 	var/aiRestorePowerRoutine = 0
-	var/datum/ai_laws/laws_object = null
-	//var/list/laws = list()
-	var/alarms = list("Motion"=list(), "Fire"=list(), "Atmosphere"=list(), "Power"=list())
+	var/obj/item/device/pda/aiPDA = null
 	var/viewalerts = 0
+	var/datum/trackable/track = null
+	var/alarms = list("Motion"=list(), "Fire"=list(), "Atmosphere"=list(), "Power"=list(), "Camera"=list())
+	var/list/ai_screens = list("Blue" = "ai", "Red" = "ai-red", "Green" = "ai-wierd",
+							"Monochrome" = "ai-mono", "Clown" = "ai-clown",
+							"Inverted" = "ai-u", "Firewall" = "ai-magma",
+							"Static" = "ai-static", "Red October" = "ai-redoctober",
+							"dWine" = "ai-dorf","Matrix" = "ai-matrix",
+							"Malfunction" = "ai-malf", "Bliss" = "ai-bliss",
+							"Console" = "ai-text", "Smiley" = "ai-smiley")
 
-
-	var/datum/game_mode/malfunction/AI_Module/module_picker/malf_picker
-	var/processing_time = 100
-	var/list/datum/game_mode/malfunction/AI_Module/current_modules = list()
+	var/mob/living/silicon/decoy/decoy
+	var/datum/ai_modules_picker/malf_picker
 	var/fire_res_on_core = 0
+
+/mob/living/silicon/ai/New(loc, var/datum/ai_laws/L)
+	..()
+	spawn(10)
+		aiPDA = new /obj/item/device/pda(src)
+		aiPDA.owner = name
+		aiPDA.ownjob = "AI"
+		aiPDA.name += " ([aiPDA.ownjob])"
 
 /mob/living/silicon/ai/Stat()
 	..()
@@ -26,7 +39,18 @@
 		if(LaunchControl.online && main_shuttle.location < 2)
 			var/timeleft = LaunchControl.timeleft()
 			if (timeleft)
-				stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+				stat("ETA-[(timeleft / 60) % 60]", "[add_zero(num2text(timeleft % 60), 2)]")
+
+/mob/living/silicon/ai/verb/pick_icon()
+	set category = "AI Commands"
+	set name = "Set AI Core Display"
+	if(stat || aiRestorePowerRoutine)
+		return
+
+	var/icontype = input("Please, select a display!", "AI", null) in ai_screens
+	icon_state = ai_screens[icontype]
+	if(decoy)
+		decoy.icon_state = ai_screens[icontype]
 
 /mob/living/silicon/ai/verb/ai_alerts()
 	set category = "AI Commands"
@@ -72,12 +96,6 @@
 	cancel_call_proc(src)
 	return
 
-/mob/living/silicon/ai/check_eye(var/mob/user as mob)
-	if (!current)
-		return null
-	user.reset_view(current)
-	return 1
-
 /mob/living/silicon/ai/blob_act()
 	if (stat != 2)
 		bruteloss += 30
@@ -116,18 +134,51 @@
 		if (href_list["mach_close"] == "aialerts")
 			viewalerts = 0
 		var/t1 = text("window=[]", href_list["mach_close"])
-		machine = null
+		unset_machine()
 		src << browse(null, t1)
 	if (href_list["switchcamera"])
-		switchCamera(locate(href_list["switchcamera"]))
+		switchCamera(locate(href_list["switchcamera"]) in cameranet.cameras)
 	if (href_list["showalerts"])
 		ai_alerts()
+	if (href_list["showalerts"])
+		ai_alerts()
+	//Carn: holopad requests
+/*	if (href_list["jumptoholopad"])
+		var/obj/machinery/hologram/holopad/H = locate(href_list["jumptoholopad"])
+		if(stat == CONSCIOUS)
+			if(H)
+				H.attack_ai(src) //may as well recycle
+			else
+				src << "<span class='notice'>Unable to locate the holopad.</span>"*/
+
+	if (href_list["track"])
+		var/mob/target = locate(href_list["track"]) in mob_list
+		var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
+		if(A && target)
+			A.ai_actual_track(target)
+		return
+
+	else if (href_list["faketrack"])
+		var/mob/target = locate(href_list["track"]) in mob_list
+		var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
+		if(A && target)
+
+			A.cameraFollow = target
+			A << text("Now tracking [] on camera.", target.name)
+			if (usr.machine == null)
+				usr.machine = usr
+
+			while (src.cameraFollow == target)
+				usr << "Target is not on or near any active cameras on the station. We'll check again in 5 seconds (unless you use the cancel-camera verb)."
+				sleep(40)
+				continue
+		return
 	return
+
 
 /mob/living/silicon/ai/meteorhit(obj/O as obj)
 	for(var/mob/M in viewers(src, null))
 		M.show_message(text("\red [] has been hit by []", src, O), 1)
-		//Foreach goto(19)
 	if (health > 0)
 		bruteloss += 30
 		if ((O.icon_state == "flaming"))
@@ -144,6 +195,20 @@
 	set category = "AI Commands"
 	set name = "Show Laws"
 	show_laws()
+
+/mob/living/silicon/ai/proc/switchCamera(var/obj/machinery/camera/C)
+	src.cameraFollow = null
+
+	if (!C || stat == 2) //C.can_use())
+		return 0
+
+	if(!src.eyeobj)
+		view_core()
+		return
+	// ok, we're alive, camera is good and in our network...
+	eyeobj.setLoc(get_turf(C))
+	//machine = src
+	return 1
 
 /mob/living/silicon/ai/show_laws(var/everyone = 0)
 	var/who
@@ -171,21 +236,6 @@
 /mob/living/silicon/ai/proc/clear_supplied_laws()
 	laws_sanity_check()
 	laws_object.clear_supplied_laws()
-
-/mob/living/silicon/ai/proc/switchCamera(var/obj/machinery/camera/C)
-	usr:cameraFollow = null
-	if (!C)
-		machine = null
-		reset_view(null)
-		return 0
-	if (stat == 2 || !C.status || C.network != network) return 0
-
-	// ok, we're alive, camera is good and in our network...
-
-	machine = src
-	src:current = C
-	reset_view(C)
-	return 1
 
 // This alarm does not show on the "Show Alerts" menu
 /mob/living/silicon/ai/proc/triggerUnmarkedAlarm(var/class, area/A, var/O)
@@ -244,19 +294,19 @@
 		C = O
 	L[A.name] = list(A, (C) ? C : O, list(alarmsource))
 	if (O)
-		if (C && C.status)
-			src << text("--- [] alarm detected in []! (<A HREF=?src=\ref[];switchcamera=\ref[]>[]</A>)", class, A.name, src, C, C.c_tag)
+		if (C && C.can_use())
+			queueAlarm("--- [class] alarm detected in [A.name]! (<A HREF=?src=\ref[src];switchcamera=\ref[C]>[C.c_tag]</A>)", class)
 		else if (CL && CL.len)
 			var/foo = 0
 			var/dat2 = ""
 			for (var/obj/machinery/camera/I in CL)
-				dat2 += text("[]<A HREF=?src=\ref[];switchcamera=\ref[]>[]</A>", (!foo) ? "" : " | ", src, I, I.c_tag)
+				dat2 += text("[]<A HREF=?src=\ref[];switchcamera=\ref[]>[]</A>", (!foo) ? "" : " | ", src, I, I.c_tag)	//I'm not fixing this shit...
 				foo = 1
-			src << text ("--- [] alarm detected in []! ([])", class, A.name, dat2)
+			queueAlarm(text ("--- [] alarm detected in []! ([])", class, A.name, dat2), class)
 		else
-			src << text("--- [] alarm detected in []! (No Camera)", class, A.name)
+			queueAlarm(text("--- [] alarm detected in []! (No Camera)", class, A.name), class)
 	else
-		src << text("--- [] alarm detected in []! (No Camera)", class, A.name)
+		queueAlarm(text("--- [] alarm detected in []! (No Camera)", class, A.name), class)
 	if (viewalerts) ai_alerts()
 	return 1
 
@@ -273,40 +323,22 @@
 				cleared = 1
 				L -= I
 	if (cleared)
-		src << text("--- [] alarm in [] has been cleared.", class, A.name)
+		queueAlarm(text("--- [] alarm in [] has been cleared.", class, A.name), class, 0)
 		if (viewalerts) ai_alerts()
 	return !cleared
 
-/mob/living/silicon/ai/cancel_camera()
-	set category = "AI Commands"
-	set name = "Cancel Camera View"
-	reset_view(null)
-	machine = null
-	src:cameraFollow = null
-
 /mob/living/silicon/ai/verb/change_network()
 	set category = "AI Commands"
-	set name = "Change Camera Network"
-	reset_view(null)
-	machine = null
-	src:cameraFollow = null
-//	if(network == "AI Satellite")
-//		network = "Luna"
-//	else if (network == "Prison")
-//		network = "AI Satellite"
-//	else //(network == "SS13")
-//		network = "Prison"
-//		network = "AI Satellite"
-//	src << "\blue Switched to [network] camera network."
-	src << "\blue No other networks available."
+	set name = "Change Camera Subnetwork"
+
+	var/net = input("Select a subnetwork", "AI", null) in ai_cam_marks
+	var/turf/T = get_turf(ai_cam_marks[net])
+	if(istype(T))
+		src << "\blue Switched to [net] camera subnetwork."
+		eyeobj.setLoc(T)
 
 /mob/living/silicon/ai/proc/choose_modules()
 	set category = "AI Commands"
 	set name = "Choose Module"
 
 	malf_picker.use(src)
-
-
-
-
-

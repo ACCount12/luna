@@ -166,7 +166,6 @@
 	if(istype(M, /mob/living/carbon/human))
 		log_admin("[key_name(src)] has made [M.key] a changeling.")
 		spawn(10)
-			M.absorbed_dna[M.real_name] = M.dna
 			M.make_changeling()
 	else
 		alert("Invalid mob")

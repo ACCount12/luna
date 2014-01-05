@@ -1,5 +1,5 @@
 /obj/item/weapon/storage/box/syndie_kit
-	name = "Box"
+	name = "box"
 	desc = "A sleek, sturdy box"
 	icon_state = "box_of_doom"
 	item_state = "syringe_kit"

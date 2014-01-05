@@ -6,6 +6,7 @@
 	icon_state = "monkey1"
 	gender = NEUTER
 	flags = 258.0
+	pass_flags = PASSTABLE
 	random_events = list("scratch")
 	species = "Monkey"
 
@@ -88,9 +89,9 @@
 		now_pushing = 1
 		now_pushing = 0
 		..()
-		if (!( istype(AM, /atom/movable) ))
+		if (!istype(AM, /atom/movable))
 			return
-		if (!( now_pushing ))
+		if (!now_pushing)
 			now_pushing = 1
 			if (!( AM.anchored ))
 				var/t = get_dir(src, AM)
@@ -130,7 +131,7 @@
 				shielded = 1
 			else
 		bruteloss += 30
-		if ((O.icon_state == "flaming" && !( shielded )))
+		if (O.icon_state == "flaming" && !shielded)
 			fireloss += 40
 		updatehealth()
 	return

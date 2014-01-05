@@ -1,7 +1,7 @@
 /**********************Mineral deposits**************************/
 
 /turf/simulated/mineral //wall piece
-	name = "Rock"
+	name = "mineral deposit"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
 	oxygen = 0
@@ -37,19 +37,19 @@
 		if((istype(get_step(src, NORTH), /turf/simulated/floor)) || (istype(get_step(src, NORTH), /turf/space)) || (istype(get_step(src, NORTH), /turf/simulated/shuttle/floor)))
 			T = get_step(src, NORTH)
 			if (T)
-				T.overlays += image('icons/turf/walls.dmi', "rock_side_s")
+				T.overlays += image('icons/turf/overlays.dmi', "rock_side_s", layer=6)
 		if((istype(get_step(src, SOUTH), /turf/simulated/floor)) || (istype(get_step(src, SOUTH), /turf/space)) || (istype(get_step(src, SOUTH), /turf/simulated/shuttle/floor)))
 			T = get_step(src, SOUTH)
 			if (T)
-				T.overlays += image('icons/turf/walls.dmi', "rock_side_n", layer=6)
+				T.overlays += image('icons/turf/overlays.dmi', "rock_side_n", layer=6)
 		if((istype(get_step(src, EAST), /turf/simulated/floor)) || (istype(get_step(src, EAST), /turf/space)) || (istype(get_step(src, EAST), /turf/simulated/shuttle/floor)))
 			T = get_step(src, EAST)
 			if (T)
-				T.overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6)
+				T.overlays += image('icons/turf/overlays.dmi', "rock_side_w", layer=6)
 		if((istype(get_step(src, WEST), /turf/simulated/floor)) || (istype(get_step(src, WEST), /turf/space)) || (istype(get_step(src, WEST), /turf/simulated/shuttle/floor)))
 			T = get_step(src, WEST)
 			if (T)
-				T.overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6)
+				T.overlays += image('icons/turf/overlays.dmi', "rock_side_e", layer=6)
 
 	if (mineralName && mineralAmt && spread && spreadChance)
 		for(var/dir in cardinal)
@@ -57,7 +57,6 @@
 				var/turf/T = get_step(src, dir)
 				if(istype(T, /turf/simulated/mineral/random))
 					Spread(T)
-	return
 
 /turf/simulated/mineral/proc/Spread(var/turf/T)
 	new src.type(T)
@@ -364,17 +363,16 @@
 	return
 
 /turf/simulated/floor/plating/airless/asteroid/proc/updateMineralOverlays()
-
 	src.overlays.Cut()
 
 	if(istype(get_step(src, NORTH), /turf/simulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_n")
+		src.overlays += image('icons/turf/overlays.dmi', "rock_side_n", layer=6)
 	if(istype(get_step(src, SOUTH), /turf/simulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_s", layer=6)
+		src.overlays += image('icons/turf/overlays.dmi', "rock_side_s", layer=6)
 	if(istype(get_step(src, EAST), /turf/simulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6)
+		src.overlays += image('icons/turf/overlays.dmi', "rock_side_e", layer=6)
 	if(istype(get_step(src, WEST), /turf/simulated/mineral))
-		src.overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6)
+		src.overlays += image('icons/turf/overlays.dmi', "rock_side_w", layer=6)
 
 
 /turf/simulated/floor/plating/airless/asteroid/proc/fullUpdateMineralOverlays()

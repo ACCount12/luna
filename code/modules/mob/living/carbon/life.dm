@@ -43,6 +43,8 @@
 	//stuff in the stomach
 	handle_stomach()
 
+	handle_hallucinations()
+
 	//Disabilities
 	handle_disabilities()
 

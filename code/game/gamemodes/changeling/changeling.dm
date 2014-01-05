@@ -97,23 +97,21 @@
 	return ..()
 
 /datum/game_mode/changeling/declare_completion()
-	for(var/datum/mind/changeling in changelings)
+	for(var/datum/mind/mind in changelings)
 		var/changelingwin = 1
 		var/changeling_name
-		var/totalabsorbed = 0
-		if (changeling.current)
-			totalabsorbed = changeling.current.absorbed_dna.len - 1
+		var/totalabsorbed = mind.changeling.absorbed_dna.len - 1
 
-		if(changeling.current)
-			changeling_name = "[changeling.current.real_name] (played by [changeling.key])"
+		if(mind.current)
+			changeling_name = "[mind.current.real_name] (played by [mind.key])"
 		else
-			changeling_name = "[changeling.key] (character destroyed)"
+			changeling_name = "[mind.key] (character destroyed)"
 
 		world << "<B>The changeling was [changeling_name]</B>"
 		world << "<B>Genomes absorbed: [totalabsorbed]</B>"
 
 		var/count = 1
-		for(var/datum/objective/objective in changeling.objectives)
+		for(var/datum/objective/objective in mind.objectives)
 			if(objective.check_completion())
 				world << "<B>Objective #[count]</B>: [objective.explanation_text] \green <B>Success</B>"
 			else

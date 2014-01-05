@@ -8,7 +8,6 @@
 
 	var/agents_possible = 0
 
-//	var/list/datum/mind/syndicates = list()
 	var/finished = 0
 	var/list/hostile_spawns = list()
 	var/list/crew_spawns = list()
@@ -175,24 +174,6 @@
 	return 1
 */
 
-/datum/game_mode/hostile/proc/get_possible_syndicates()
-	var/list/candidates = list()
-
-	for(var/mob/new_player/player in world)
-		if((player.client) &&  (player.ready))
-			if(player.be_takeover_agent)
-				candidates += player.mind
-
-	if(candidates.len < 1)
-		for(var/mob/new_player/player in world)
-			if((player.client) && (player.ready))
-				candidates += player.mind
-
-	if(candidates.len < 1)
-		return null
-	else
-		return candidates
-
 /datum/game_mode/hostile/proc/random_radio_frequency()
 	var/f = 0
 
@@ -202,10 +183,3 @@
 	while (f == 0 || f == 1459)
 
 	return f
-
-/datum/game_mode/hostile/proc/get_player_count()
-	var/count = 0
-	for(var/mob/new_player/P in world)
-		if(P.ready)
-			count++
-	return count

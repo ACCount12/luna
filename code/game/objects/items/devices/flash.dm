@@ -22,7 +22,7 @@
 	status = -1
 
 
-/obj/item/device/flash/attack(mob/living/carbon/M as mob, mob/user as mob)
+/obj/item/device/flash/attack(mob/living/carbon/M as mob, mob/living/user as mob)
 	if ((CLUMSY in usr.mutations) && prob(50))
 		usr << "\red The [src.name] slips out of your hand."
 		usr.drop_item()
@@ -72,6 +72,10 @@
 				if(prob(M.eye_stat - 20 + 1))
 					M << "\red You go blind!"
 					M.sdisabilities |= 1
+
+			user.mind_initialize()
+			M.mind_initialize()
+
 			if((user.mind in ticker.mode.head_revolutionaries) && ticker.mode.name != "rp-revolution")
 				ticker.mode.add_revolutionary(M.mind)
 

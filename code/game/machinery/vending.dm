@@ -494,7 +494,7 @@
 
 
 //"Borrowed" airlock shocking code.
-/obj/machinery/vending/proc/shock(mob/user, prb)
+/obj/machinery/vending/shock(mob/user, prb)
 	if(!prob(prb))
 		return 0
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
@@ -531,34 +531,6 @@
 	product_prices = "2;1;1;1;1;1;1;2;1"
 	product_hidden = "/obj/item/weapon/reagent_containers/pill/tox;/obj/item/weapon/reagent_containers/glass/bottle/stoxin"
 	hidden_prices = "4;2"
-
-/obj/machinery/vending/security
-	name = "SecTech"
-	desc = "A security equipment vendor"
-	icon_state = "sec"
-	icon_deny = "sec-deny"
-	req_access_txt = "1"
-	points = 10
-	product_paths = "/obj/item/clothing/under/color/red;/obj/item/clothing/under/rank/forensic_technician;/obj/item/clothing/under/rank/det;/obj/item/clothing/suit/storage/det_suit;/obj/item/clothing/head/det_hat;/obj/item/clothing/head/helmet;/obj/item/clothing/suit/armor/vest;/obj/item/clothing/suit/storage/gearharness;/obj/item/weapon/storage/belt/security;/obj/item/device/radio/headset/headset_sec;/obj/item/clothing/glasses/sunglasses;/obj/item/weapon/handcuffs;/obj/item/weapon/melee/baton;/obj/item/weapon/gun/energy/taser;/obj/item/weapon/grenade/flashbang;/obj/item/device/flash/*;/obj/item/weapon/storage/box/evidence*/"
-	//product_amounts = "8;5;4"
-	product_prices = "1;1;1;1;1;3;3;3;2;1;1;1;4;4;3;3;2"
-	product_hidden = "/obj/item/kitchen/donut_box"
-	hidden_prices = "3"
-	charge_type = "security"
-
-/obj/machinery/vending/genetics
-	name = "Genetics Dispenser"
-	desc = "Medical drug dispenser."
-	icon_state = "med"
-	icon_deny = "med-deny"
-	req_access_txt = "5"
-	points = 10
-	product_paths = "/obj/item/clothing/suit/storage/labcoat;/obj/item/clothing/under/rank/geneticist;/obj/item/weapon/reagent_containers/glass/bottle/antitoxin;/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline;/obj/item/weapon/reagent_containers/glass/bottle/stoxin;/obj/item/weapon/reagent_containers/glass/bottle/toxin;/obj/item/weapon/reagent_containers/syringe"
-	//product_amounts = "4;4;4;4;12"
-	product_prices = "1;1;2;2;2;2;1"
-	product_hidden = ""
-	hidden_prices = ""
-	charge_type = "genetics"
 
 /obj/machinery/vending/toxins
 	name = "Toxins dispenser"

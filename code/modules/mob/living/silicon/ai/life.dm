@@ -5,12 +5,11 @@
 //	if (isturf(T))	//let cryo/sleeper handle adjusting body temp in their respective alter_health procs
 //		bodytemperature = adjustBodyTemp(bodytemperature, (shuttlefloor ? shuttlefloor.temp : T.temp), 1.0) //TODO: DEFERRED
 
-	if (stat == 2)
+	if (stat == DEAD)
 		return
 	else
-		if (stat!=0)
+		if (stat)
 			src:cameraFollow = null
-			src:current = null
 			src:machine = null
 
 		updatehealth()
@@ -33,7 +32,7 @@
 			oxyloss++
 
 		if (machine)
-			if (!( machine.check_eye(src) ))
+			if (!machine.check_eye(src))
 				reset_view(null)
 
 		//var/stage = 0

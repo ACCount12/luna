@@ -59,53 +59,57 @@
 		update_icon()
 		user.update_clothing()
 
-	attack(mob/living/carbon/M as mob, mob/user as mob)
+	attack(mob/living/carbon/M as mob, mob/living/user as mob)
 		if ((CLUMSY in usr.mutations) && prob(50))
 			usr << "\red The [src.name] slips out of your hand."
 			usr.drop_item()
 			return
 
-		if(power_supply.use(50))
-			playsound(src.loc, 'flash.ogg', 100, 1)
-			add_fingerprint(user)
-
-			var/safety = null
-			if (istype(M, /mob/living/carbon/human))
-				var/mob/living/carbon/human/H = M
-				if (istype(H.glasses, /obj/item/clothing/glasses/sunglasses) || (istype(H.head, /obj/item/clothing/head/helmet/welding) && !H.head:up))
-					safety = 1
-			if(isrobot(user))
-				spawn(0)
-					var/atom/movable/overlay/animation = new(user.loc)
-					animation.layer = user.layer + 1
-					animation.icon_state = "blank"
-					animation.icon = 'mob.dmi'
-					animation.master = user
-					flick("blspell", animation)
-					sleep(5)
-					del(animation)
-			if(!safety)
-				M.Weaken(10)
-				if(M.eye_stat > 15 && prob(M.eye_stat + 50))
-					flick("e_flash", M.flash)
-					M.eye_stat += rand(1, 2)
-				else
-					flick("flash", M.flash)
-					M.eye_stat += rand(0, 2)
-				if (M.eye_stat >= 20)
-					M << "\red You eyes start to burn badly!"
-					M.disabilities |= 1
-					if(prob(M.eye_stat - 20 + 1))
-						M << "\red You go blind!"
-						M.sdisabilities |= 1
-				if((user.mind in ticker.mode.head_revolutionaries) && ticker.mode.name != "rp-revolution")
-					ticker.mode.add_revolutionary(M.mind)
-
-			for(var/mob/O in viewers(user, null))
-				O.show_message(text("\red [user] blinds [M] with [src]'s flash!"))
-
-		else
+		if(!power_supply.use(50))
 			user.show_message("\red *click*", 2)
+			return
+
+		playsound(src.loc, 'flash.ogg', 100, 1)
+		add_fingerprint(user)
+
+		var/safety = null
+		if (istype(M, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = M
+			if (istype(H.glasses, /obj/item/clothing/glasses/sunglasses) || (istype(H.head, /obj/item/clothing/head/helmet/welding) && !H.head:up))
+				safety = 1
+		if(isrobot(user))
+			spawn(0)
+				var/atom/movable/overlay/animation = new(user.loc)
+				animation.layer = user.layer + 1
+				animation.icon_state = "blank"
+				animation.icon = 'mob.dmi'
+				animation.master = user
+				flick("blspell", animation)
+				sleep(5)
+				del(animation)
+		if(!safety)
+			M.Weaken(10)
+			if(M.eye_stat > 15 && prob(M.eye_stat + 50))
+				flick("e_flash", M.flash)
+				M.eye_stat += rand(1, 2)
+			else
+				flick("flash", M.flash)
+				M.eye_stat += rand(0, 2)
+			if (M.eye_stat >= 20)
+				M << "\red You eyes start to burn badly!"
+				M.disabilities |= 1
+				if(prob(M.eye_stat - 20 + 1))
+					M << "\red You go blind!"
+					M.sdisabilities |= 1
+
+			user.mind_initialize()
+			M.mind_initialize()
+
+			if((user.mind in ticker.mode.head_revolutionaries) && ticker.mode.name != "rp-revolution")
+				ticker.mode.add_revolutionary(M.mind)
+
+		for(var/mob/O in viewers(user, null))
+			O.show_message(text("\red [user] blinds [M] with [src]'s flash!"))
 
 		update_icon()
 

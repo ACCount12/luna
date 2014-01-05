@@ -35,6 +35,7 @@
 	var/dna	//dna-locking the mech
 	var/list/proc_res = list() //stores proc owners, like proc_res["functionname"] = owner reference
 	var/datum/effect/effect/system/spark_spread/spark_system = new
+	var/datum/effect/effect/system/ion_trail_follow/ion_trail = new
 	var/lights = 0
 	var/lights_power = 6
 
@@ -65,6 +66,8 @@
 	var/obj/item/mecha_parts/mecha_equipment/selected
 	var/max_equip = 3
 	var/datum/events/events
+	var/has_thrusters = 0
+	var/thrusters = 0
 
 /obj/mecha/New()
 	..()
@@ -75,8 +78,13 @@
 	if(!add_airtank()) //we check this here in case mecha does not have an internal tank available by default - WIP
 		removeVerb(/obj/mecha/verb/connect_to_port)
 		removeVerb(/obj/mecha/verb/toggle_internal_tank)
+
+	if(!has_thrusters)
+		removeVerb(/obj/mecha/verb/toggle_thrusters)
+
 	spark_system.set_up(2, 0, src)
 	spark_system.attach(src)
+	ion_trail.set_up(src)
 	add_cell()
 	add_iterators()
 	removeVerb(/obj/mecha/verb/disconnect_from_port)
@@ -229,7 +237,6 @@
 //////////////////////////////////
 ////////  Movement procs  ////////
 //////////////////////////////////
-
 /obj/mecha/Move()
 	. = ..()
 	if(.)
@@ -238,18 +245,44 @@
 
 /obj/mecha/relaymove(mob/user,direction)
 	if(user != src.occupant) //While not "realistic", this piece is player friendly.
-		user.forceMove(get_turf(src))
+		user.loc = get_turf(src)
 		user << "You climb out from [src]"
+		return 0
+	if(!can_move)
 		return 0
 	if(connected_port)
 		if(world.time - last_message > 20)
 			src.occupant_message("Unable to move while connected to the air system port")
 			last_message = world.time
 		return 0
-	if(state)
-		occupant_message("<font color='red'>Maintenance protocols in effect</font>")
-		return
-	return domove(direction)
+	if(!thrusters && src.pr_inertial_movement.active())
+		return 0
+	if(state || !has_charge(step_energy_drain))
+		return 0
+	var/tmp_step_in = step_in
+	var/tmp_step_energy_drain = step_energy_drain
+	var/move_result = 0
+	if(internal_damage&MECHA_INT_CONTROL_LOST)
+		move_result = mechsteprand()
+	else if(direction == UP || direction == DOWN)
+		move_result = move_z(cardinal)
+	else if(src.dir!=direction)
+		move_result = mechturn(direction)
+	else
+		move_result	= mechstep(direction)
+	if(move_result)
+		if(istype(src.loc, /turf/space))
+			if(!src.check_for_support())
+				src.pr_inertial_movement.start(list(src,direction))
+				if(thrusters)
+					src.pr_inertial_movement.set_process_args(list(src,direction))
+					tmp_step_energy_drain = step_energy_drain*2
+
+		can_move = 0
+		spawn(tmp_step_in) can_move = 1
+		use_power(tmp_step_energy_drain)
+		return 1
+	return 0
 
 /obj/mecha/proc/domove(direction)
 	return call((proc_res["dyndomove"]||src), "dyndomove")(direction)
@@ -932,6 +965,24 @@
 	src.go_out()
 	return
 */
+/obj/mecha/verb/toggle_thrusters()
+	set category = "Exosuit Interface"
+	set name = "Toggle thrusters"
+	set src = usr.loc
+	set popup_menu = 0
+	if(usr!=src.occupant)
+		return
+	if(src.occupant)
+		if(get_charge() > 0)
+			thrusters = !thrusters
+			src.log_message("Toggled thrusters.")
+			if(thrusters)
+				ion_trail.start()
+			else
+				ion_trail.stop()
+			src.occupant_message("<font color='[src.thrusters?"blue":"red"]'>Thrusters [thrusters?"en":"dis"]abled.")
+	return
+
 
 /obj/mecha/verb/eject()
 	set name = "Eject"
@@ -1501,7 +1552,6 @@
 		return
 
 /datum/global_iterator/mecha_internal_damage // processing internal damage
-
 	process(var/obj/mecha/mecha)
 		if(!mecha.hasInternalDamage())
 			return stop()

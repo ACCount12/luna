@@ -137,8 +137,6 @@ datum/hSB
 					//Note, these istypes don't work
 						if(istype(O, /obj/item/weapon/gun))
 							continue
-						if(istype(O, /obj/item/assembly))
-							continue
 						if(istype(O, /obj/item/device/cloak))
 							continue
 						if(istype(O, /obj/item/weapon/dummy))

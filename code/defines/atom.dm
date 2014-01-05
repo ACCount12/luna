@@ -11,6 +11,7 @@
 	var/list/overlayslist = list()
 	var/labels[0] //for labels
 	var/pass_flags = 0
+	var/mob/pulledby = null
 
 	///Chemistry.
 	var/datum/reagents/reagents = null

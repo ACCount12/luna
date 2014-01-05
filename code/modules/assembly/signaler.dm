@@ -16,6 +16,7 @@
 	var/delay = 0
 	var/datum/wires/connected = null
 	var/datum/radio_frequency/radio_connection
+	var/sound = 1
 
 	New()
 		..()
@@ -39,14 +40,8 @@
 		return
 
 	interact(mob/user as mob, flag1)
-		var/t1 = "-------"
-//		if ((src.b_stat && !( flag1 )))
-//			t1 = text("-------<BR>\nGreen Wire: []<BR>\nRed Wire:   []<BR>\nBlue Wire:  []<BR>\n", (src.wires & 4 ? text("<A href='?src=\ref[];wires=4'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=4'>Mend Wire</A>", src)), (src.wires & 2 ? text("<A href='?src=\ref[];wires=2'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=2'>Mend Wire</A>", src)), (src.wires & 1 ? text("<A href='?src=\ref[];wires=1'>Cut Wire</A>", src) : text("<A href='?src=\ref[];wires=1'>Mend Wire</A>", src)))
-//		else
-//			t1 = "-------"	Speaker: [src.listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
 		var/dat = {"
 	<TT>
-
 	<A href='byond://?src=\ref[src];send=1'>Send Signal</A><BR>
 	<B>Frequency/Code</B> for signaler:<BR>
 	Frequency:
@@ -62,7 +57,7 @@
 	[src.code]
 	<A href='byond://?src=\ref[src];code=1'>+</A>
 	<A href='byond://?src=\ref[src];code=5'>+</A><BR>
-	[t1]
+	Speaker: <A href='byond://?src=\ref[src];sound=1'>[sound ? "Engaged" : "Disengaged"]</A><BR>
 	</TT>"}
 		user << browse(dat, "window=radio")
 		onclose(user, "radio")
@@ -92,6 +87,9 @@
 		if(href_list["send"])
 			spawn( 0 )
 				signal()
+
+		if(href_list["sound"])
+			sound = !sound
 
 		if(usr)
 			attack_self(usr)
@@ -138,8 +136,9 @@
 		if(signal.encryption != code)	return 0
 		if(!(src.wires & WIRE_RADIO_RECEIVE))	return 0
 		pulse(1)
-		for(var/mob/O in hearers(1, src.loc))
-			O.show_message(text("\icon[] *beep* *beep*", src), 3, "*beep* *beep*", 2)
+		if(sound)
+			for(var/mob/O in hearers(1, src.loc))
+				O.show_message(text("\icon[] *beep* *beep*", src), 3, "*beep* *beep*", 2)
 		return
 
 
@@ -152,6 +151,9 @@
 		frequency = new_frequency
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 		return
+
+	open
+		secured = 0
 
 // Embedded signaller used in grenade construction.
 // It's necessary because the signaler doens't have an off state.

@@ -1,5 +1,5 @@
 /obj/machinery/pipedispenser
-	name = "Pipe Dispenser"
+	name = "pipe dispenser"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "pipe_d"
 	density = 1
@@ -56,7 +56,7 @@
 		if(!wait)
 			var/p_type = text2num(href_list["make"])
 			var/p_dir = text2num(href_list["dir"])
-			var/obj/item/pipe/P = new (/*usr.loc*/ src.loc, pipe_type=p_type, dir=p_dir)
+			var/obj/item/pipe/P = new (src.loc, pipe_type=p_type, dir=p_dir)
 			P.update()
 			P.add_fingerprint(usr)
 			wait = 1
@@ -64,7 +64,7 @@
 				wait = 0
 	if(href_list["makemeter"])
 		if(!wait)
-			new /obj/item/pipe_meter(/*usr.loc*/ src.loc)
+			new /obj/item/pipe_meter(src.loc)
 			wait = 1
 			spawn(15)
 				wait = 0
@@ -116,7 +116,7 @@
 
 /*
 //Allow you to push disposal pipes into it (for those with density 1)
-/obj/machinery/pipedispenser/disposal/HasEntered(var/obj/structure/disposalconstruct/pipe as obj)
+/obj/machinery/pipedispenser/disposal/HasEntered(var/obj/structure/disposal/construct/pipe as obj)
 	if(istype(pipe) && !pipe.anchored)
 		del(pipe)
 
@@ -124,7 +124,7 @@ Nah
 */
 
 //Allow you to drag-drop disposal pipes into it
-/obj/machinery/pipedispenser/disposal/MouseDrop_T(var/obj/structure/disposalconstruct/pipe as obj, mob/usr as mob)
+/obj/machinery/pipedispenser/disposal/MouseDrop_T(var/obj/structure/disposal/construct/pipe as obj, mob/usr as mob)
 	if(!usr.canmove || usr.stat || usr.restrained())
 		return
 
@@ -168,7 +168,7 @@ Nah
 			return
 		if(!wait)
 			var/p_type = text2num(href_list["dmake"])
-			var/obj/structure/disposalconstruct/C = new (src.loc)
+			var/obj/structure/disposal/construct/C = new (src.loc)
 			switch(p_type)
 				if(0)
 					C.ptype = 0

@@ -12,7 +12,6 @@
 		src.pixel_y = rand(-5.0, 5)
 
 //Rank 1
-
 /obj/item/weapon/stock_parts/console_screen
 	name = "console screen"
 	desc = "Used in the construction of computers and other devices with a interactive console."
@@ -59,10 +58,10 @@
 	m_amt = 80
 
 //Rank 2
-
 /obj/item/weapon/stock_parts/capacitor/adv
 	name = "advanced capacitor"
 	desc = "An advanced capacitor used in the construction of a variety of devices."
+	icon_state = "adv_capacitor"
 	origin_tech = "powerstorage=3"
 	rating = 2
 	m_amt = 50
@@ -102,11 +101,11 @@
 	rating = 2
 	m_amt = 80
 
-//Rating 3
-
+//Rank 3
 /obj/item/weapon/stock_parts/capacitor/super
 	name = "super capacitor"
 	desc = "A super-high capacity capacitor used in the construction of a variety of devices."
+	icon_state = "super_capacitor"
 	origin_tech = "powerstorage=5;materials=4"
 	rating = 3
 	m_amt = 50

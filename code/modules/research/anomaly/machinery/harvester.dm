@@ -1,5 +1,5 @@
 /obj/machinery/artifact_device/harvester
-	name = "Exotic Particle Harvester"
+	name = "exotic particle harvester"
 	icon_state = "anocol"
 	anchored = 1
 	density = 1
@@ -26,13 +26,13 @@
 /obj/machinery/artifact_device/harvester/New()
 	..()
 	component_parts = list()
-	component_parts += new /obj/item/weapon/circuitboard/machine/anocol(src)
-	component_parts += new /obj/item/weapon/stock_parts/capacitor(src)
-	component_parts += new /obj/item/weapon/stock_parts/capacitor(src)
-	component_parts += new /obj/item/weapon/stock_parts/capacitor(src)
-	component_parts += new /obj/item/weapon/stock_parts/manipulator(src)
-	component_parts += new /obj/item/weapon/stock_parts/micro_laser(src)
-	component_parts += new /obj/item/weapon/stock_parts/console_screen(src)
+	component_parts += new /obj/item/weapon/circuitboard/machine/anocol(null)
+	component_parts += new /obj/item/weapon/stock_parts/capacitor(null)
+	component_parts += new /obj/item/weapon/stock_parts/capacitor(null)
+	component_parts += new /obj/item/weapon/stock_parts/capacitor(null)
+	component_parts += new /obj/item/weapon/stock_parts/manipulator(null)
+	component_parts += new /obj/item/weapon/stock_parts/micro_laser(null)
+	component_parts += new /obj/item/weapon/stock_parts/console_screen(null)
 	RefreshParts()
 
 /obj/machinery/artifact_device/harvester/attackby(var/obj/O as obj, var/mob/user as mob)
@@ -72,10 +72,6 @@
 			user << "\red There is already a battery in [src]."
 	else
 		return..()
-
-/obj/machinery/artifact_device/harvester/attack_hand(var/mob/user as mob)
-	src.add_fingerprint(user)
-	interact(user)
 
 /obj/machinery/artifact_device/harvester/interact(var/mob/user as mob)
 	if(stat & (NOPOWER|BROKEN))

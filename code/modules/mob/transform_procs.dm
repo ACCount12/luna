@@ -9,6 +9,9 @@
 			W.loc = loc
 			W.dropped(src)
 			W.layer = initial(W.layer)
+
+	src.clearHUD()
+
 	update_clothing()
 	monkeyizing = 1
 	canmove = 0
@@ -75,6 +78,8 @@
 	client.screen.len = null
 	var/mob/living/silicon/ai/O = new /mob/living/silicon/ai( loc )
 
+	src.clearHUD()
+
 	O.invisibility = 0
 	O.canmove = 0
 	O.name = name
@@ -101,24 +106,18 @@
 	O << "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>"
 	O << "<B>To look at other parts of the station, double-click yourself to get a camera menu.</B>"
 	O << "<B>While observing through a camera, you can use most (networked) devices which you can see, such as computers, APCs, intercoms, doors, etc.</B>"
-	O << "To use something, simply double-click it."
-	O << "Currently right-click functions will not work for the AI (except examine), and will either be replaced with dialogs or won't be usable by the AI."
+	O << "To use something, simply click it."
+//	O << "Currently right-click functions will not work for the AI (except examine), and will either be replaced with dialogs or won't be usable by the AI."
 
-	if (ticker.mode.name != "AI malfunction")
-		O.laws_object = new /datum/ai_laws/nanotrasen
-		O.show_laws()
-		O << "<b>These laws may be changed by other players, or by you being the traitor.</b>"
-	else
-		O.verbs += /mob/living/silicon/ai/proc/choose_modules
-		O.laws_object = new /datum/ai_laws/malfunction
-		O:malf_picker = new /datum/game_mode/malfunction/AI_Module/module_picker
-		O.show_laws()
-		O << "<b>Kill all.</b>"
+	O.laws_object = new /datum/ai_laws/nanotrasen
+	O.show_laws()
+	O << "<b>These laws may be changed by other players, or by you being the traitor.</b>"
+
 	//O.verbs += /mob/living/silicon/ai/proc/ai_call_shuttle
 	//O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
 //	O.verbs += /mob/living/silicon/ai/proc/ai_alerts
-	O.verbs += /mob/living/silicon/ai/proc/lockdown
-	O.verbs += /mob/living/silicon/ai/proc/disablelockdown
+//	O.verbs += /mob/living/silicon/ai/proc/lockdown
+//	O.verbs += /mob/living/silicon/ai/proc/disablelockdown
 	//O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
 
 //	O.verbs += /mob/living/silicon/ai/proc/ai_cancel_call
@@ -139,20 +138,9 @@
 			O.name = newname
 		if (O.name == "B.A.N.N.E.D.")
 			O.icon_state = "ai-banned"
-		else
-			var/aisprite = input(O,"What do you want to look like?", "AI image", "Cancel") in list("Blue Face","Red Face","Text","Smiley", "Matrix \"rain\"", "Angry Face") //Lets player change AI sprite. Will add more sprites later. -CN
-			if (aisprite == "Blue Face")
-				O.icon_state = "ai"
-			if (aisprite == "Red Face")
-				O.icon_state = "ai-malf"
-			if (aisprite == "Text")
-				O.icon_state = "ai-2"
-			if (aisprite == "Smiley")
-				O.icon_state = "ai-3"
-			if (aisprite == "Matrix \"rain\"")
-				O.icon_state = "ai-matrix"
-			if (aisprite == "Angry Face")
-				O.icon_state = "ai-angryface"
+
+		if(O.decoy)
+			O.decoy.name = O.name
 		world << text("<b>[O.real_name] is the AI!</b>")
 		del(src)
 
@@ -180,12 +168,7 @@
 	invisibility = 101
 	for(var/t in organs)
 		del(organs[text("[t]")])
-	if(client)
-		client.screen -= hud_used.contents
-		client.screen -= hud_used.adding
-		client.screen -= hud_used.mon_blo
-		client.screen -= list( oxygen, throw_icon, i_select, m_select, toxin, internals, fire, hands, healths, pullin, blind, flash, rest, sleep, mach )
-		client.screen -= list( zone_sel, oxygen, throw_icon, i_select, m_select, toxin, internals, fire, hands, healths, pullin, blind, flash, rest, sleep, mach )
+	src.clearHUD()
 	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot( loc )
 
 	// cyborgs produced by Robotize get an automatic power cell
@@ -231,6 +214,9 @@
 			W.loc = loc
 			W.dropped(src)
 			W.layer = initial(W.layer)
+
+	src.clearHUD()
+
 	update_clothing()
 	monkeyizing = 1
 	canmove = 0

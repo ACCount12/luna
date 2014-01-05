@@ -1,7 +1,7 @@
 /obj/structure/AIcore
 	name = "AI core"
 	var/buildstate = 0
-	icon = 'mob.dmi'
+	icon = 'icons/mob/ai.dmi'
 	icon_state = "0"
 	var/mob/bb
 

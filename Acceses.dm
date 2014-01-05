@@ -1,4 +1,3 @@
-
 //code/game/jobs/access.dm contains the code, whereas this is documentation
 
 /*
@@ -36,7 +35,7 @@ Checked jobs: HoP, HoS, Security Officer, Doctor, CE, Detective, Scientist RD, C
 	access_chapel_incinerator = 27 (HoP, Counselor)
 	access_kitchen_and_bar = 28 (HoP, Chef, Barman, HoS)
 	access_robotics = 29 (RD, Roboticist, HoP, HoS)
-	access_admins = 30 (Noone has this)
+	??? = 30 (Noone has this)
 	access_supply_warehouse = 31 (QM, HoP)
 	access_construction = 32 (CE) (Got name from Strumpet. What is this? Couldnt find it ingame.)
 	access_chemistry = 33 (HoP, HoS, RD, Chemist)
@@ -44,7 +43,7 @@ Checked jobs: HoP, HoS, Security Officer, Doctor, CE, Detective, Scientist RD, C
     	//This is supposed to only be held by the bots normally, or it's used twice and needs to be split up.
     	//The security checkpoint doors use this to (try) and restrict the access to only bots, and prevent humans (normally)
     	//If this is the access needed to /control/ bots, then it's doubly used and needs to be split.
-	
+
 	access_security_hq = 35 (Security Officer, Detective, CE, HoS, HoP, RD)
 	access_research_hallway = 36 (Security Officer, Detective, HoS, HoP, CE, RD, Doctor, Scientist, Chemist, Geneticist, Janitor, Engineer)
 	access_incinerator = 37 (HoS, Security Officer, HoP, Janitor, Engineer)
@@ -54,4 +53,10 @@ Checked jobs: HoP, HoS, Security Officer, Doctor, CE, Detective, Scientist RD, C
 	access_theater = 41 (Clown, Mime)
 	access_HoSoffice = 42 (HoS)
 	access_mining = 43 (Shaft Miner, QM)
+*/
+
+/*
+	access_admins = 100
+	access_nanotrasen = 100
+	access_syndicate = 101
 */

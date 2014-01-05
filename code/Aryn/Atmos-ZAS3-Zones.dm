@@ -154,10 +154,11 @@ zone
 			if(T.disable_connections)
 				disable_connections = 1
 		if(!ticker) //If this zone was created at startup, add gases.
-			if(start.oxygen != MOLES_O2STANDARD || start.nitrogen != MOLES_N2STANDARD || start.carbon_dioxide)
+			if(start.oxygen != MOLES_O2STANDARD || start.nitrogen != MOLES_N2STANDARD || start.carbon_dioxide /*|| start.toxins*/)
 				oxygen = start.oxygen*members.len
 				nitrogen = start.nitrogen*members.len
 				co2 = start.carbon_dioxide*members.len
+				//plasma = start.toxins*members.len
 			else if(istype(start,/turf/simulated/floor/airless) || istype(start,/turf/simulated/floor/engine/vacuum) || istype(start,/turf/simulated/floor/plating/airless))
 				oxygen = 0
 				nitrogen = 0.0001
@@ -222,7 +223,7 @@ zone
 					var/datum/gas_mixture/GM = M.return_air(1)
 					GM.remove_ratio(1/vsc.VACUUM_SPEED)
 				spawn AirflowSpace(src)
-			//merge_with.len = 0
+			//merg+e_with.len = 0
 			//if(pressure > 225)
 			//	for(var/turf/T in edges)
 			//		for(var/obj/structure/window/W in T)

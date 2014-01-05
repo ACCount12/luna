@@ -103,7 +103,7 @@ datum
 							turf.overlays -= T:wet_overlay
 							turf.wet_overlay = null
 
-				var/hotspot = (locate(/obj/hotspot) in T)
+				var/hotspot = (locate(/obj/effect/hotspot) in T)
 				if(hotspot)
 					var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() )
 					lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2) ,0)
@@ -115,7 +115,7 @@ datum
 			reaction_obj(var/obj/O, var/volume)
 				src = null
 				var/turf/T = get_turf(O)
-				var/hotspot = (locate(/obj/hotspot) in T)
+				var/hotspot = (locate(/obj/effect/hotspot) in T)
 				if(hotspot)
 					var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() )
 					lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2) ,0)
@@ -1252,6 +1252,7 @@ datum
 							W.loc = M.loc
 							W.dropped(src)
 							W.layer = initial(W.layer)
+					M.clearHUD()
 					var/mob/living/carbon/slime/new_mob = new /mob/living/carbon/slime(M.loc)
 					new_mob.a_intent = "harm"
 					if(M.mind)
@@ -1845,7 +1846,7 @@ datum
 						if(T.wet_overlay)
 							T.overlays -= T.wet_overlay
 							T.wet_overlay = null
-				var/hotspot = (locate(/obj/hotspot) in T)
+				var/hotspot = (locate(/obj/effect/hotspot) in T)
 				if(hotspot)
 					var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() )
 					lowertemp.temperature = max( min(lowertemp.temperature-2000,lowertemp.temperature / 2) ,0)

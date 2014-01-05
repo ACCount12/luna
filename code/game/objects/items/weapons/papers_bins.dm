@@ -51,7 +51,7 @@ PHOTOGRAPHS
 	return
 
 /obj/item/weapon/paper/attack_ai(var/mob/living/silicon/ai/user as mob)
-	if (get_dist(src, user.current) < 2)
+	if (get_dist(src, user.eyeobj) < 2)
 		usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", src.name, src.info), text("window=[]", src.name))
 		onclose(usr, "[src.name]")
 	else

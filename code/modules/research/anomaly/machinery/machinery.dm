@@ -17,3 +17,7 @@
 	..()
 	sleep(rand(1, 15))
 	update_icon()
+
+/obj/machinery/artifact_device/attack_hand(var/mob/user as mob)
+	src.add_fingerprint(user)
+	interact(user)

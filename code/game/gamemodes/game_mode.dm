@@ -6,6 +6,7 @@
 
 	// Antags.
 	var/list/datum/mind/traitors = list()
+	var/list/datum/mind/malf_ais = list()
 	var/list/datum/mind/changelings = list()
 	var/list/datum/mind/head_revolutionaries = list()
 	var/list/datum/mind/revolutionaries = list()
@@ -15,6 +16,7 @@
 	// this includes admin-appointed antags and multiantags. Easy!
 
 	var/list/logtraitors = list()
+	var/list/mode_landmarks = list()
 
 	var/uplink_welcome = "Syndicate Uplink Console:"
 	var/uplink_items = {"
@@ -56,6 +58,8 @@
 
 /datum/game_mode/proc/pre_setup()
 	return 1
+
+/datum/game_mode/proc/get_landmarks()
 
 /datum/game_mode/proc/post_setup()
 
@@ -186,63 +190,3 @@
 			T.hostpda = R
 			traitor_mob << "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply enter the code \"[pda_pass]\" into the ringtone select to unlock its hidden features."
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
-
-/*	var/obj/item/device/R = null //Hide the uplink in a PDA if available, otherwise radio
-	if (!R && istype(traitor_mob.belt, /obj/item/device/pda))
-		R = traitor_mob.belt
-		loc = "on your belt"
-	if (!R && istype(traitor_mob.l_hand, /obj/item/weapon/storage))
-		var/obj/item/weapon/storage/S = traitor_mob.l_hand
-		var/list/L = S.return_inv()
-		for (var/obj/item/device/radio/foo in L)
-			R = foo
-			loc = "in the [S.name] in your left hand"
-			break
-	if (!R && istype(traitor_mob.r_hand, /obj/item/weapon/storage))
-		var/obj/item/weapon/storage/S = traitor_mob.r_hand
-		var/list/L = S.return_inv()
-		for (var/obj/item/device/radio/foo in L)
-			R = foo
-			loc = "in the [S.name] in your right hand"
-			break
-	if (!R && istype(traitor_mob.back, /obj/item/weapon/storage))
-		var/obj/item/weapon/storage/S = traitor_mob.back
-		var/list/L = S.return_inv()
-		for (var/obj/item/device/radio/foo in L)
-			R = foo
-			loc = "in the [S.name] on your back"
-			break
-	if (!R && traitor_mob.w_uniform && istype(traitor_mob.belt, /obj/item/device/radio))
-		R = traitor_mob.belt
-		loc = "on your belt"
-	if (!R && istype(traitor_mob.ears, /obj/item/device/radio))
-		R = traitor_mob.ears
-		loc = "on your head"
-	if (!R)
-		traitor_mob << "Unfortunately, the Syndicate wasn't able to get you a radio."
-	else
-		if (istype(R, /obj/item/device/radio))
-			// generate list of radio freqs
-			while (freq <= 1489)
-				if (freq < 1451 || freq > 1459)
-					freqlist += freq
-				freq += 2
-				if ((freq % 2) == 0)
-					freq += 1
-			freq = freqlist[rand(1, freqlist.len)]
-
-			var/obj/item/device/uplink/radio/T = new /obj/item/device/uplink/radio(R)
-			R:traitorradio = T
-			R:traitor_frequency = freq
-			T.name = R.name
-			T.icon_state = R.icon_state
-			T.origradio = R
-			traitor_mob << "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply dial the frequency [format_frequency(freq)] to unlock its hidden features."
-			traitor_mob.mind.store_memory("<B>Radio Freq:</B> [format_frequency(freq)] ([R.name] [loc]).")
-		else if (istype(R, /obj/item/device/pda))
-			var/obj/item/device/uplink/pda/T = new /obj/item/device/uplink/pda(R)
-			R:uplink = T
-			T.unlocking_code = pda_pass
-			T.hostpda = R
-			traitor_mob << "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply enter the code \"[pda_pass]\" into the ringtone select to unlock its hidden features."
-			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")*/

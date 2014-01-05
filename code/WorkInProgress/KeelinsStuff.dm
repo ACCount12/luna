@@ -87,7 +87,7 @@
 		user.drop_item()
 		src.throw_at(target, throw_range, throw_speed)
 
-
+/*
 /obj/fake_attacker
 	icon = null
 	icon_state = null
@@ -234,7 +234,7 @@
 
 //	F.base = new /icon(clone.stand_icon)
 //	F.currentimage = new /image(clone)
-
+*/
 /*
 
 
@@ -255,7 +255,7 @@
 	target << F.up
 	*/
 
-	F.updateimage()
+//	F.updateimage()
 //var/image/O = image(clone,F)
 //	target << O
 

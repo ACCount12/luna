@@ -199,7 +199,6 @@
 
 /obj/New()
 	..()
-	if (ticker)
-		for(var/Direction in list(0) | cardinal8)
-			for (var/obj/cabling/Cable in get_step(src, Direction))
-				Cable.ObjectBuilt(src)
+	if(ticker)
+		for(var/obj/cabling/Cable in src.loc)
+			Cable.ObjectBuilt(src)

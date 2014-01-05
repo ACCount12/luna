@@ -1,3 +1,22 @@
+/turf/proc/is_plating()
+	return 0
+/turf/proc/is_asteroid_floor()
+	return 0
+/turf/proc/is_plasteel_floor()
+	return 0
+/turf/proc/is_light_floor()
+	return 0
+/turf/proc/is_grass_floor()
+	return 0
+/turf/proc/is_wood_floor()
+	return 0
+/turf/proc/is_carpet_floor()
+	return 0
+/turf/proc/return_siding_icon_state()		//used for grass floors, which have siding.
+	return 0
+
+
+
 /turf
 	icon = 'floors.dmi'
 	var/intact = 1
@@ -39,6 +58,10 @@
 	heat_capacity = 700000
 	mouse_opacity = 2
 
+	MaxRed = list(7)
+	MaxGreen = list(7)
+	MaxBlue = list(7)
+
 /turf/space/New()
 	. = ..()
 	icon = 'space.dmi'
@@ -66,7 +89,7 @@
 	oxygen = MOLES_O2STANDARD
 	nitrogen = MOLES_N2STANDARD
 
-/turf/simulated/
+/turf/simulated
 	name = "station"
 	var/wet = 0
 	var/image/wet_overlay = null
@@ -104,14 +127,236 @@
 	thermal_conductivity = OPEN_HEAT_TRANSFER_COEFFICIENT
 	heat_capacity = 700000*/
 
-/turf/simulated/floor
-	name = "floor"
-	icon = 'floors.dmi'
+
+//This is so damaged or burnt tiles or platings don't get remembered as the default tile
+var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","damaged4",
+				"damaged5","panelscorched","floorscorched1","floorscorched2","platingdmg1","platingdmg2",
+				"platingdmg3","plating","light_on","light_on_flicker1","light_on_flicker2",
+				"light_on_clicker3","light_on_clicker4","light_on_clicker5","light_broken",
+				"light_on_broken","light_off","wall_thermite","grass1","grass2","grass3","grass4",
+				"asteroid","asteroid_dug",
+				"asteroid0","asteroid1","asteroid2","asteroid3","asteroid4",
+				"asteroid5","asteroid6","asteroid7","asteroid8","asteroid9","asteroid10","asteroid11","asteroid12",
+				"oldburning","light-on-r","light-on-y","light-on-g","light-on-b", "wood", "wood-broken", "carpet",
+				"carpetcorner", "carpetside", "carpet", "ironsand1", "ironsand2", "ironsand3", "ironsand4", "ironsand5",
+				"ironsand6", "ironsand7", "ironsand8", "ironsand9", "ironsand10", "ironsand11",
+				"ironsand12", "ironsand13", "ironsand14", "ironsand15")
+
+var/list/plating_icons = list("plating","platingdmg1","platingdmg2","platingdmg3","asteroid","asteroid_dug",
+				"ironsand1", "ironsand2", "ironsand3", "ironsand4", "ironsand5", "ironsand6", "ironsand7",
+				"ironsand8", "ironsand9", "ironsand10", "ironsand11",
+				"ironsand12", "ironsand13", "ironsand14", "ironsand15")
+var/list/wood_icons = list("wood","wood-broken")
+
+/turf/simulated/floor/proc/update_icon()
+	if(lava)
+		return
+	else if(is_plasteel_floor())
+		if(!broken && !burnt)
+			icon_state = icon_regular_floor
+	else if(is_plating())
+		if(!broken && !burnt)
+			icon_state = icon_plating //Because asteroids are 'platings' too.
+	else if(is_grass_floor())
+		if(!broken && !burnt)
+			if(!(icon_state in list("grass1","grass2","grass3","grass4")))
+				icon_state = "grass[pick("1","2","3","4")]"
+	else if(is_carpet_floor())
+		if(!broken && !burnt)
+			if(icon_state != "carpetsymbol")
+				var/connectdir = 0
+				for(var/direction in cardinal)
+					if(istype(get_step(src,direction),/turf/simulated/floor))
+						var/turf/simulated/floor/FF = get_step(src,direction)
+						if(FF.is_carpet_floor())
+							connectdir |= direction
+
+				//Check the diagonal connections for corners, where you have, for example, connections both north and east. In this case it checks for a north-east connection to determine whether to add a corner marker or not.
+				var/diagonalconnect = 0 //1 = NE; 2 = SE; 4 = NW; 8 = SW
+
+				//Northeast
+				if(connectdir & NORTH && connectdir & EAST)
+					if(istype(get_step(src,NORTHEAST),/turf/simulated/floor))
+						var/turf/simulated/floor/FF = get_step(src,NORTHEAST)
+						if(FF.is_carpet_floor())
+							diagonalconnect |= 1
+
+				//Southeast
+				if(connectdir & SOUTH && connectdir & EAST)
+					if(istype(get_step(src,SOUTHEAST),/turf/simulated/floor))
+						var/turf/simulated/floor/FF = get_step(src,SOUTHEAST)
+						if(FF.is_carpet_floor())
+							diagonalconnect |= 2
+
+				//Northwest
+				if(connectdir & NORTH && connectdir & WEST)
+					if(istype(get_step(src,NORTHWEST),/turf/simulated/floor))
+						var/turf/simulated/floor/FF = get_step(src,NORTHWEST)
+						if(FF.is_carpet_floor())
+							diagonalconnect |= 4
+
+				//Southwest
+				if(connectdir & SOUTH && connectdir & WEST)
+					if(istype(get_step(src,SOUTHWEST),/turf/simulated/floor))
+						var/turf/simulated/floor/FF = get_step(src,SOUTHWEST)
+						if(FF.is_carpet_floor())
+							diagonalconnect |= 8
+
+				icon_state = "carpet[connectdir]-[diagonalconnect]"
+
+	else if(is_wood_floor())
+		if(!broken && !burnt)
+			if(!(icon_state in wood_icons))
+				icon_state = "wood"
+				//world << "[icon_state]y's got [icon_state]"
+	/*spawn(1)
+		if(istype(src,/turf/simulated/floor)) //Was throwing runtime errors due to a chance of it changing to space halfway through.
+			if(air)
+				update_visuals(air)*/
+
+/turf/simulated/floor/superdark
+	icon = 'icons/turf/floorsnew.dmi'
 	icon_state = "floor"
+
+/turf/simulated/floor/return_siding_icon_state()
+	..()
+	if(is_grass_floor())
+		var/dir_sum = 0
+		for(var/direction in cardinal)
+			var/turf/T = get_step(src,direction)
+			if(!(T.is_grass_floor()))
+				dir_sum += direction
+		if(dir_sum)
+			return "wood_siding[dir_sum]"
+		else
+			return 0
+
+/turf/simulated/floor/proc/break_tile_to_plating()
+	if(!is_plating())
+		make_plating()
+	break_tile()
+
+/turf/simulated/floor/proc/make_plating()
+	if(istype(src,/turf/simulated/floor/engine)) return
+
+	if(is_grass_floor())
+		for(var/direction in cardinal)
+			if(istype(get_step(src,direction),/turf/simulated/floor))
+				var/turf/simulated/floor/FF = get_step(src,direction)
+				FF.update_icon() //so siding get updated properly
+	else if(is_carpet_floor())
+		spawn(5)
+			if(src)
+				for(var/direction in list(1,2,4,8,5,6,9,10))
+					if(istype(get_step(src,direction),/turf/simulated/floor))
+						var/turf/simulated/floor/FF = get_step(src,direction)
+						FF.update_icon() //so siding get updated properly
+
+	if(!floor_tile) return
+	del(floor_tile)
+	icon_plating = "plating"
+	ul_SetLuminosity(0)
+	floor_tile = null
+	intact = 0
+	broken = 0
+	burnt = 0
+
+	update_icon()
+	levelupdate()
+
+/turf/simulated/floor/is_plasteel_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/metal))
+		return 1
+	else
+		return 0
+
+/turf/simulated/floor/is_light_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/light))
+		return 1
+	else
+		return 0
+
+/turf/simulated/floor/is_grass_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/grass))
+		return 1
+	else
+		return 0
+
+/turf/simulated/floor/is_wood_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/wood))
+		return 1
+	else
+		return 0
+
+/turf/simulated/floor/is_carpet_floor()
+	if(istype(floor_tile,/obj/item/stack/tile/carpet))
+		return 1
+	else
+		return 0
+
+/turf/simulated/floor/is_plating()
+	if(!floor_tile)
+		return 1
+	return 0
+
+/turf/simulated/floor/proc/break_tile()
+	if(istype(src,/turf/simulated/floor/engine)) return
+	if(broken) return
+	if(is_plasteel_floor())
+		src.icon_state = "damaged[pick(1,2,3,4,5)]"
+		broken = 1
+	else if(is_light_floor())
+		src.icon_state = "light_broken"
+		broken = 1
+	else if(is_plating())
+		src.icon_state = "platingdmg[pick(1,2,3)]"
+		broken = 1
+	else if(is_wood_floor())
+		src.icon_state = "wood-broken"
+		broken = 1
+	else if(is_carpet_floor())
+		src.icon_state = "carpet-broken"
+		broken = 1
+	else if(is_grass_floor())
+		src.icon_state = "sand[pick("1","2","3")]"
+		broken = 1
+
+/turf/simulated/floor/proc/burn_tile()
+	if(istype(src,/turf/simulated/floor/engine)) return
+	if(istype(src,/turf/simulated/floor/plating/airless/asteroid)) return//Asteroid tiles don't burn
+	if(broken || burnt) return
+	if(is_plasteel_floor())
+		src.icon_state = "floorscorched[pick(1,2)]"
+		burnt = 1
+	else if(is_plating())
+		src.icon_state = "panelscorched"
+		burnt = 1
+	else if(is_wood_floor())
+		src.icon_state = "wood-broken"
+		burnt = 1
+	else if(is_carpet_floor())
+		src.icon_state = "carpet-broken"
+		burnt = 1
+	else if(is_grass_floor())
+		src.icon_state = "sand[pick("1","2","3")]"
+		burnt = 1
+
+/turf/simulated/floor
+	//Note to coders, the 'intact' var can no longer be used to determine if the floor is a plating or not.
+	//Use the is_plating(), is_plasteel_floor() and is_light_floor() procs instead. --Errorage
+	name = "floor"
+	icon = 'icons/turf/floors.dmi'
+	icon_state = "floor"
+
+	var/icon_regular_floor = "floor" //used to remember what icon the tile should have by default
+	var/icon_plating = "plating"
 	thermal_conductivity = 0.040
-	heat_capacity = 225000
+	heat_capacity = 50000
+	var/lava = 0
 	var/broken = 0
 	var/burnt = 0
+	var/mineral = "metal"
+	var/obj/item/stack/tile/floor_tile = new /obj/item/stack/tile/metal
 	var/turf/simulated/floor/open/open = null
 
 	New()
@@ -121,6 +366,11 @@
 			if(istype(T, /turf/simulated/floor/open))
 				open = T
 				open.update()
+
+		if(icon_state in icons_to_ignore_at_floor_init) //so damaged/burned tiles or plating icons aren't saved as the default
+			icon_regular_floor = "floor"
+		else
+			icon_regular_floor = icon_state
 
 	Enter(var/atom/movable/AM)
 		. = ..()
@@ -144,7 +394,7 @@
 		icon_state = "open"
 		pathweight = 100000 //Seriously, don't try and path over this one numbnuts
 		var/icon/darkoverlays = null
-		var/turf/floorbelow
+		var/turf/simulated/floorbelow
 		floorstrength = 1
 
 		mouse_opacity = 2
@@ -160,6 +410,8 @@
 					return
 
 				floorbelow = locate(x, y, z + 1)
+				if("open" in floorbelow.vars)
+					floorbelow:open = src
 				if(ticker)
 					add_to_other_zone()
 				update()
@@ -199,6 +451,8 @@
 		Del()
 			if(zone)
 				zone.Disconnect(src,floorbelow)
+			if(floorbelow && floorbelow:open)
+				floorbelow:open = null
 			. = ..()
 
 
@@ -244,7 +498,7 @@
 				src.addoverlay(floorbelow)
 
 				for(var/obj/o in floorbelow.contents)
-					if(!(o.pixel_x < -12 || o.pixel_y < -12 || o.pixel_x > 12 || o.pixel_y > 12 || istype(o, /obj/effect)))
+					if(!(o.pixel_x < -12 || o.pixel_y < -12 || o.pixel_x > 12 || o.pixel_y > 12 || istype(o, /obj/effect) || o.invisibility))
 						src.addoverlay(image(o, dir=o.dir, layer = TURF_LAYER+0.05*o.layer))
 
 				var/image/I = image('ULIcons.dmi', "[min(max(floorbelow.LightLevelRed - 4, 0), 7)]-[min(max(floorbelow.LightLevelGreen - 4, 0), 7)]-[min(max(floorbelow.LightLevelBlue - 4, 0), 7)]")
@@ -285,8 +539,11 @@
 		name = "plating"
 		icon_state = "plating"
 		intact = 0
+		floor_tile = null
 
-
+	plating/snow
+		name = "snow"
+		icon_state = "snow"
 
 /proc/update_open()
 	for(var/turf/simulated/floor/open/a in world)
@@ -298,8 +555,48 @@
 	temperature = TSPC
 
 /turf/simulated/floor/grid
-	icon = 'floors.dmi'
 	icon_state = "circuit"
+
+/turf/simulated/floor/grass
+	name = "grass patch"
+	icon_state = "grass1"
+	floor_tile = new/obj/item/stack/tile/grass
+
+	New()
+		floor_tile.New() //I guess New() isn't ran on objects spawned without the definition of a turf to house them, ah well.
+		icon_state = "grass[pick("1","2","3","4")]"
+		..()
+		spawn(4)
+			if(src)
+				update_icon()
+				for(var/direction in cardinal)
+					if(istype(get_step(src,direction),/turf/simulated/floor))
+						var/turf/simulated/floor/FF = get_step(src,direction)
+						FF.update_icon() //so siding get updated properly
+
+/turf/simulated/floor/wood
+	name = "floor"
+	icon_state = "wood"
+	floor_tile = new/obj/item/stack/tile/wood
+
+/turf/simulated/floor/carpet
+	name = "carpet"
+	icon_state = "carpet"
+	floor_tile = new/obj/item/stack/tile/carpet
+
+	New()
+		floor_tile.New() //I guess New() isn't ran on objects spawned without the definition of a turf to house them, ah well.
+		if(!icon_state)
+			icon_state = "carpet"
+		..()
+		spawn(4)
+			if(src)
+				update_icon()
+				for(var/direction in list(1,2,4,8,5,6,9,10))
+					if(istype(get_step(src,direction),/turf/simulated/floor))
+						var/turf/simulated/floor/FF = get_step(src,direction)
+						FF.update_icon() //so siding get updated properly
+
 
 /turf/simulated/wall
 	name = "wall"
@@ -371,7 +668,7 @@
 
 /turf/simulated/wall/mineral/sandstone
 	name = "sandstone wall"
-	desc = "A wall with sandstone plating."
+	desc = "A wall with sandstone plating. Cheap."
 	icon_state = "sandstone0"
 	walltype = "sandstone"
 	mineral = "sandstone"
@@ -402,9 +699,12 @@
 	thermal_conductivity = 0
 	opacity = 0
 	explosionstrength = 5
-	name = "heat shielding"
-	icon = 'thermal.dmi'
+	name = "heat shield"
 	icon_state = "thermal"
+	walltype = "thermal"
+
+/turf/simulated/wall/heatshield/ThermiteBurn()
+	return // Thermite proof!
 
 /turf/simulated/wall/heatshield/attackby()
 	return
@@ -432,6 +732,19 @@
 /turf/simulated/shuttle/wall/other
 	icon = 'walls.dmi'
 	icon_state = "riveted"
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /turf/unsimulated
 	name = "Command"

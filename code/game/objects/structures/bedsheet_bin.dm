@@ -7,8 +7,8 @@ LINEN BINS
 /obj/item/weapon/bedsheet
 	name = "bedsheet"
 	desc = "A surprisingly soft linen bedsheet."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "sheet"
+	icon = 'icons/obj/bedsheets.dmi'
+	icon_state = "white"
 	item_state = "bedsheet"
 	layer = 4.0
 	throwforce = 1
@@ -38,71 +38,82 @@ LINEN BINS
 	add_fingerprint(user)
 	return
 
-/obj/item/weapon/bedsheet/blue
-	icon_state = "sheetblue"
-	item_color = "blue"
-
-/obj/item/weapon/bedsheet/green
-	icon_state = "sheetgreen"
-	item_color = "green"
-
-/obj/item/weapon/bedsheet/orange
-	icon_state = "sheetorange"
-	item_color = "orange"
-
-/obj/item/weapon/bedsheet/purple
-	icon_state = "sheetpurple"
-	item_color = "purple"
-
-/obj/item/weapon/bedsheet/rainbow
-	icon_state = "sheetrainbow"
-	item_color = "rainbow"
+/obj/item/weapon/bedsheet/grey
+	icon_state = "grey"
+	item_color = "grey"
 
 /obj/item/weapon/bedsheet/red
-	icon_state = "sheetred"
+	icon_state = "red"
 	item_color = "red"
 
+/obj/item/weapon/bedsheet/orange
+	icon_state = "orange"
+	item_color = "orange"
+
 /obj/item/weapon/bedsheet/yellow
-	icon_state = "sheetyellow"
+	icon_state = "yellow"
 	item_color = "yellow"
 
-/obj/item/weapon/bedsheet/mime
-	icon_state = "sheetmime"
-	item_color = "mime"
+/obj/item/weapon/bedsheet/green
+	icon_state = "green"
+	item_color = "green"
 
-/obj/item/weapon/bedsheet/clown
-	icon_state = "sheetclown"
-	item_color = "clown"
+/obj/item/weapon/bedsheet/blue
+	icon_state = "blue"
+	item_color = "blue"
 
-/obj/item/weapon/bedsheet/captain
-	icon_state = "sheetcaptain"
-	item_color = "captain"
-
-/obj/item/weapon/bedsheet/rd
-	icon_state = "sheetrd"
-	item_color = "director"
-
-/obj/item/weapon/bedsheet/medical
-	icon_state = "sheetmedical"
-	item_color = "medical"
-
-/obj/item/weapon/bedsheet/hos
-	icon_state = "sheethos"
-	item_color = "hosred"
-
-/obj/item/weapon/bedsheet/hop
-	icon_state = "sheethop"
-	item_color = "hop"
-
-/obj/item/weapon/bedsheet/ce
-	icon_state = "sheetce"
-	item_color = "chief"
+/obj/item/weapon/bedsheet/purple
+	icon_state = "purple"
+	item_color = "purple"
 
 /obj/item/weapon/bedsheet/brown
-	icon_state = "sheetbrown"
+	icon_state = "brown"
 	item_color = "brown"
 
+/obj/item/weapon/bedsheet/black
+	icon_state = "black"
+	item_color = "black"
 
+/obj/item/weapon/bedsheet/rainbow
+	icon_state = "rainbow"
+	item_color = "rainbow"
+
+
+/obj/item/weapon/bedsheet/clown
+	icon_state = "clown"
+	item_color = "clown"
+
+/obj/item/weapon/bedsheet/mime
+	icon_state = "mime"
+	item_color = "mime"
+
+/obj/item/weapon/bedsheet/medical
+	icon_state = "medical"
+	item_color = "medical"
+
+/obj/item/weapon/bedsheet/rd
+	icon_state = "rd"
+	item_color = "director"
+
+/obj/item/weapon/bedsheet/cmo
+	icon_state = "cmo"
+	item_color = "cmo"
+
+/obj/item/weapon/bedsheet/hos
+	icon_state = "hos"
+	item_color = "hosred"
+
+/obj/item/weapon/bedsheet/ce
+	icon_state = "ce"
+	item_color = "chief"
+
+/obj/item/weapon/bedsheet/hop
+	icon_state = "hop"
+	item_color = "hop"
+
+/obj/item/weapon/bedsheet/captain
+	icon_state = "captain"
+	item_color = "captain"
 
 
 /obj/structure/bedsheetbin

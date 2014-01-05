@@ -43,7 +43,7 @@
 	name = "Special supplies"
 	contains = list(/obj/item/weapon/storage/box/grenades/emp,
 					/obj/item/weapon/pen/sleepypen,
-					/obj/item/weapon/grenade/incendiarygrenade)
+					/obj/item/weapon/grenade/chem_grenade/incendiary)
 	cost = 30
 	containertype = /obj/structure/closet/crate
 	emagged = 1
@@ -216,15 +216,15 @@
 	contains = list(/obj/item/weapon/tank/plasma,
 					/obj/item/weapon/tank/plasma,
 					/obj/item/weapon/tank/plasma,
-					/obj/item/device/igniter,
-					/obj/item/device/igniter,
-					/obj/item/device/igniter,
-					/obj/item/device/prox_sensor,
-					/obj/item/device/prox_sensor,
-					/obj/item/device/prox_sensor,
-					/obj/item/device/timer,
-					/obj/item/device/timer,
-					/obj/item/device/timer)
+					/obj/item/device/assembly/igniter,
+					/obj/item/device/assembly/igniter,
+					/obj/item/device/assembly/igniter,
+					/obj/item/device/assembly/prox_sensor,
+					/obj/item/device/assembly/prox_sensor,
+					/obj/item/device/assembly/prox_sensor,
+					/obj/item/device/assembly/timer,
+					/obj/item/device/assembly/timer,
+					/obj/item/device/assembly/timer)
 	cost = 20
 	containertype = /obj/structure/closet/crate/secure/plasma
 	containername = "plasma assembly crate"
@@ -233,9 +233,9 @@
 
 /datum/supply_packs/robotics
 	name = "Robotics assembly crate"
-	contains = list(/obj/item/device/prox_sensor,
-					/obj/item/device/prox_sensor,
-					/obj/item/device/prox_sensor,
+	contains = list(/obj/item/device/assembly/prox_sensor,
+					/obj/item/device/assembly/prox_sensor,
+					/obj/item/device/assembly/prox_sensor,
 					/obj/item/weapon/storage/toolbox/electrical,
 					/obj/item/device/flash,
 					/obj/item/device/flash,

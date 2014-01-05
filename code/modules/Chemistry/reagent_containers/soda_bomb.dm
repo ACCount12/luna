@@ -1,6 +1,6 @@
 //soda bomb crafting//
 /obj/item/weapon/reagent_containers/food/drinks/soda/attackby(var/obj/item/I, mob/user as mob)
-	if((istype(I, /obj/item/device/assembly/igniter) || istype(I, /obj/item/device/igniter)) && assemblystate == 0)
+	if((isigniter(I)) && assemblystate == 0)
 		assemblystate++
 		del(I)
 		user << "<span class='notice'>You stuff the igniter in the can, emptying the can in process.</span>"

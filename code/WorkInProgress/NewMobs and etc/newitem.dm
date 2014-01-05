@@ -31,7 +31,7 @@
 //
 
 /obj/item/proc/on_found(mob/finder as mob)
-	return
+	return 0
 
 /obj/item/proc/afterattack()
 	return

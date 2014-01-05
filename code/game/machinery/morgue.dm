@@ -327,7 +327,7 @@
 	density = 1
 	layer = 2.0
 	var/obj/structure/crematorium/connected = null
-	anchored = 1.0
+	anchored = 1
 
 /obj/structure/c_tray/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 	if (istype(mover, /obj/item/weapon/dummy))
@@ -341,7 +341,7 @@
 /obj/structure/c_tray/attack_hand(mob/user as mob)
 	if (src.connected)
 		for(var/atom/movable/A as mob|obj in src.loc)
-			if (!( A.anchored ))
+			if (!A.anchored)
 				A.loc = src.connected
 		src.connected.connected = null
 		src.connected.update()
@@ -359,14 +359,3 @@
 			if ((B.client && !( B.blinded )))
 				B << text("\red [] stuffs [] into []!", user, O, src)
 	return
-
-/obj/machinery/crema_switch/attack_hand(mob/user as mob)
-	if(src.allowed(usr))
-		for (var/obj/structure/crematorium/C in world)
-			if (C.id == id)
-				if (!C.cremating)
-					C.cremate(user)
-	else
-		usr << "\red Access denied."
-	return
-

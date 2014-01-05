@@ -590,7 +590,7 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 	if(stat & BROKEN)	return 0
 	return 1
 
-/obj/machinery/power/apc/proc/shock(mob/user, prb)
+/obj/machinery/power/apc/shock(mob/user, prb)
 	if(!prob(prb))
 		//world << "NO PRB"
 		return 0

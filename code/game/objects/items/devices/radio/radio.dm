@@ -25,7 +25,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	var/syndie = 0//Holder to see if it's a syndicate encrpyed radio
 	var/maxf = 1499
 //			"Example" = FREQ_LISTENING|FREQ_BROADCASTING
-	flags = FPRINT | CONDUCT | TABLEPASS
+	flags = FPRINT | CONDUCT
 	slot_flags = SLOT_BELT
 	throw_speed = 2
 	throw_range = 9
@@ -336,11 +336,6 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 		var/filter_type = 2
 
-		/* --- Intercoms can only broadcast to other intercoms, but bounced radios can broadcast to bounced radios and intercoms --- */
-		if(istype(src, /obj/item/device/radio/intercom))
-			filter_type = 1
-
-
 		var/datum/signal/signal = new
 		signal.transmission_method = 2
 
@@ -571,7 +566,6 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 						R.show_message(rendered, 2)
 
 /obj/item/device/radio/hear_talk(mob/M as mob, msg)
-
 	if (broadcasting)
 		if(get_dist(src, M) <= canhear_range)
 			talk_into(M, msg)

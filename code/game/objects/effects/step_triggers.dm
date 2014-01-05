@@ -22,7 +22,7 @@
 /* Tosses things in a certain direction */
 
 /obj/effect/step_trigger/thrower
-	var/direction = SOUTH // the direction of throw
+	var/direction = EAST // the direction of throw
 	var/tiles = 3	// if 0: forever until atom hits a stopper
 	var/immobilize = 1 // if nonzero: prevents mobs from moving while they're being flung
 	var/speed = 1	// delay of movement
@@ -114,6 +114,17 @@
 				A.x = rand(teleport_x, teleport_x_offset)
 				A.y = rand(teleport_y, teleport_y_offset)
 				A.z = rand(teleport_z, teleport_z_offset)
+
+/obj/effect/step_trigger/teleporter/random/spacethrower
+	teleport_x = 5	// teleportation coordinates (if one is null, then no teleport!)
+	teleport_y = 5
+	teleport_x_offset = 95
+	teleport_y_offset = 155
+
+	teleport_z = 5
+	teleport_z_offset = 5
+
+
 
 /obj/effect/step_trigger/teleporter/random/rteam
 	name = "wormhole"

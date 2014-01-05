@@ -1,3 +1,20 @@
+/obj/effect/new_year_tree
+	name = "fir"
+	desc = "This is a fir. Real fir on dammit spess station. You smell pine-needles."
+	icon = 'icons/obj/pinetree.dmi'
+	icon_state = "pine_c"
+	anchored = 1
+	opacity = 0
+	density = 0
+	layer = 5
+
+/obj/effect/snow
+	name = "snow"
+	mouse_opacity = 1
+	layer = 2.001
+	icon = 'icons/turf/overlays.dmi'
+	icon_state = "snowfloor"
+
 /obj/item/toy/fire
 	icon = 'fireworks.dmi'
 	var/lit = 0

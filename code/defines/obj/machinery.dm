@@ -24,38 +24,6 @@
 	networking = 2
 	security = 1
 
-/obj/machinery/camera
-	name = "Security Camera"
-	desc = "A security camera with exposed wires."
-	icon = 'monitors.dmi'
-	icon_state = "camera"
-	var/network = "Luna"
-	layer = 5
-	var/c_tag = null
-	var/c_tag_order = 999
-	var/status = 1.0
-	anchored = 1.0
-	var/invuln = null
-	var/bugged = 0
-	networking = PROCESS_RPCS
-	security = 1
-
-/obj/machinery/camera/call_function(datum/function/F)
-	..()
-	if(uppertext(F.arg1) != net_pass)
-		var/datum/function/R = new()
-		R.name = "response"
-		R.source_id = address
-		R.destination_id = F.source_id
-		R.arg1 += "Incorrect Access token"
-		send_packet(src,F.source_id,R)
-		return 0 // send a wrong password really.
-	if(F.name == "disable")
-		src.status = 0
-	else if(F.name == "enable")
-		src.status = 1
-
-
 /obj/machinery/dna_scanner
 	name = "DNA Scanner/Implanter"
 	icon = 'Cryogenic2.dmi'
@@ -229,17 +197,6 @@
 	anchored = 1.0
 	req_access = list(access_brig)
 
-
-
-/obj/machinery/ignition_switch
-	name = "ignition switch"
-	icon = 'objects.dmi'
-	icon_state = "launcherbtt"
-	desc = "A remote control switch for a mounted igniter."
-	var/id = null
-	var/active = 0
-	anchored = 1.0
-
 /obj/machinery/shuttle
 	name = "shuttle"
 	icon = 'shuttle.dmi'
@@ -252,6 +209,14 @@
 /obj/machinery/shuttle/engine/heater
 	name = "heater"
 	icon_state = "heater"
+
+/obj/machinery/shuttle/engine/turbine
+	name = "accelerator"
+	icon_state = "compressor_l"
+/obj/machinery/shuttle/engine/turbine/r/icon_state = "compressor_r"
+
+/obj/machinery/shuttle/engine/turbine/part2/icon_state = "turbine_l"
+/obj/machinery/shuttle/engine/turbine/part2/r/icon_state = "turbine_r"
 
 /obj/machinery/shuttle/engine/platform
 	name = "platform"
@@ -327,29 +292,6 @@
 	var/brightnessred = 0
 	var/brightnessgreen = 0
 	var/brightnessblue = 0
-
-/obj/machinery/light_switch
-	desc = "A light switch"
-	name = "light switch"
-	icon = 'power.dmi'
-	icon_state = "light1"
-	anchored = 1.0
-	var/on = 1
-	var/area/area = null
-	var/otherarea = null
-	//	luminosity = 1
-
-/obj/machinery/crema_switch
-	desc = "Burn baby burn!"
-	name = "crematorium igniter"
-	icon = 'power.dmi'
-	icon_state = "crema_switch"
-	anchored = 1.0
-	req_access = list(access_crematorium)
-	var/on = 0
-	var/area/area = null
-	var/otherarea = null
-	var/id = 1
 
 /obj/machinery/gibber
 	name = "Gibber"

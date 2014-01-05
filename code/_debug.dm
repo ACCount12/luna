@@ -497,7 +497,7 @@ Doing this because FindTurfs() isn't even used
 /mob/verb/Smoke()
 	set category = "Debug"
 	if(Debug)
-		var/obj/effects/smoke/O = new /obj/effects/smoke( src.loc )
+		var/obj/effect/effect/smoke/O = new /obj/effect/effect/smoke( src.loc )
 		O.dir = pick(NORTH, SOUTH, EAST, WEST)
 		spawn( 0 )
 			O.Life()

@@ -9,87 +9,32 @@
 
 /obj/effect/spawner/bomb/New()
 	..()
+	var/obj/item/device/onetankbomb/bomb = new /obj/item/device/onetankbomb(get_turf(src))
 
-	switch (src.btype)
-		// radio
-		if (0)
-			var/obj/item/assembly/r_i_ptank/R = new /obj/item/assembly/r_i_ptank(src.loc)
-			var/obj/item/weapon/tank/plasma/p3 = new /obj/item/weapon/tank/plasma(R)
-			var/obj/item/device/radio/signaler/p1 = new /obj/item/device/radio/signaler(R)
-			var/obj/item/device/igniter/p2 = new /obj/item/device/igniter(R)
-			R.part1 = p1
-			R.part2 = p2
-			R.part3 = p3
-			p1.master = R
-			p2.master = R
-			p3.master = R
+	bomb.bombtank = new /obj/item/weapon/tank/plasma(bomb)
+	bomb.bombtank.air_contents.temperature = btemp + T0C
 
-			p1.b_stat = 0
-			p2.status = 1
-			p3.air_contents.temperature = btemp + T0C
+	bomb.bombassembly = new /obj/item/device/assembly_holder(bomb)
 
-			R.status = explosive
+	var/obj/item/device/assembly/assembly
 
-		// proximity
-		if (1)
-			var/obj/item/assembly/m_i_ptank/R = new /obj/item/assembly/m_i_ptank(src.loc)
-			var/obj/item/weapon/tank/plasma/p3 = new /obj/item/weapon/tank/plasma(R)
-			var/obj/item/device/prox_sensor/p1 = new /obj/item/device/prox_sensor(R)
-			var/obj/item/device/igniter/p2 = new /obj/item/device/igniter(R)
-			R.part1 = p1
-			R.part2 = p2
-			R.part3 = p3
-			p1.master = R
-			p2.master = R
-			p3.master = R
+	switch (btype)
+		if(0) // radio
+			assembly = new /obj/item/device/assembly/signaler/open()
 
-			p3.air_contents.temperature = btemp + T0C
-			p2.status = 1
+		if(1) // proximity
+			assembly = new /obj/item/device/assembly/prox_sensor()
 
-			if(src.active)
-				R.part1.state = 1
-				R.part1.icon_state = text("motion[]", 1)
-				R.c_state(1, src)
+		if(2) // timer
+			assembly = new /obj/item/device/assembly/timer()
+			assembly:time = 30
 
-			R.status = explosive
+		if(3) // bombvest
+			assembly = new /obj/item/device/assembly/health/open()
 
-		// timer
-		if (2)
-			var/obj/item/assembly/t_i_ptank/R = new /obj/item/assembly/t_i_ptank(src.loc)
-			var/obj/item/weapon/tank/plasma/p3 = new /obj/item/weapon/tank/plasma(R)
-			var/obj/item/device/timer/p1 = new /obj/item/device/timer(R)
-			var/obj/item/device/igniter/p2 = new /obj/item/device/igniter(R)
-			R.part1 = p1
-			R.part2 = p2
-			R.part3 = p3
-			p1.master = R
-			p2.master = R
-			p3.master = R
+	bomb.bombassembly.attach(new /obj/item/device/assembly/igniter(), assembly)
 
-			p3.air_contents.temperature = btemp + T0C
-			p2.status = 1
-
-			R.status = explosive
-		//bombvest
-		if(3)
-			var/obj/item/clothing/suit/armor/a_i_a_ptank/R = new /obj/item/clothing/suit/armor/a_i_a_ptank(src.loc)
-			var/obj/item/weapon/tank/plasma/p4 = new /obj/item/weapon/tank/plasma(R)
-			var/obj/item/device/healthanalyzer/p1 = new /obj/item/device/healthanalyzer(R)
-			var/obj/item/device/igniter/p2 = new /obj/item/device/igniter(R)
-			var/obj/item/clothing/suit/armor/vest/p3 = new /obj/item/clothing/suit/armor/vest(R)
-			R.part1 = p1
-			R.part2 = p2
-			R.part3 = p3
-			R.part4 = p4
-			p1.master = R
-			p2.master = R
-			p3.master = R
-			p4.master = R
-
-			p4.air_contents.temperature = btemp + T0C
-			p2.status = 1
-
-			R.status = explosive
+	bomb.status = 1
 
 	del(src)
 
@@ -130,28 +75,23 @@
 	PT.air_contents.temperature = btemp1 + T0C
 	OT.air_contents.temperature = btemp2 + T0C
 
+	var/obj/item/device/assembly/A
+
 	switch (src.btype)
-		// radio
-		if (0)
-			var/obj/item/device/radio/signaler/S = new(V)
-			V.attached_device = S
-			S.master = V
-			S.b_stat = 0
+		if (0) // radio
+			A = new /obj/item/device/assembly/signaler(V)
 
-		// proximity
-		if (1)
-			var/obj/item/device/prox_sensor/P = new(V)
-			V.attached_device = P
-			P.master = V
+		if (1) // proximity
+			A = new /obj/item/device/assembly/prox_sensor(V)
 
-		// timer
-		if (2)
-			var/obj/item/device/timer/T = new(V)
-			V.attached_device = T
-			T.master = V
-			T.time = 30
+		if (2) // timer
+			A = new /obj/item/device/assembly/timer(V)
+			A:time = 30
 
-	V.update_icon()
+	V.attached_device = A
+	A.holder = V
+	A.toggle_secure()	//this calls update_icon(), which calls update_icon() on the holder (i.e. the bomb).
+
 	del(src)
 
 /obj/effect/spawner/newbomb/timer

@@ -236,7 +236,7 @@
 	..()
 	if(ticker && ticker.mode.name == "AI malfunction")
 		if(ticker.mode:malf_mode_declared)
-			stat(null, "Time left: [ticker.mode:AI_win_timeleft]")
+			stat("Time left", "[ticker.mode:AI_win_timeleft]")
 //	if(main_shuttle.online && main_shuttle.location < 2)
 //		var/timeleft = LaunchControl.timeleft()
 //		if (timeleft)
@@ -251,10 +251,9 @@
 				stat("Tank Pressure", internal.air_contents.return_pressure())
 				stat("Distribution Pressure", internal.distribute_pressure)
 
-		if(mind)
-			if(mind.changeling)
-				stat("Chemical Storage", "[mind.changeling.chem_charges]/[mind.changeling.chem_storage]")
-				stat("Absorbed DNA", mind.changeling.absorbedcount)
+		if(mind && mind.changeling)
+			stat("Chemical Storage", "[mind.changeling.chem_charges]/[mind.changeling.chem_storage]")
+			stat("Absorbed DNA", mind.changeling.absorbedcount)
 
 		var/obj/item/device/assembly/health/H = locate() in src
 		if(H && H.scanning)
@@ -752,8 +751,6 @@
 					else
 						UpdateDamage()
 				updatehealth()
-				if(istype(M.virus, /datum/disease/jungle_fever))
-					monkeyize()
 	return
 
 /mob/living/carbon/human/attack_paw(mob/M as mob)
@@ -812,8 +809,6 @@
 					else
 						UpdateDamage()
 				updatehealth()
-				if(istype(M.virus, /datum/disease/jungle_fever))
-					monkeyize()
 	return
 
 /mob/living/carbon/human/attack_slime(mob/living/carbon/slime/M as mob)
@@ -1451,18 +1446,15 @@
 			if("dnainjector")
 				return
 			if("handcuff")
-				if (!( target.handcuffed ))
-					//SN src = null
+				if (!target.handcuffed)
 					del(src)
 					return
 			if("id")
-				if ((!( target.wear_id ) || !( target.w_uniform )))
-					//SN src = null
+				if (!target.wear_id || !target.w_uniform)
 					del(src)
 					return
 			if("internal")
 				if (!istype(target.wear_mask, /obj/item/clothing/mask) || !istype(target.back, /obj/item/weapon/tank) && !istype(target.belt, /obj/item/weapon/tank))
-					//SN src = null
 					del(src)
 					return
 	var/list/L = list( "syringe", "pill", "drink", "dnainjector", "fuel")
@@ -1490,8 +1482,6 @@
 						switch(place)
 							if("mask")
 								message = text("\red <B>[] is trying to take off \a [] from []'s head!</B>", source, target.wear_mask, target)
-/*							if("headset")
-								message = text("\red <B>[] is trying to take off \a [] from []'s face!</B>", source, target.w_radio, target) */
 							if("l_hand")
 								message = text("\red <B>[] is trying to take off \a [] from []'s left hand!</B>", source, target.l_hand, target)
 							if("r_hand")
@@ -1517,41 +1507,12 @@
 							if("uniform")
 								message = text("\red <B>[] is trying to take off \a [] from []'s body!</B>", source, target.w_uniform, target)
 							if("pockets")
-								for(var/obj/item/device/assembly/mousetrap/MT in list(target.l_store, target.r_store))
-									if(MT.armed)
-										for(var/mob/O in viewers(target, null))
-											if(O == source)
-												O.show_message(text("\red <B>You reach into the [target]'s pockets, but there was a live mousetrap in there!</B>"), 1)
-											else
-												O.show_message(text("\red <B>[source] reaches into [target]'s pockets and sets off a hidden mousetrap!</B>"), 1)
-										target.u_equip(MT)
-										if (target.client)
-											target.client.screen -= MT
-										MT.loc = source.loc
-										MT.triggered(source, source.hand ? "l_hand" : "r_hand")
-										MT.layer = OBJ_LAYER
-										return
-								for(var/obj/item/device/assembly_holder/AH in list(target.l_store, target.r_store))
-									var/obj/item/device/assembly/mousetrap/MT
-									if(istype(AH.a_left, /obj/item/device/assembly/mousetrap) && AH.a_left:armed)
-										MT = AH.a_left
-									else if(istype(AH.a_right, /obj/item/device/assembly/mousetrap) && AH.a_right:armed)
-										MT = AH.a_right
-
-									if(MT)
-										for(var/mob/O in viewers(target, null))
-											if(O == source)
-												O.show_message(text("\red <B>You reach into the [target]'s pockets, but there was a live mousetrap in there!</B>"), 1)
-											else
-												O.show_message(text("\red <B>[source] reaches into [target]'s pockets and sets off a hidden mousetrap!</B>"), 1)
-										target.u_equip(AH)
-										if (target.client)
-											target.client.screen -= AH
-										AH.loc = source.loc
-										MT.triggered(source, source.hand ? "l_hand" : "r_hand")
-										AH.layer = OBJ_LAYER
-										return
-								message = text("\red <B>[] is trying to empty []'s pockets!!</B>", source, target)
+								for(var/obj/item/I in list(target.l_store, target.r_store))
+									if(I.on_found(source))
+										message = text("\red <B>[] reaches into []'s pockets!</B>", source, target)
+										break
+								if(!message)
+									message = text("\red <B>[] is trying to empty []'s pockets!</B>", source, target)
 							if("CPR")
 								if (target.cpr_time >= world.time + 3)
 									//SN src = null

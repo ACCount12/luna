@@ -318,7 +318,7 @@ var/list/department_radio_keys = list(
 			M << test2
 		spawn(30) del(test2)
 
-	var/renderedold = rendered // Used for the voice recorders below
+//	var/renderedold = rendered // Used for the voice recorders below
 
 	if(length(heard_b))
 		var/message_b
@@ -352,7 +352,7 @@ var/list/department_radio_keys = list(
 			if (C.mob.stat >= 2 && !(C.mob in heard_a))
 				C.mob.show_message(rendered, 2)
 
-	for(var/obj/item/weapon/recorder/R in oview(message_range,src))
+/*	for(var/obj/item/device/taperecorder/R in oview(message_range,src))
 		if(R.recording)
 			over
 			var/id = rand(1,9999)
@@ -363,13 +363,12 @@ var/list/department_radio_keys = list(
 					goto over
 			if(istype(src, /mob/living/carbon/human))
 				R.disk.memory["[id]"] += renderedold
-				R.disk.mobtype["[id]"] += "human"
+				R.disk.mobtype["[id]"] += "human"*/
 
 	for(var/mob/M in viewers(message_range,src))
-		var/obj/item/weapon/implant/I = locate() in M.contents
-		if(I)
-			I.hear(message,src)
-		var/obj/item/weapon/recorder/R = locate() in M.contents
+		for(var/obj/item/weapon/implant/I in M.contents)
+			I.hear_talk(src, message,italics,alt_name)
+/*		var/obj/item/weapon/recorder/R = locate() in M.contents
 		if(R)
 			if(R.recording)
 				over
@@ -390,7 +389,7 @@ var/list/department_radio_keys = list(
 					R.disk.mobtype["[id]"] += "bot"
 				if(istype(src,/mob/living/carbon/alien))
 					R.disk.memory["[id]"] += renderedold
-					R.disk.mobtype["[id]"] += "alien"
+					R.disk.mobtype["[id]"] += "alien"*/
 
 	log_say("[src.name]/[src.key] : [message]")
 

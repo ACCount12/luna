@@ -56,7 +56,7 @@
 		var/datum/game_mode/current_mode = ticker.mode
 		switch (current_mode.config_tag)
 			if("malfunction")
-				if (src in current_mode:malf_ai)
+				if (src in current_mode:malf_ais)
 					dat += "<font color=red>Malfunction</font>"
 
 		if(src in current_mode.traitors)

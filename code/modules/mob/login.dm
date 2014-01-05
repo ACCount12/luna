@@ -36,9 +36,15 @@
 	next_move = 1
 	sight |= SEE_SELF
 	logged_in = 1
+
 	if (!client.changes)
 		changes()
 
+	//if(!isai(src))
+
+
+	client.reset_eye(src)
+
 	..()
 
-mob/proc/GetInfo()
+/mob/proc/GetInfo()

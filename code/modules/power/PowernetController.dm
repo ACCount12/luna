@@ -11,7 +11,6 @@
 	PowerAvailableLastTick = Power - Draw
 
 	//world << "PowerNet Controller: [PowerAvailableLastTick] Unused Power, [Draw] Draw, [Power] Total Supply"
-
 	var/NumAPCs = 0
 
 	for(var/obj/machinery/power/terminal/Terminal in Network.Nodes)
@@ -30,7 +29,6 @@
 	Power = 0
 	Draw = 0
 	RecoveredSurplus = 0
-
 
 	return
 
@@ -73,4 +71,3 @@
 /datum/UnifiedNetworkController/PowernetController/proc/RecoverSurplusPower(var/amount)
 	RecoveredSurplus += amount
 	return
-

@@ -13,15 +13,16 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	var/gold_amount = 0
 	var/diamond_amount = 0
 	var/max_material_amount = 75000.0
+	var/efficiency_coeff
 
 	New()
 		..()
 		component_parts = list()
-		component_parts += new /obj/item/weapon/circuitboard/machine/circuit_imprinter(src)
-		component_parts += new /obj/item/weapon/stock_parts/matter_bin(src)
-		component_parts += new /obj/item/weapon/stock_parts/manipulator(src)
-		component_parts += new /obj/item/weapon/reagent_containers/glass/beaker(src)
-		component_parts += new /obj/item/weapon/reagent_containers/glass/beaker(src)
+		component_parts += new /obj/item/weapon/circuitboard/machine/circuit_imprinter(null)
+		component_parts += new /obj/item/weapon/stock_parts/matter_bin(null)
+		component_parts += new /obj/item/weapon/stock_parts/manipulator(null)
+		component_parts += new /obj/item/weapon/reagent_containers/glass/beaker(null)
+		component_parts += new /obj/item/weapon/reagent_containers/glass/beaker(null)
 		RefreshParts()
 
 	RefreshParts()
@@ -31,10 +32,16 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 		var/datum/reagents/R = new/datum/reagents(T)		//Holder for the reagents used as materials.
 		reagents = R
 		R.my_atom = src
+
 		T = 0
 		for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 			T += M.rating
 		max_material_amount = T * 75000.0
+
+		T = 0
+		for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+			T += M.rating
+		efficiency_coeff = T-1
 
 
 	blob_act()
@@ -92,10 +99,10 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 				return
 		if (disabled)
 			return
+		if (O.is_open_container())
+			return
 		if (!linked_console)
 			user << "\The [name] must be linked to an R&D console first!"
-			return
-		if (O.is_open_container())
 			return
 		if (!istype(O, /obj/item/stack/sheet/glass) && !istype(O, /obj/item/stack/sheet/mineral/gold) && !istype(O, /obj/item/stack/sheet/mineral/diamond))
 			user << "\red You cannot insert this item into the [name]!"

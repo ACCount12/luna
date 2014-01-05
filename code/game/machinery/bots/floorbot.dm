@@ -32,9 +32,8 @@
 
 //Floorbot
 /obj/machinery/bot/floorbot
-	name = "Floorbot"
+	name = "floorbot"
 	desc = "A little floor repairing robot, he looks so excited!"
-	icon = 'aibots.dmi'
 	icon_state = "floorbot0"
 	layer = 5.0
 	density = 0
@@ -60,7 +59,7 @@
 /obj/machinery/bot/floorbot/attack_hand(user as mob)
 	var/dat
 	dat += text({"
-<TT><B>Automatic Station Floor Repairer v1.0</B></TT><BR><BR>
+<TT><B>Automatic Ship Floor Repairer v1.0</B></TT><BR><BR>
 Status: []<BR>
 Tiles left: [src.amount]<BR>
 Behaviour controls are [src.locked ? "locked" : "unlocked"]"},
@@ -327,8 +326,8 @@ text("<A href='?src=\ref[src];operation=make'>[src.maketiles ? "Yes" : "No"]</A>
 		src.icon_state = "[bot_color]floorbot[src.on]e"
 
 
-/obj/item/weapon/robot_assembly/toolbox_tiles/attackby(var/obj/item/device/prox_sensor/D, mob/user as mob)
-	if(!istype(D, /obj/item/device/prox_sensor))
+/obj/item/weapon/robot_assembly/toolbox_tiles/attackby(var/obj/item/device/D, mob/user as mob)
+	if(!isprox(D))
 		return
 	var/obj/item/weapon/robot_assembly/toolbox_tiles_sensor/B = new /obj/item/weapon/robot_assembly/toolbox_tiles_sensor
 	B.loc = user

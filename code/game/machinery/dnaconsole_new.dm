@@ -44,7 +44,7 @@
 
 /obj/item/weapon/circuitboard/computer/scan_consolenew
 	name = "Circuit board (DNA Machine)"
-	computertype = "/obj/machinery/computer/scan_consolenew"
+	computertype = /obj/machinery/computer/scan_consolenew
 	origin_tech = "programming=2;biotech=2"
 
 /obj/machinery/computer/scan_consolenew/attackby(obj/item/I as obj, mob/user as mob)

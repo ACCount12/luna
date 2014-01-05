@@ -1,5 +1,5 @@
 /obj/machinery/artifact_device/analyser
-	name = "Anomaly Analyser"
+	name = "anomaly analyser"
 	desc = "Studies the emissions of anomalous materials to discover their uses."
 	icon_state = "anoscan"
 	anchored = 1
@@ -11,10 +11,6 @@
 	var/scan_duration = 160
 	var/obj/scanned_object
 	var/report_num = 0
-
-/obj/machinery/artifact_device/analyser/attack_hand(var/mob/user as mob)
-	src.add_fingerprint(user)
-	interact(user)
 
 /obj/machinery/artifact_device/analyser/RefreshParts()
 	..()
@@ -31,12 +27,12 @@
 /obj/machinery/artifact_device/analyser/New()
 	..()
 	component_parts = list()
-	component_parts += new /obj/item/weapon/circuitboard/machine/anoscan(src)
-	component_parts += new /obj/item/weapon/stock_parts/scanning_module(src)
-	component_parts += new /obj/item/weapon/stock_parts/scanning_module(src)
-	component_parts += new /obj/item/weapon/stock_parts/manipulator(src)
-	component_parts += new /obj/item/weapon/stock_parts/micro_laser(src)
-	component_parts += new /obj/item/weapon/stock_parts/console_screen(src)
+	component_parts += new /obj/item/weapon/circuitboard/machine/anoscan(null)
+	component_parts += new /obj/item/weapon/stock_parts/scanning_module(null)
+	component_parts += new /obj/item/weapon/stock_parts/scanning_module(null)
+	component_parts += new /obj/item/weapon/stock_parts/manipulator(null)
+	component_parts += new /obj/item/weapon/stock_parts/micro_laser(null)
+	component_parts += new /obj/item/weapon/stock_parts/console_screen(null)
 	RefreshParts()
 
 /obj/machinery/artifact_device/analyser/attackby(var/obj/O as obj, var/mob/user as mob)

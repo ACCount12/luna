@@ -4,7 +4,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 /datum/changeling //stores changeling powers, changeling recharge thingie, changeling absorbed DNA and changeling ID (for changeling hivemind)
 	var/list/absorbed_dna = list()
 	var/absorbedcount = 0
-	var/chem_charges = 20
+	var/chem_charges = 50
 	var/chem_recharge_rate = 0.5
 	var/chem_storage = 50
 	var/sting_range = 1

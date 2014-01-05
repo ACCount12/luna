@@ -6,6 +6,7 @@ obj/rail
 	var/obj/rail/node2
 	var/node1_dir
 	var/node2_dir
+
 obj/rail/New()
 	sleep(1)
 	updatetrack()
