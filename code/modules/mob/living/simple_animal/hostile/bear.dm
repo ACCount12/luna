@@ -41,9 +41,6 @@
 /mob/living/simple_animal/hostile/bear/Hudson
 	name = "Hudson"
 	desc = ""
-	response_help  = "pets"
-	response_disarm = "gently pushes aside"
-	response_harm   = "hits"
 
 /mob/living/simple_animal/hostile/bear/Move()
 	..()
@@ -115,8 +112,8 @@
 		target = M
 	..()
 
-/mob/living/simple_animal/hostile/bear/Process_Spacemove(var/check_drift = 0)
-	return 1	//No drifting in space for space bears!
+/*mob/living/simple_animal/hostile/bear/Process_Spacemove(var/check_drift = 0)
+	return 1*/	//No drifting in space for space bears!
 
 /mob/living/simple_animal/hostile/bear/FindTarget()
 	. = ..()
@@ -135,7 +132,7 @@
 	if(ishuman(target))
 		var/mob/living/carbon/human/H = target
 		var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
-		var/datum/limb/affecting = H.get_organ(ran_zone(dam_zone))
+		var/datum/organ/external/affecting = H.get_organ(ran_zone(dam_zone))
 		H.apply_damage(damage, BRUTE, affecting, H.run_armor_check(affecting, "melee"))
 		return H
 	else if(isliving(target))

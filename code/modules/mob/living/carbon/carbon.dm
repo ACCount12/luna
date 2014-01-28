@@ -97,7 +97,8 @@
 			H.blood_DNA = list()
 	update_clothing()
 
-
+/mob/living/carbon/proc/eyecheck()
+	return 0
 
 /mob/living/carbon/Move()
 	if(buckled)
@@ -271,3 +272,7 @@
 						return 1
 
 	..()
+
+/mob/living/carbon/proc/handle_changeling()
+	if(mind && mind.changeling)
+		mind.changeling.regenerate()

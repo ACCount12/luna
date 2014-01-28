@@ -85,6 +85,9 @@
 	spark_system.set_up(2, 0, src)
 	spark_system.attach(src)
 	ion_trail.set_up(src)
+	if(thrusters)
+		ion_trail.start()
+
 	add_cell()
 	add_iterators()
 	removeVerb(/obj/mecha/verb/disconnect_from_port)
@@ -1001,7 +1004,7 @@
 /obj/mecha/proc/go_out()
 	if(!src.occupant) return
 
-	if(src.occupant.forceMove(src.loc))//ejecting mob container
+	if(src.occupant.forceMove(get_turf(src)))//ejecting mob container
 		src.log_message("[src.occupant] moved out.")
 		occupant.reset_view()
 		/*

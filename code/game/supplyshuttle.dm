@@ -243,7 +243,7 @@ var/supply_shuttle_points = 50
 /obj/machinery/computer/cargo/ordercomp/attack_hand(var/mob/user as mob)
 	if(..())
 		return
-	user.machine = src
+	user.set_machine(src)
 	var/dat
 	if (src.temp)
 		dat = src.temp
@@ -266,7 +266,7 @@ var/supply_shuttle_points = 50
 		return
 
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
-		usr.machine = src
+		usr.set_machine(src)
 
 	src.temp = ""
 
@@ -329,7 +329,7 @@ var/supply_shuttle_points = 50
 
 	if(..())
 		return
-	user.machine = src
+	user.set_machine(src)
 	post_signal("supply")
 	var/dat
 	if (src.temp)
@@ -353,7 +353,7 @@ var/supply_shuttle_points = 50
 		return
 
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || istype(usr, /mob/living/silicon))
-		usr.machine = src
+		usr.set_machine(src)
 
 	src.temp = ""
 

@@ -1,6 +1,6 @@
 /obj/machinery/nuclearbomb
-	desc = "Uh oh."
 	name = "Nuclear Fission Explosive"
+	desc = "Uh oh."
 	icon = 'stationobjs.dmi'
 	icon_state = "nuclearbomb0"
 	density = 1
@@ -30,8 +30,8 @@
 
 /obj/machinery/nuclearbomb/attack_hand(mob/user as mob)
 	if (src.extended)
-		user.machine = src
-		var/dat = text("<TT><B>Nuclear Fission Explosive</B><BR>\nAuth. Disk: <A href='?src=\ref[];auth=1'>[]</A><HR>", src, (src.auth ? "++++++++++" : "----------"))
+		user.set_machine(src)
+		var/dat = "<TT><B>Nuclear Fission Explosive</B><BR>\nAuth. Disk: <A href='?src=\ref[src];auth=1'>[src.auth ? "++++++++++" : "----------"]</A><HR>"
 		if (src.auth)
 			if (src.yes_code)
 				dat += text("\n<B>Status</B>: []-[]<BR>\n<B>Timer</B>: []<BR>\n<BR>\nTimer: [] <A href='?src=\ref[];timer=1'>Toggle</A><BR>\nTime: <A href='?src=\ref[];time=-10'>-</A> <A href='?src=\ref[];time=-1'>-</A> [] <A href='?src=\ref[];time=1'>+</A> <A href='?src=\ref[];time=10'>+</A><BR>\n<BR>\nSafety: [] <A href='?src=\ref[];safety=1'>Toggle</A><BR>\nAnchor: [] <A href='?src=\ref[];anchor=1'>Toggle</A><BR>\n", (src.timing ? "Func/Set" : "Functional"), (src.safety ? "Safe" : "Engaged"), src.timeleft, (src.timing ? "On" : "Off"), src, src, src, src.timeleft, src, src, (src.safety ? "On" : "Off"), src, (src.anchored ? "Engaged" : "Off"), src)
@@ -74,7 +74,7 @@
 		usr << "\red You don't have the dexterity to do this!"
 		return
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))))
-		usr.machine = src
+		usr.set_machine(src)
 		if (href_list["auth"])
 			if (src.auth)
 				src.auth.loc = src.loc
@@ -128,16 +128,9 @@
 		return
 	return
 
-//this whole thing is retarded???
-
-/obj/machinery/nuclearbomb/ex_act(severity)
+/obj/machinery/nuclearbomb/ex_act()
 	return
-
 /obj/machinery/nuclearbomb/blob_act()
-	if (src.timing == -1.0)
-		return
-	else
-		return ..()
 	return
 
 /obj/machinery/nuclearbomb/proc/explode()
@@ -155,18 +148,24 @@
 
 */
 	enter_allowed = 0
-	for(var/client/C)
+/*	for(var/client/C)
 		spawn(0)
-			C.station_explosion_cinematic()
+			C.station_explosion_cinematic()*/
+	var/missed = 0
+	var/turf/T = get_turf(src)
+	if(T.z > 4) missed = 1
 
-	if(ticker.mode.name == "nuclear emergency")
-		ticker.mode:nuke_detonated = 1
-		ticker.mode.check_win()
-	else
-		sleep(10*tick_multiplier)
-		world << "<B>Everyone was killed by the nuclear blast! Resetting in 30 seconds!</B>"
+	ticker.station_explosion_cinematic(missed)
 
-		sleep(300*tick_multiplier)
-		log_game("Rebooting due to nuclear destruction of ship")
-		world.Reboot()
+	if(!missed)
+		if(ticker.mode.name == "nuclear emergency")
+			ticker.mode:nuke_detonated = 1
+			ticker.mode.check_win()
+		else
+			sleep(10*tick_multiplier)
+			world << "<B>Everyone was killed by the nuclear blast! Resetting in 30 seconds!</B>"
+
+			sleep(300*tick_multiplier)
+			log_game("Rebooting due to nuclear destruction of ship")
+			world.Reboot()
 	return

@@ -1,8 +1,9 @@
 /obj/item/clothing/glasses
-	name = "Glasses"
+	name = "glasses"
 	icon = 'glasses.dmi'
 	w_class = 2.0
 	flags = GLASSESCOVERSEYES
+	slot_flags = SLOT_EYES
 
 	var/see_turfs = 0
 	var/see_mobs = 0
@@ -10,6 +11,7 @@
 
 	var/see_in_dark = 2
 	var/see_invisible = 0
+
 
 /obj/item/clothing/glasses/blindfold
 	name = "blindfold"
@@ -27,7 +29,7 @@
 	see_invisible = 1
 
 /obj/item/clothing/glasses/meson/night
-	name = "Night Vision Goggles"
+	name = "night vision goggles"
 	desc = "You can totally see in the dark now!"
 	icon_state = "night"
 	item_state = "glasses"
@@ -86,13 +88,13 @@
 	var/already_worn = 0
 	see_in_dark = 1
 
-/*
+
 /obj/item/clothing/glasses/welding
 	name = "welding goggles"
 	desc = "Protects the eyes from welders, approved by the mad scientist association."
 	icon_state = "welding-g"
 	item_state = "welding-g"
-	action_button_name = "Toggle Welding Goggles"
+//	action_button_name = "Toggle Welding Goggles"
 	var/up = 0
 
 /obj/item/clothing/glasses/welding/attack_self()
@@ -118,8 +120,8 @@
 			icon_state = "[initial(icon_state)]up"
 			usr << "You push the [src] up out of your face."
 
-		usr.update_inv_glasses(0)
-*/
+		usr.update_clothing()
+
 /obj/item/clothing/glasses/sunglasses/blindfold
 	name = "blindfold"
 	desc = "Covers the eyes, preventing sight."

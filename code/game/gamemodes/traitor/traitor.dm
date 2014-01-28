@@ -2,11 +2,7 @@
 	name = "Traitor"
 	config_tag = "traitor"
 
-	var/const/waittime_l = 600 // Lower bound on time before intercept arrives (in tenths of seconds)
-	var/const/waittime_h = 1800 // Upper bound on time before intercept arrives (in tenths of seconds)
-
 	var/const/traitors_possible = 4
-
 	var/num_players = 0
 
 /datum/game_mode/traitor/announce()
@@ -163,7 +159,7 @@
 	var/list/candidates = list()
 	for(var/mob/new_player/player in world)
 		if (player.client && player.ready)
-			if(player.preferences.be_syndicate)
+			if(BE_OPERATIVE in player.preferences.roles)
 				candidates += player.mind
 
 	if(candidates.len < 1)

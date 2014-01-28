@@ -180,7 +180,7 @@
 			flick("door_deny", src)
 	return
 
-/obj/machinery/door/proc/open()
+/obj/machinery/door/proc/open(var/use_autoclose = 1)
 	if(!density)
 		return 1
 	if (src.operating == 1) //doors can still open when emag-disabled
@@ -201,7 +201,7 @@
 	if(operating == 1) //emag again
 		src.operating = 0
 
-	if(autoclose)
+	if(autoclose && use_autoclose)
 		spawn(150)
 			autoclose()
 	return 1

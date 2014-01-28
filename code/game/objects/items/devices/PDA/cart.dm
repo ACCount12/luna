@@ -12,6 +12,7 @@
 	var/access_medical = 0
 	var/access_manifest = 0
 	var/access_clown = 0
+	var/access_atmos = 0
 	var/access_mime = 0
 	var/access_janitor = 0
 	var/access_reagent_scanner = 0

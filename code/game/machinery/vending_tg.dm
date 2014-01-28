@@ -577,7 +577,7 @@
 	vend_reply = "Have an enchanted evening!"
 	product_ads = "FJKLFJSD;AJKFLBJAKL;1234 LOONIES LOL!;>MFW;Kill them fuckers!;GET DAT FUKKEN DISK;HONK!;EI NATH;Destroy the station!;Admin conspiracies since forever!;Space-time bending hardware!"
 	products = list(/obj/item/clothing/head/wizard = 1,/obj/item/clothing/suit/wizrobe = 1,/obj/item/clothing/head/wizard/red = 1,/obj/item/clothing/suit/wizrobe/red = 1,/obj/item/clothing/shoes/sandal = 1,/obj/item/weapon/staff = 2)
-	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/virus/wizarditis = 1, /obj/item/weapon/staff/magical/test = 1)	//No one can get to the machine to hack it anyways; for the lulz - Microwave
+	contraband = list(/obj/item/weapon/reagent_containers/glass/beaker/vial/virus/wizarditis = 1, /obj/item/weapon/staff/magical/test = 1)	//No one can get to the machine to hack it anyways; for the lulz - Microwave
 /*
 /obj/machinery/vending_tg/dinnerware
 	name = "dinnerware"
@@ -606,27 +606,28 @@
 	contraband = list(/obj/item/weapon/weldingtool/industrial = 2,/obj/item/clothing/gloves/fyellow = 4)
 	premium = list(/obj/item/clothing/gloves/yellow = 2)
 
-/*obj/machinery/vending_tg/engivend
-	name = "\improper Engi-Vend"
-	desc = "Spare tool vending. What? Did you expect some witty description?"
+/obj/machinery/vending_tg/engivend
+	name = "\improper Power-Vend"
+	desc = "Spare electronics vending. What? Did you expect some witty description?"
 	icon_state = "engivend"
 	icon_deny = "engivend-deny"
 //	req_access_txt = "11" //Engineering Equipment access
-	products = list(/obj/item/clothing/glasses/meson = 2,/obj/item/device/multitool = 4,/obj/item/weapon/airlock_electronics = 10,/obj/item/weapon/module/power_control = 10,/obj/item/weapon/airalarm_electronics = 10,/obj/item/weapon/cell/high = 10)
+	products = list(/obj/item/clothing/glasses/meson = 2, /obj/item/device/multitool = 4, /obj/item/weapon/circuitboard/airlock_electronics = 10,
+					/obj/item/weapon/circuitboard/power_control = 10,/obj/item/weapon/circuitboard/airalarm_electronics = 10,/obj/item/weapon/cell/high = 10)
 	contraband = list(/obj/item/weapon/cell/potato = 3)
-	premium = list(/obj/item/weapon/storage/belt/utility = 3)*/
+	premium = list(/obj/item/weapon/storage/belt/utility = 3)
 
 //This one's from bay12
 /obj/machinery/vending_tg/engineering
-	name = "\improper Robco Tool Maker"
+	name = "\improper Robco Tool Dispenser"
 	desc = "Everything you need for do-it-yourself station repair."
 	icon_state = "engi"
 	icon_deny = "engi-deny"
 	req_access_txt = "11"
-	products = list(/obj/item/clothing/under/rank/chief_engineer = 4,/obj/item/clothing/under/rank/engineer = 4,/obj/item/clothing/shoes/orange = 4,/obj/item/clothing/head/helmet/hardhat = 4,
+	products = list(/obj/item/clothing/under/rank/chief_engineer = 2,/obj/item/clothing/under/rank/engineer = 4,/obj/item/clothing/shoes/orange = 4,/obj/item/clothing/head/helmet/hardhat = 4,
 					/obj/item/weapon/storage/belt/utility = 4,/obj/item/clothing/glasses/meson = 4,/obj/item/clothing/gloves/yellow = 4, /obj/item/weapon/screwdriver = 12,
 					/obj/item/weapon/crowbar = 12,/obj/item/weapon/wirecutters = 12,/obj/item/device/multitool = 12,/obj/item/weapon/wrench = 12,/obj/item/device/t_scanner = 12,
-					/obj/item/weapon/cell/high = 8, /obj/item/weapon/weldingtool = 8,/obj/item/clothing/head/helmet/welding = 8,
+					/obj/item/weapon/cell/high = 8, /obj/item/weapon/weldingtool = 8,/obj/item/clothing/head/helmet/welding = 8, /obj/item/weapon/circuitboard/circuitry = 6,
 					/obj/item/weapon/light/tube = 10,/obj/item/clothing/suit/fire = 4, /obj/item/weapon/stock_parts/scanning_module = 5,/obj/item/weapon/stock_parts/micro_laser = 5,
 					/obj/item/weapon/stock_parts/matter_bin = 5,/obj/item/weapon/stock_parts/manipulator = 5,/obj/item/weapon/stock_parts/console_screen = 5)
 	// There was an incorrect entry (cablecoil/power).  I improvised to cablecoil/heavyduty.
@@ -643,7 +644,7 @@
 	products = list(/obj/item/clothing/suit/storage/labcoat = 2,/obj/item/clothing/under/rank/roboticist = 2,/obj/item/weapon/cable_coil = 4,/obj/item/device/flash = 6,
 					/obj/item/weapon/cell/high/empty = 10, /obj/item/device/assembly/prox_sensor = 4,/obj/item/device/assembly/signaler = 4,/obj/item/device/healthanalyzer = 4,
 					/obj/item/weapon/surgical/scalpel = 2,/obj/item/weapon/surgical/circular_saw = 2,/obj/item/weapon/tank/anesthetic = 4,/obj/item/clothing/mask/breath/medical = 4,
-					/obj/item/weapon/screwdriver = 5,/obj/item/weapon/crowbar = 5)
+					/obj/item/weapon/screwdriver = 5,/obj/item/weapon/crowbar = 5, /obj/item/weapon/circuitboard/circuitry = 6)
 	contraband = list(/obj/item/weapon/stock_parts/scanning_module = 2,/obj/item/weapon/stock_parts/micro_laser = 3,
 					/obj/item/weapon/stock_parts/matter_bin = 5,/obj/item/weapon/stock_parts/manipulator = 3,/obj/item/weapon/stock_parts/console_screen = 2)
 	//everything after the power cell had no amounts, I improvised.  -Sayu

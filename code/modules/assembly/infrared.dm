@@ -201,7 +201,7 @@
 		return
 	return
 
-/obj/effect/beam/i_beam/proc/process()
+/obj/effect/beam/i_beam/process()
 	//world << "i_beam \ref[src] : process"
 
 	if((loc.density || !(master)))

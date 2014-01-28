@@ -345,3 +345,5 @@ proc/isInSight(var/atom/A, var/atom/B)
 	if(src.machine)
 		unset_machine()
 	src.machine = O
+	if(istype(O))
+		O.in_use = 1

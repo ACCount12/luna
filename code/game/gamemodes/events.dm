@@ -93,8 +93,19 @@
 		spawn(30)
 			dotheblobbaby()
 
+/obj/bhole
+	name = "black hole"
+	icon = 'objects.dmi'
+	desc = "FUCK FUCK FUCK AAAHHH"
+	icon_state = "bhole2"
+	opacity = 0
+	density = 0
+	anchored = 1
+	var/datum/effect/effect/system/harmless_smoke_spread/smoke
+
 /obj/bhole/New()
-	src.smoke = new /datum/effects/system/harmless_smoke_spread()
+	..()
+	src.smoke = new /datum/effect/effect/system/harmless_smoke_spread()
 	src.smoke.set_up(5, 0, src)
 	src.smoke.attach(src)
 	src:life()

@@ -1,6 +1,10 @@
 /mob/living/carbon/alien/larva/death(gibbed)
 	if(stat == 2)
 		return
+
+	living_mob_list -= src
+	dead_mob_list |= src
+
 	if(healths)
 		healths.icon_state = "health6"
 	icon_state = "larva_l"
@@ -12,11 +16,5 @@
 		if(src.client)
 			blind.layer = 0
 		lying = 1
-		var/h = src.hand
-		hand = 0
-		drop_item()
-		hand = 1
-		drop_item()
-		hand = h
 
 	return ..(gibbed)

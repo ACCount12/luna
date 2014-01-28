@@ -62,7 +62,7 @@
 	mind.assigned_role = "pAI"
 	mind.special_role = ""
 
-/*/Animals
+//Animals
 /mob/living/simple_animal/mind_initialize()
 	..()
 	mind.assigned_role = "Animal"
@@ -88,7 +88,7 @@
 /mob/living/simple_animal/construct/armoured/mind_initialize()
 	..()
 	mind.assigned_role = "Juggernaut"
-	mind.special_role = "Cultist"*/
+	mind.special_role = "Cultist"
 
 /mob/living/parasite/meme/mind_initialize()
 	..()

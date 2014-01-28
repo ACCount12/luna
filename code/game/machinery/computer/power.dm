@@ -25,7 +25,7 @@
 			return
 
 
-	user.machine = src
+	user.set_machine(src)
 	var/t = "<TT><B>Power Monitoring</B><HR>"
 
 

@@ -426,7 +426,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 	return creatures
 
-/*Orders mobs by type then by name
+//Orders mobs by type then by name
 /proc/sortmobs()
 	var/list/moblist = list()
 	var/list/sortmob = sortAtom(mob_list)
@@ -457,7 +457,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 //	for(var/mob/living/silicon/hive_mainframe/M in world)
 //		mob_list.Add(M)
 	return moblist
-*/
+
 //E = MC^2
 /proc/convert2energy(var/M)
 	var/E = M*(SPEED_OF_LIGHT_SQ)
@@ -776,7 +776,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all turfs in areas of that type of that type in the world.
-/proc/get_area_turfs(var/areatype)
+/proc/get_area_turfs(var/areatype, var/strict = 0)
 	if(!areatype) return null
 	if(istext(areatype)) areatype = text2path(areatype)
 	if(isarea(areatype))
@@ -784,9 +784,14 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		areatype = areatemp.type
 
 	var/list/turfs = new/list()
-	for(var/area/N in world)
-		if(istype(N, areatype))
-			for(var/turf/T in N) turfs += T
+	if(strict)
+		for(var/area/N in world)
+			if(N.type == areatype)
+				for(var/turf/T in N) turfs += T
+	else
+		for(var/area/N in world)
+			if(istype(N, areatype))
+				for(var/turf/T in N) turfs += T
 	return turfs
 
 //Takes: Area type as text string or as typepath OR an instance of the area.
@@ -1334,3 +1339,9 @@ var/list/WALLITEMS = list(
 
 /proc/format_text(text)
 	return replacetext(replacetext(text,"\proper ",""),"\improper ","")
+
+/proc/is_same_z_group(var/z1, var/z2)
+	if((z1 in list(1,2,3,4)) && (z2 in list(1,2,3,4)))
+		return 1
+
+	return (z1 == z2)

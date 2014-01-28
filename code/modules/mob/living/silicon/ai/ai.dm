@@ -140,8 +140,8 @@
 		switchCamera(locate(href_list["switchcamera"]) in cameranet.cameras)
 	if (href_list["showalerts"])
 		ai_alerts()
-	if (href_list["showalerts"])
-		ai_alerts()
+	if (href_list["switchsubnet"])
+		change_network()
 	//Carn: holopad requests
 /*	if (href_list["jumptoholopad"])
 		var/obj/machinery/hologram/holopad/H = locate(href_list["jumptoholopad"])

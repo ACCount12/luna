@@ -6,7 +6,6 @@ var/const/PARTICLE_TOGGLE_WIRE = 1 // Toggles whether the PA is on or not.
 var/const/PARTICLE_STRENGTH_WIRE = 2 // Determines the strength of the PA.
 var/const/PARTICLE_INTERFACE_WIRE = 4 // Determines the interface showing up.
 var/const/PARTICLE_LIMIT_POWER_WIRE = 8 // Determines how strong the PA can be.
-//var/const/PARTICLE_NOTHING_WIRE = 16 // Blank wire
 
 /datum/wires/particle_acc/control_box/CanUse(var/mob/living/L)
 	var/obj/machinery/particle_accelerator/control_box/C = holder
@@ -39,7 +38,6 @@ var/const/PARTICLE_LIMIT_POWER_WIRE = 8 // Determines how strong the PA can be.
 				C.toggle_power()
 
 		if(PARTICLE_STRENGTH_WIRE)
-
 			for(var/i = 1; i < 3; i++)
 				C.remove_strength()
 

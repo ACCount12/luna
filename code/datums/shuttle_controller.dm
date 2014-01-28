@@ -283,10 +283,10 @@ proc/CreateShuttles() //Would do this via config, but map changes are rare and n
 	recall()
 		settimeleft(20)
 		online = 1
-		if(direction == 1)
-			setdirection(2)
+		if(location == 1)
+			direction = 2
 		else
-			setdirection(1)
+			direction = 1
 
 	process()
 		if(!online) return

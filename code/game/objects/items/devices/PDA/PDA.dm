@@ -7,7 +7,7 @@
 	icon_state = "pda"
 	item_state = "electronic"
 	w_class = 2.0
-	slot_flags = SLOT_BELT
+	slot_flags = SLOT_BELT | SLOT_ID
 
 	//Main variables
 	var/owner = null
@@ -159,15 +159,19 @@
 /obj/item/device/pda/miner
 	icon_state = "pda-miner"
 
+/obj/item/device/pda/atmos
+	default_cartridge = /obj/item/weapon/cartridge/engineering
+	icon_state = "pda-atmo"
+
+/obj/item/device/pda/chaplain
+	icon_state = "pda-holy"
+	ttone = "holy"
+
 /obj/item/device/pda/syndicate
 	default_cartridge = /obj/item/weapon/cartridge/syndicate
 	icon_state = "pda-syn"
 	name = "Military PDA"
 	toff = 1
-
-/obj/item/device/pda/chaplain
-	icon_state = "pda-holy"
-	ttone = "holy"
 
 /*
  *	The Actual PDA
@@ -194,7 +198,7 @@
 
 //NOTE: graphic resources are loaded on client login
 /obj/item/device/pda/attack_self(mob/user as mob)
-	user.machine = src
+	user.set_machine(src)
 
 	var/dat = "<html><head><title>Personal Data Assistant</title><META http-equiv='Content-Type' content='text/html; charset=windows-1251'></head><body bgcolor=\"#808000\"><style>a, a:link, a:visited, a:active, a:hover { color: #000000; }img {border-style:none;}</style>"
 
@@ -382,7 +386,7 @@
 		if ( !(U.stat || U.restrained()) )
 
 			add_fingerprint(U)
-			U.machine = src
+			U.set_machine(src)
 
 			switch(href_list["choice"])
 

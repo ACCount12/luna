@@ -17,11 +17,10 @@
 	w_class = 4
 	m_amt = 500
 	g_amt = 100
-	w_amt = 200
 
-	var/obj/beam/laser/beam 	// the created beam
+	var/obj/effect/beam/laser/beam 	// the created beam
 
-	flags = FPRINT | CONDUCT | TABLEPASS
+	flags = FPRINT | CONDUCT
 
 	attack_ai()
 		return

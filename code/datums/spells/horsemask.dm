@@ -46,7 +46,7 @@
 	target.visible_message(	"<span class='danger'>[target]'s face lights up in fire, and after the event a horse's head takes its place!</span>", \
 							"<span class='danger'>Your face burns up, and shortly after the fire you realise you have the face of a horse!</span>")
 	del target.wear_mask
-	target.equip_if_possible(magichead, target.slot_wear_mask)
+	target.equip_if_possible(magichead, slot_wear_mask)
 	target.update_clothing()
 
 	flick("e_flash", target.flash)

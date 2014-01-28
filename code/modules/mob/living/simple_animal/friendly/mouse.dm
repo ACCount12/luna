@@ -18,20 +18,20 @@
 	response_disarm = "gently pushes aside"
 	response_harm   = "splats"
 	density = 0
-	var/color //brown, gray and white, leave blank for random
+	var/mouse_color //brown, gray and white, leave blank for random
 
 /mob/living/simple_animal/mouse/New()
 	..()
-	if(!color)
-		color = pick( list("brown","gray","white") )
-	icon_state = "mouse_[color]"
-	icon_living = "mouse_[color]"
-	icon_dead = "mouse_[color]_dead"
+	if(!mouse_color)
+		mouse_color = pick( list("brown","gray","white") )
+	icon_state = "mouse_[mouse_color]"
+	icon_living = "mouse_[mouse_color]"
+	icon_dead = "mouse_[mouse_color]_dead"
 
 
 /mob/living/simple_animal/mouse/proc/splat()
-	src.health = 0
-	src.icon_dead = "mouse_[color]_splat"
+	health = 0
+	icon_dead = "mouse_[mouse_color]_splat"
 	Die()
 
 /mob/living/simple_animal/mouse/Die()
@@ -53,24 +53,21 @@
  */
 
 /mob/living/simple_animal/mouse/white
-	color = "white"
+	mouse_color = "white"
 	icon_state = "mouse_white"
 
 /mob/living/simple_animal/mouse/gray
-	color = "gray"
+	mouse_color = "gray"
 	icon_state = "mouse_gray"
 
 /mob/living/simple_animal/mouse/brown
-	color = "brown"
+	mouse_color = "brown"
 	icon_state = "mouse_brown"
 
 //TOM IS ALIVE! SQUEEEEEEEE~K :)
 /mob/living/simple_animal/mouse/brown/Tom
 	name = "Tom"
 	desc = "Jerry the cat is not amused."
-	response_help  = "pets"
-	response_disarm = "gently pushes aside"
-	response_harm   = "splats"
 
 /obj/item/trash/deadmouse
 	name = "dead mouse"

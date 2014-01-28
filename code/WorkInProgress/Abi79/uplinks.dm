@@ -92,7 +92,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		return
 
 	if (usr.contents.Find(src) || usr.contents.Find(hostradio) || (in_range(src, usr) && istype(src.loc, /turf)))
-		usr.machine = src
+		usr.set_machine(src)
 
 		if(href_list["buy_item"])
 			if(..() == 1) // We can afford the item
@@ -234,7 +234,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 //A Syndicate uplink disguised as a portable radio
 
 /obj/item/device/uplink/radio/attack_self(mob/user as mob)
-	user.machine = src
+	user.set_machine(src)
 	var/dat
 
 	if (src.selfdestruct)
@@ -264,7 +264,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 		return 1
 
 	if (usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf)))
-		usr.machine = src
+		usr.set_machine(src)
 
 		if(href_list["buy_item"])
 			if(..() == 1) // We can afford the item

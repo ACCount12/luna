@@ -42,8 +42,7 @@ mob/living/carbon/alien/Life()
 	R.my_atom = src
 
 	update_clothing()
-
-	src << "\blue Your icons have been generated!"
+	//src << "\blue Your icons have been generated!"
 
 /mob/living/carbon/alien/Bump(atom/movable/AM as mob|obj, yes)
 	spawn(0)
@@ -52,11 +51,11 @@ mob/living/carbon/alien/Life()
 		now_pushing = 1
 		now_pushing = 0
 		..()
-		if (!( istype(AM, /atom/movable) ))
+		if (!istype(AM, /atom/movable))
 			return
-		if (!( now_pushing ))
+		if (!now_pushing)
 			now_pushing = 1
-			if (!( AM.anchored ))
+			if (!AM.anchored)
 				var/t = get_dir(src, AM)
 				step(AM, t)
 			now_pushing = null
@@ -73,3 +72,6 @@ mob/living/carbon/alien/Life()
 
 		updatehealth()
 	return
+
+/mob/living/carbon/alien/eyecheck()
+	return 2

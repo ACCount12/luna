@@ -13,7 +13,7 @@
 	level = 1
 	var/online = 0
 	var/control = 0
-	var/list/obj/shielding/shield/PoweredShields = list( )
+	var/list/obj/effect/shielding/shield/PoweredShields = list( )
 
 
 //When an emitter is created, run the AoE setup code after a delay
@@ -37,7 +37,7 @@
 	var/nonline = ShieldNetwork.HasPower() && control
 
 	if (online != nonline)
-		for(var/obj/shielding/shield/Shield in PoweredShields)
+		for(var/obj/effect/shielding/shield/Shield in PoweredShields)
 			if(Shield.disabled)
 				Shield.density = 0
 				Shield.invisibility = 101
@@ -71,7 +71,7 @@
 
 //Set up a shield tile on this turf if applicable
 /obj/machinery/shielding/emitter/proc/UpdateTurf(var/turf/S)
-	for (var/obj/shielding/shield/shield in S)
+	for (var/obj/effect/shielding/shield/shield in S)
 		if(!shield.emitter || shield.emitterdist < get_dist(shield, src))
 			shield.emitter = src
 			shield.emitterdist = get_dist(shield, src)
@@ -85,11 +85,11 @@
 				return
 
 /obj/machinery/shielding/emitter/proc/AddShield(var/turf/S)
-	for (var/obj/shielding/shield/shield in S)
+	for (var/obj/effect/shielding/shield/shield in S)
 		if(!shield.emitter)
 			shield.emitter = src
 		return
-	var/obj/shielding/shield/Shield = new /obj/shielding/shield(S)
+	var/obj/effect/shielding/shield/Shield = new /obj/effect/shielding/shield(S)
 	Shield.emitter = src
 	PoweredShields += Shield
 	return
@@ -108,7 +108,7 @@
 
 //AoE Setup for the emitter plate - Shield the exterior hull
 /obj/machinery/shielding/emitter/plate/UpdateAoE()
-	for(var/obj/shielding/shield/shield in PoweredShields)
+	for(var/obj/effect/shielding/shield/shield in PoweredShields)
 		shield.density = 0
 		shield.invisibility = 101
 		shield.explosionstrength = 0

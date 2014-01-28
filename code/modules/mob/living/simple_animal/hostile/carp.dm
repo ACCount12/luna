@@ -1,5 +1,3 @@
-
-
 /mob/living/simple_animal/hostile/carp
 	name = "space carp"
 	desc = "A ferocious, fang-bearing creature that resembles a fish."
@@ -36,8 +34,8 @@
 
 	faction = "carp"
 
-/mob/living/simple_animal/hostile/carp/Process_Spacemove(var/check_drift = 0)
-	return 1	//No drifting in space for space carp!	//original comments do not steal
+/*mob/living/simple_animal/hostile/carp/Process_Spacemove(var/check_drift = 0)
+	return 1*/	//No drifting in space for space carp!	//original comments do not steal
 
 /mob/living/simple_animal/hostile/carp/FindTarget()
 	. = ..()
@@ -48,6 +46,6 @@
 	. =..()
 	var/mob/living/carbon/L = .
 	if(istype(L))
-		if(prob(15))
-			L.Weaken(3)
+		if(prob(10))
+			L.Weaken(2)
 			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")

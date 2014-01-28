@@ -104,20 +104,20 @@
 
 	var/obj/item/device/radio/R = new /obj/item/device/radio/headset(synd_mob)
 	R.set_frequency(radio_freq)
-	synd_mob.equip_if_possible(R, synd_mob.slot_ears)
+	synd_mob.equip_if_possible(R, slot_ears)
 
-	synd_mob.equip_if_possible(new /obj/item/clothing/under/syndicate(synd_mob), synd_mob.slot_w_uniform)
-	synd_mob.equip_if_possible(new /obj/item/clothing/shoes/black(synd_mob), synd_mob.slot_shoes)
-	synd_mob.equip_if_possible(new /obj/item/clothing/suit/armor/vest(synd_mob), synd_mob.slot_wear_suit)
-	synd_mob.equip_if_possible(new /obj/item/clothing/gloves/swat(synd_mob), synd_mob.slot_gloves)
-	synd_mob.equip_if_possible(new /obj/item/clothing/head/helmet/swat(synd_mob), synd_mob.slot_head)
+	synd_mob.equip_if_possible(new /obj/item/clothing/under/syndicate(synd_mob), slot_w_uniform)
+	synd_mob.equip_if_possible(new /obj/item/clothing/shoes/black(synd_mob), slot_shoes)
+	synd_mob.equip_if_possible(new /obj/item/clothing/suit/armor/vest(synd_mob), slot_wear_suit)
+	synd_mob.equip_if_possible(new /obj/item/clothing/gloves/swat(synd_mob), slot_gloves)
+	synd_mob.equip_if_possible(new /obj/item/clothing/head/helmet/swat(synd_mob), slot_head)
 
-	synd_mob.equip_if_possible(new /obj/item/weapon/storage/backpack(synd_mob), synd_mob.slot_back)
-	synd_mob.equip_if_possible(new /obj/item/weapon/reagent_containers/pill/cyanide(synd_mob), synd_mob.slot_in_backpack)
-	synd_mob.equip_if_possible(new /obj/item/weapon/handcuffs(synd_mob), synd_mob.slot_in_backpack)
-	synd_mob.equip_if_possible(new /obj/item/weapon/gun/energy/gun(synd_mob), synd_mob.slot_in_backpack)
-	synd_mob.equip_if_possible(new /obj/item/weapon/gun/projectile(synd_mob), synd_mob.slot_in_backpack)
-	synd_mob.equip_if_possible(new /obj/item/weapon/melee/baton(synd_mob), synd_mob.slot_in_backpack)
+	synd_mob.equip_if_possible(new /obj/item/weapon/storage/backpack(synd_mob), slot_back)
+	synd_mob.equip_if_possible(new /obj/item/weapon/reagent_containers/pill/cyanide(synd_mob), slot_in_backpack)
+	synd_mob.equip_if_possible(new /obj/item/weapon/handcuffs(synd_mob), slot_in_backpack)
+	synd_mob.equip_if_possible(new /obj/item/weapon/gun/energy/gun(synd_mob), slot_in_backpack)
+	synd_mob.equip_if_possible(new /obj/item/weapon/gun/projectile(synd_mob), slot_in_backpack)
+	synd_mob.equip_if_possible(new /obj/item/weapon/melee/baton(synd_mob), slot_in_backpack)
 
 	synd_mob.update_clothing()
 

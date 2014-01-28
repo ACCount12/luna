@@ -7,9 +7,6 @@
 	var/nuke_detonated = 0 //Has the nuke gone off?
 	var/agents_possible = 0 //If we ever need more syndicate agents.
 
-	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
-	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
-
 	var/list/synd_spawns = list()
 	var/list/disk_spawns = list()
 
@@ -175,16 +172,16 @@
 	return 1
 
 /datum/game_mode/hijack/equip_syndicate(mob/living/carbon/human/synd_mob)
-	synd_mob.equip_if_possible(new /obj/item/device/radio/headset/syndicate(synd_mob), synd_mob.slot_ears)
+	synd_mob.equip_if_possible(new /obj/item/device/radio/headset/syndicate(synd_mob), slot_ears)
 
-	synd_mob.equip_if_possible(new /obj/item/clothing/under/syndicate(synd_mob), synd_mob.slot_w_uniform)
-	synd_mob.equip_if_possible(new /obj/item/clothing/shoes/black(synd_mob), synd_mob.slot_shoes)
-	synd_mob.equip_if_possible(new /obj/item/clothing/gloves/swat(synd_mob), synd_mob.slot_gloves)
+	synd_mob.equip_if_possible(new /obj/item/clothing/under/syndicate(synd_mob), slot_w_uniform)
+	synd_mob.equip_if_possible(new /obj/item/clothing/shoes/black(synd_mob), slot_shoes)
+	synd_mob.equip_if_possible(new /obj/item/clothing/gloves/swat(synd_mob), slot_gloves)
 
-	synd_mob.equip_if_possible(new /obj/item/weapon/gun/projectile/revolver(synd_mob), synd_mob.slot_belt)
-	synd_mob.equip_if_possible(new /obj/item/weapon/card/id/syndicate(synd_mob), synd_mob.slot_wear_id)
+	synd_mob.equip_if_possible(new /obj/item/weapon/gun/projectile/revolver(synd_mob), slot_belt)
+	synd_mob.equip_if_possible(new /obj/item/weapon/card/id/syndicate(synd_mob), slot_wear_id)
 
-	synd_mob.equip_if_possible(new /obj/item/weapon/storage/backpack(synd_mob), synd_mob.slot_back)
-	synd_mob.equip_if_possible(new /obj/item/weapon/reagent_containers/pill/cyanide(synd_mob), synd_mob.slot_in_backpack)
+	synd_mob.equip_if_possible(new /obj/item/weapon/storage/backpack(synd_mob), slot_back)
+	synd_mob.equip_if_possible(new /obj/item/weapon/reagent_containers/pill/cyanide(synd_mob), slot_in_backpack)
 
 	synd_mob.update_clothing()

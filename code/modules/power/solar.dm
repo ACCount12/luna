@@ -104,7 +104,7 @@
 	if(adir != ndir)
 		spawn(10+rand(0,15))
 			adir = (360+adir+dd_range(-10,10,ndir-adir))%360
-			update_icon()
+			queue_icon_update(cooldown = 50)
 			update_solar_exposure()
 
 /obj/machinery/power/solar/proc/broken()
@@ -265,7 +265,7 @@
 			return
 
 	add_fingerprint(user)
-	user.machine = src
+	user.set_machine(src)
 
 	var/t = "<TT><B>Solar Generator Control</B><HR><PRE>"
 	t += "Generated power : [round(lastgen)] W<BR><BR>"

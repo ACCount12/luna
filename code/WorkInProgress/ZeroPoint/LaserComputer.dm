@@ -45,7 +45,7 @@
 			return
 
 
-	user.machine = src
+	user.set_machine(src)
 	var/t = "<TT><B>Laser status monitor</B><HR>"
 
 	var/obj/machinery/engine/laser/laser = src.laser[1]

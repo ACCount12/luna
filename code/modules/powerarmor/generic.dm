@@ -1,14 +1,14 @@
 /obj/item/clothing/suit/powered
-	name = "Powered armor"
+	name = "powered armor"
 	desc = "Not for rookies."
-	icon_state = "swat"
+	icon_state = "powered-riot"
 	item_state = "swat"
 	w_class = 4//bulky item
 
 	flags = FPRINT
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS
 	armor = list(melee = 40, bullet = 30, laser = 20,energy = 15, bomb = 25, bio = 10, rad = 10)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/gun,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_oxygen)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/gun, /obj/item/weapon/handcuffs, /obj/item/weapon/tank)
 	slowdown = 9
 	var/fuel = 0
 
@@ -33,6 +33,12 @@
 	New()
 		verbs += /obj/item/clothing/suit/powered/proc/poweron
 
+	proc/get_power()
+		if(!power)
+			return 0
+
+		return power.checkpower()
+
 	proc/poweron()
 		set category = "Powersuit"
 		set name = "Activate armor systems"
@@ -46,7 +52,7 @@
 			user << "\red This suit was engineered for human use only."
 			return
 
-		if(user.wear_suit!=src)
+		if(user.wear_suit != src)
 			user << "\red The suit functions best if you are inside of it."
 			return
 
@@ -67,7 +73,7 @@
 			return
 
 		if(!power || !power.checkpower())
-			user << "\red Powersource missing or depleted."
+			user << "\red Power source missing or depleted."
 			return
 
 		verbs -= /obj/item/clothing/suit/powered/proc/poweron
@@ -110,7 +116,6 @@
 		powerdown() //BYOND doesn't seem to like it if you try using a proc with vars in it as a verb, hence this. --NEO
 
 	proc/powerdown(sudden = 0)
-
 		var/delay = sudden?0:20
 
 		var/mob/living/carbon/human/user = usr
@@ -202,7 +207,7 @@
 		..()
 
 /obj/item/clothing/head/powered
-	name = "Powered armor"
+	name = "powered armor"
 	icon_state = "swat"
 	desc = "Not for rookies."
 	flags = FPRINT | HEADCOVERSEYES | HEADCOVERSMOUTH

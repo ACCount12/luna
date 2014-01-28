@@ -12,7 +12,7 @@
 	emote_see = list("shakes its head", "shivers")
 	speak_chance = 1
 	turns_per_move = 10
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/corgi
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 	meat_amount = 3
 	response_help  = "pets"
 	response_disarm = "bops"
@@ -79,7 +79,7 @@
 					emote_hear = list("barks", "woofs", "yaps","pants")
 					emote_see = list("shakes its head", "shivers")
 					desc = "It's a corgi."
-					SetLuminosity(0)
+					ul_SetLuminosity(0)
 					inventory_head.loc = src.loc
 					inventory_head = null
 					regenerate_icons()
@@ -126,7 +126,6 @@
 					var/list/allowed_types = list(
 						/obj/item/clothing/suit/armor/vest,
 						/obj/item/device/radio,
-						/obj/item/device/radio/off,
 						/obj/item/clothing/suit/cardborg,
 						/obj/item/weapon/tank/oxygen,
 						/obj/item/weapon/tank/air,
@@ -175,7 +174,7 @@
 	//Various hats and items (worn on his head) change Ian's behaviour. His attributes are reset when a hat is removed.
 	switch(item_to_add.type)
 		if( /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/head/that, /obj/item/clothing/head/collectable/paper,
-				/obj/item/clothing/head/hardhat, /obj/item/clothing/head/collectable/hardhat,/obj/item/clothing/head/hardhat/white, /obj/item/weapon/paper )
+			/obj/item/clothing/head/helmet/hardhat, /obj/item/clothing/head/collectable/hardhat,/obj/item/clothing/head/helmet/hardhat/white, /obj/item/weapon/paper )
 			valid = 1
 
 		if(/obj/item/clothing/head/helmet)
@@ -185,13 +184,13 @@
 
 		if(/obj/item/clothing/head/chefhat,	/obj/item/clothing/head/collectable/chef)
 			name = "Sous chef [real_name]"
-			desc = "Your food will be taste-tested.  All of it."
+			desc = "Your food will be taste-tested. All of it."
 			valid = 1
 
-		if(/obj/item/clothing/head/caphat, /obj/item/clothing/head/collectable/captain)
-			name = "Captain [real_name]"
-			desc = "Probably better than the last captain."
-			valid = 1
+//		if(/obj/item/clothing/head/helmet/caphat, /obj/item/clothing/head/collectable/captain)
+//			name = "Captain [real_name]"
+//			desc = "Probably better than the last captain."
+//			valid = 1
 
 		if(/obj/item/clothing/head/kitty, /obj/item/clothing/head/collectable/kitty)
 			name = "Runtime"
@@ -233,11 +232,11 @@
 			speak = list("Arrrrgh!!","Grrrrrr!")
 			valid = 1
 
-		if(/obj/item/clothing/head/ushanka)
-			name = "[pick("Comrade","Commissar","Glorious Leader")] [real_name]"
-			desc = "A follower of Karl Barx."
-			emote_see = list("contemplates the failings of the capitalist economic model", "ponders the pros and cons of vangaurdism")
-			valid = 1
+//		if(/obj/item/clothing/head/ushanka)
+//			name = "[pick("Comrade","Commissar","Glorious Leader")] [real_name]"
+//			desc = "A follower of Karl Barx."
+//			emote_see = list("contemplates the failings of the capitalist economic model", "ponders the pros and cons of vangaurdism")
+//			valid = 1
 
 		if(/obj/item/clothing/head/collectable/police)
 			name = "Officer [real_name]"
@@ -269,13 +268,13 @@
 			name = "Rudolph the Red-Nosed Corgi"
 			emote_hear = list("barks christmas songs", "yaps")
 			desc = "He has a very shiny nose."
-			SetLuminosity(4)
+			ul_SetLuminosity(4)
 			valid = 1
 
-		if(/obj/item/clothing/head/soft)
-			name = "Corgi Tech [real_name]"
-			desc = "The reason your yellow gloves have chew-marks."
-			valid = 1
+//		if(/obj/item/clothing/head/soft)
+//			name = "Corgi Tech [real_name]"
+//			desc = "The reason your yellow gloves have chew-marks."
+//			valid = 1
 
 	if(valid)
 		usr.visible_message("[usr] puts [item_to_add] on [real_name]'s head.  [src] looks at [usr] and barks once.",
@@ -372,7 +371,6 @@
 			now_pushing = 0
 			return
 
-		tmob.LAssailant = src
 	now_pushing = 0
 	..()
 	if (!istype(AM, /atom/movable))
@@ -390,7 +388,7 @@
 		now_pushing = null
 //PC stuff-Sieve
 
-/mob/living/simple_animal/corgi/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
+/*mob/living/simple_animal/corgi/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
 	if(istype(O, /obj/item/weapon/newspaper))
 		if(!stat)
 			user.visible_message("\blue [user] baps [name] on the nose with the rolled up [O]")
@@ -399,7 +397,7 @@
 					dir = i
 					sleep(1)
 	else
-		..()
+		..()*/
 
 /mob/living/simple_animal/corgi/regenerate_icons()
 	overlays = list()

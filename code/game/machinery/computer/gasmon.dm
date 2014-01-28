@@ -31,7 +31,7 @@
 
 	attack_hand(var/mob/user as mob)
 		user << browse(return_text(), "window=computer")
-		user.machine = src
+		user.set_machine(src)
 		onclose(user, "computer")
 
 	proc/return_text()

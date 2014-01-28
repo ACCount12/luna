@@ -7,9 +7,6 @@
 	var/nuke_detonated = 0 //Has the nuke gone off?
 	var/agents_possible = 0 //If we ever need more syndicate agents.
 
-	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
-	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
-
 	var/list/synd_spawns = list()
 	var/list/disk_spawns = list()
 

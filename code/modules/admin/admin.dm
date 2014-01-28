@@ -376,8 +376,8 @@
 				M.loc = pick(prisonwarp)
 				if(istype(M, /mob/living/carbon/human))
 					var/mob/living/carbon/human/prisoner = M
-					prisoner.equip_if_possible(new /obj/item/clothing/under/color/orange(prisoner), prisoner.slot_w_uniform)
-					prisoner.equip_if_possible(new /obj/item/clothing/shoes/orange(prisoner), prisoner.slot_shoes)
+					prisoner.equip_if_possible(new /obj/item/clothing/under/color/orange(prisoner), slot_w_uniform)
+					prisoner.equip_if_possible(new /obj/item/clothing/shoes/orange(prisoner), slot_shoes)
 				spawn(50)
 					M << "\red You have been sent to the prison station!"
 				log_admin("[key_name(usr)] sent [key_name(M)] to the prison station.")
@@ -595,62 +595,7 @@
 			M.mind.edit_memory()
 			return
 
-		/*
-		if(!ticker || !ticker.mode)
-			alert("The game hasn't started yet!")
-			return
-		var/mob/M = locate(href_list["traitor"])
-		var/datum/game_mode/current_mode = ticker.mode
-		switch(current_mode.config_tag)
-			if("revolution")
-				if(M.mind in current_mode:head_revolutionaries)
-					alert("Is a Head Revolutionary!")
-				else if(M.mind in current_mode:revolutionaries)
-					alert("Is a Revolutionary!")
-				return
-		/*	if("wizard")
-				if(current_mode:wizard && M.mind == current_mode:wizard)
-					var/datum/mind/antagonist = M.mind
-					var/t = ""
-					for(var/datum/objective/OB in antagonist.objectives)
-						t += "[OB.explanation_text]\n"
-					if(antagonist.objectives.len == 0)
-						t = "None defined."
-					alert("Is a WIZARD. Objective(s):\n[t]", "[M.key]")
-					return*/
-			if("malfunction")
-				if(M.mind in current_mode:malf_ai)
-					alert("Is malfunctioning!")
-					return
-			if("nuclear")
-				if(M.mind in current_mode:syndicates)
-					alert("Is a Syndicate operative!", "[M.key]")
-					return
-		// traitor, or other modes where traitors/counteroperatives would be.
-		if(M.mind in current_mode.traitors)
-			var/datum/mind/antagonist = M.mind
-			var/t = ""
-			for(var/datum/objective/OB in antagonist.objectives)
-				t += "[OB.explanation_text]\n"
-			if(antagonist.objectives.len == 0)
-				t = "None defined."
-			alert("Is a Traitor. Objective(s):\n[t]", "[M.key]")
-			return
-
-		//they're nothing so turn them into a traitor!
-		if(istype(M, /mob/living/carbon/human) || istype(M, /mob/living/silicon/ai))
-			var/traitorize = alert("Is not a traitor, make Traitor?", "Traitor", "Yes", "Cancel")
-			if(traitorize == "Cancel")
-				return
-			if(traitorize == "Yes")
-				traitorize(M,,1)
-		//they're a ghost/monkey
-		else
-			alert("Cannot make this mob a traitor")
-		*/
-
 	if (href_list["create"])
-
 		if(src.rank in list("Administrator", "Primary Administrator", "Super Administrator", "Coder", "Host"))
 			switch(href_list["create"])
 				if("object")
@@ -756,8 +701,8 @@
 						removed_paths += dirty_path
 					else if (!ispath(path, /obj) && !ispath(path, /turf) && !ispath(path, /mob))
 						removed_paths += dirty_path
-					else if (ispath(path, /obj/bhole) && !(src.rank in list("Coder", "Host")))
-						removed_paths += dirty_path
+/*					else if (ispath(path, /obj/bhole) && !(src.rank in list("Coder", "Host")))
+						removed_paths += dirty_path*/
 					else if (ispath(path, /mob) && !(src.rank in list("Super Administrator", "Coder", "Host")))
 						removed_paths += dirty_path
 					else
@@ -912,8 +857,8 @@
 									W.layer = initial(W.layer)
 							//teleport person to cell
 							H.loc = pick(prisonwarp)
-							H.equip_if_possible(new /obj/item/clothing/under/color/orange(H), H.slot_w_uniform)
-							H.equip_if_possible(new /obj/item/clothing/shoes/orange(H), H.slot_shoes)
+							H.equip_if_possible(new /obj/item/clothing/under/color/orange(H), slot_w_uniform)
+							H.equip_if_possible(new /obj/item/clothing/shoes/orange(H), slot_shoes)
 						else
 							//teleport security person
 							H.loc = pick(prisonsecuritywarp)

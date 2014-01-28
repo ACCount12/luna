@@ -274,7 +274,7 @@
 		if (usr.stat)
 			return
 		if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
-			usr.machine = src
+			usr.set_machine(src)
 
 			switch(href_list["op"])
 				if("lock", "unlock")

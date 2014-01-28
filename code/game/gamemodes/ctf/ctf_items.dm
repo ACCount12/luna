@@ -1,5 +1,5 @@
 /obj/item/weapon/ctf_flag
-	name = "Flag"
+	name = "flag"
 	desc = "Its a flag"
 	w_class = 5
 	icon = 'flags.dmi'
@@ -7,12 +7,12 @@
 	item_state = "paper"
 
 /obj/item/weapon/ctf_flag/red
-	name = "The Red Flag"
+	name = "red flag"
 	desc = "Catch dat fukken flag"
 	icon_state = "flag_red"
 
 /obj/item/weapon/ctf_flag/green
-	name = "The Green Flag"
+	name = "green flag"
 	desc = "Catch dat fukken flag"
 	icon_state = "flag_green"
 

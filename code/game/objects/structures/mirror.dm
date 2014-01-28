@@ -37,7 +37,7 @@
 		visible_message("<span class='warning'>[user] hits [src] with [I]!</span>")
 		playsound(src.loc, 'sound/effects/glasshit.ogg', 70, 1)
 
-/*
+
 /obj/structure/mirror/attack_alien(mob/user as mob)
 	if(islarva(user)) return
 	if(shattered)
@@ -65,4 +65,3 @@
 		return
 	user.visible_message("<span class='danger'>[user] smashes [src]!</span>")
 	shatter()
-*/

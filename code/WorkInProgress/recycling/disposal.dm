@@ -8,6 +8,7 @@
 	icon = 'icons/obj/pipes/disposal.dmi'
 
 
+#define SEND_PRESSURE 0.05*ONE_ATMOSPHERE
 /obj/machinery/disposal
 	name = "disposal unit"
 	desc = "A pneumatic waste disposal unit."
@@ -25,19 +26,41 @@
 	var/timeleft = 0	//used to give a delay after the last item was put in before flushing
 	// create a new disposal
 	// find the attached trunk (if present) and init gas resvr.
-	New()
-		..()
-		spawn(5)
-			trunk = locate() in src.loc
-			if(!trunk)
-				mode = 0
-				flush = 0
-			else
-				trunk.linked = src	// link the pipe trunk to self
 
-			air_contents = new/datum/gas_mixture()
-			air_contents.volume = 0.125 * CELL_VOLUME
-			update()
+/obj/machinery/disposal/New()
+	..()
+
+	trunk_check()
+
+	air_contents = new/datum/gas_mixture()
+	//gas.volume = 1.05 * CELLSTANDARD
+	update()
+
+/obj/machinery/disposal/proc/trunk_check()
+	trunk = locate() in src.loc
+	if(!trunk)
+		mode = 0
+		flush = 0
+	else
+		mode = initial(mode)
+		flush = initial(flush)
+		trunk.linked = src	// link the pipe trunk to self
+
+/obj/machinery/disposal/Del()
+	for(var/atom/movable/AM in contents)
+		AM.loc = src.loc
+	..()
+
+/obj/machinery/disposal/initialize()
+	// this will get a copy of the air turf and take a SEND PRESSURE amount of air from it
+	var/atom/L = loc
+	var/datum/gas_mixture/env = new
+	env.copy_from(L.return_air())
+	var/datum/gas_mixture/removed = env.remove(SEND_PRESSURE + 1)
+	air_contents.merge(removed)
+	trunk_check()
+
+/obj/machinery/disposal
 
 	call_function(var/datum/function/F)
 		if(uppertext(F.arg1) != net_pass)
@@ -229,7 +252,7 @@
 		dat += "Pressure: [round(per, 1)]%<BR></body>"
 
 
-		user.machine = src
+		user.set_machine(src)
 		user << browse(dat, "window=disposal;size=360x170")
 		onclose(user, "disposal")
 
@@ -244,7 +267,7 @@
 			return
 
 		if (in_range(src, usr) && istype(src.loc, /turf))
-			usr.machine = src
+			usr.set_machine(src)
 
 			if(href_list["close"])
 				usr.machine = null
@@ -318,7 +341,7 @@
 
 		src.updateDialog()
 
-		if(flush && air_contents.return_pressure() >= 2*ONE_ATMOSPHERE)	// flush can happen even without power
+		if(flush && air_contents.return_pressure() >= SEND_PRESSURE)	// flush can happen even without power
 			flush()
 
 		if(stat & NOPOWER)			// won't charge if no power
@@ -333,13 +356,10 @@
 		use_power(500)		// charging power usage
 
 
-
-
-
 		var/atom/L = loc						// recharging from loc turf
 
 		var/datum/gas_mixture/env = L.return_air()
-		var/pressure_delta = (ONE_ATMOSPHERE*2.1) - air_contents.return_pressure()
+		var/pressure_delta = (SEND_PRESSURE*1.01) - air_contents.return_pressure()
 
 		if(env.temperature > 0)
 			var/transfer_moles = 0.1 * pressure_delta*air_contents.volume/(env.temperature * R_IDEAL_GAS_EQUATION)
@@ -350,7 +370,7 @@
 
 
 		// if full enough, switch to ready mode
-		if(air_contents.return_pressure() >= 2*ONE_ATMOSPHERE)
+		if(air_contents.return_pressure() >= SEND_PRESSURE)
 			mode = 2
 			update()
 		return
@@ -359,15 +379,12 @@
 
 	// perform a flush
 	proc/flush()
-
 		flushing = 1
 		flick("disposal-flush", src)
 
-		var/obj/structure/disposal/holder/H = new()	// virtual holder object which actually
-											// travels through the pipes.
-
+		var/obj/structure/disposal/holder/H = new()
+		// virtual holder object which actually travels through the pipes.
 		H.init(src)	// copy the contents of disposer to holder
-
 		air_contents = new()		// new empty gas resv.
 
 		sleep(10)
@@ -565,7 +582,7 @@
 		return
 
 	// movement process, persists while holder is moving through pipes
-	proc/process()
+	process()
 		sleep(1)
 		var/obj/structure/disposal/pipe/last
 		while(active)

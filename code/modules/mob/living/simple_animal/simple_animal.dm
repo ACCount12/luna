@@ -16,7 +16,7 @@
 
 	var/turns_per_move = 1
 	var/turns_since_move = 0
-	universal_speak = 1
+	//universal_speak = 1
 	var/meat_amount = 0
 	var/meat_type
 	var/stop_automated_movement = 0 //Use this to temporarely stop random movement or to if you write special movement code for animals.
@@ -68,6 +68,8 @@
 
 /mob/living/simple_animal/updatehealth()
 	return
+
+/mob/living/simple_animal/proc/regenerate_icons()
 
 /mob/living/simple_animal/Life()
 
@@ -246,8 +248,6 @@
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
 			O.show_message("\red <B>\The [M]</B> [M.attacktext] [src]!", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		adjustBruteLoss(damage)
 
@@ -280,8 +280,6 @@
 			grabbed_by += G
 			G.synch()
 
-			LAssailant = M
-
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
 					O.show_message(text("\red [] has grabbed [] passively!", M, src), 1)
@@ -295,7 +293,6 @@
 	return
 
 /mob/living/simple_animal/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-
 	switch(M.a_intent)
 
 		if ("help")
@@ -310,12 +307,10 @@
 				return
 
 			var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(M, src )
-
 			M.put_in_active_hand(G)
 
 			grabbed_by += G
 			G.synch()
-			LAssailant = M
 
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			for(var/mob/O in viewers(src, null))
@@ -328,22 +323,19 @@
 			adjustBruteLoss(damage)
 
 	return
-
+/*
 /mob/living/simple_animal/attack_larva(mob/living/carbon/alien/larva/L as mob)
-
 	switch(L.a_intent)
 		if("help")
 			visible_message("\blue [L] rubs it's head against [src]")
 
-
 		else
-
 			var/damage = rand(5, 10)
 			visible_message("\red <B>[L] bites [src]!</B>")
 
 			if(stat != DEAD)
 				adjustBruteLoss(damage)
-				L.amount_grown = min(L.amount_grown + damage, L.max_grown)
+				L.amount_grown = min(L.amount_grown + damage, L.max_grown)*/
 
 
 /mob/living/simple_animal/attack_slime(mob/living/carbon/slime/M as mob)
@@ -394,7 +386,7 @@
 			user << "\blue [src] is dead, medical items won't bring it back to life."
 			return
 	else if(meat_type && (stat == DEAD))	//if the animal has a meat, and if it is dead.
-		if(istype(O, /obj/item/weapon/kitchenknife) || istype(O, /obj/item/weapon/butch))
+		if(istype(O, /obj/item/weapon/kitchenknife))
 			new meat_type (get_turf(src))
 			if(prob(95))
 				del(src)
@@ -420,10 +412,8 @@
 
 /mob/living/simple_animal/movement_delay()
 	var/tally = 0 //Incase I need to add stuff other than "speed" later
-
 	tally = speed
-
-	return tally+config.animal_delay
+	return tally+2
 
 /mob/living/simple_animal/Stat()
 	..()

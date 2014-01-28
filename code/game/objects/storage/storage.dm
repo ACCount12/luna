@@ -4,6 +4,7 @@
 	var/list/can_hold = new/list()
 	var/obj/effect/screen/storage/boxes = null
 	var/obj/effect/screen/close/closer = null
+	var/storage_slots = 7
 	w_class = 3.0
 	flags = FPRINT
 	var/foldable = null	// BubbleWrap - if set, can be folded (when empty) into a sheet of cardboard
@@ -61,7 +62,7 @@
 			user << "\red This container cannot hold [W]."
 			return
 
-	if (src.contents.len >= 7) return
+	if (contents.len >= storage_slots) return
 
 	if ((W.w_class >= w_class && !istype(src, /obj/item/weapon/storage/backpack/holding)) || w_class == 1 && W.w_class == 1 || src.loc == W)
 		return

@@ -58,13 +58,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 		return
 	if (opened)
 		if(istype(O, /obj/item/weapon/crowbar))
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/structure/frame/machine/M = new /obj/structure/frame/machine(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				I.loc = src.loc
-			del(src)
+			default_deconstruction_crowbar()
 			return 1
 		else
 			user << "\red You can't load the [src.name] while it's opened."

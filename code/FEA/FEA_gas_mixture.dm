@@ -400,7 +400,6 @@ datum
 			return removed
 
 		remove_ratio(ratio)
-
 			if(ratio <= 0)
 				return null
 
@@ -476,9 +475,7 @@ datum
 
 				merge(removed)
 
-		check_then_remove(amount)
-
-			//Since it is all proportional, the check may be done on the gas as a whole
+		check_then_remove(amount)//Since it is all proportional, the check may be done on the gas as a whole
 			var/sum = total_moles()
 			amount = min(amount,sum) //Can not take more air than tile has!
 

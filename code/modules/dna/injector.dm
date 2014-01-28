@@ -15,6 +15,60 @@
 	var/nofail
 	var/is_bullet = 0
 
+/obj/item/weapon/dnainjector/proc/inject(mob/M as mob)
+	M.radiation += rand(20,40)
+	if (dnatype == "ui")
+		if (!block) //isolated block?
+			if (ue) //unique enzymes? yes
+				M.dna.uni_identity = dna
+				updateappearance(M, M.dna.uni_identity)
+				M.real_name = ue
+				M.name = ue
+				uses--
+			else //unique enzymes? no
+				M.dna.uni_identity = dna
+				updateappearance(M, M.dna.uni_identity)
+				uses--
+		else
+			M.dna.uni_identity = setblock(M.dna.uni_identity,block,dna,3)
+			updateappearance(M, M.dna.uni_identity)
+			uses--
+	if (dnatype == "se")
+		if (!block) //isolated block?
+			M.dna.struc_enzymes = dna
+		else
+			M.dna.struc_enzymes = setblock(M.dna.struc_enzymes,block,dna,3)
+
+		if(!type == "/obj/item/weapon/dnainjector") domutcheck(M, null, 1)
+		else domutcheck(M, null)
+		uses--
+	del(src)
+	return uses
+
+/obj/item/weapon/dnainjector/attack(mob/M as mob, mob/user as mob)
+	if (!istype(M, /mob))
+		return
+	if (user)
+		if (istype(M, /mob/living/carbon/human))
+			var/obj/equip_e/human/O = new /obj/equip_e/human(  )
+			O.source = user
+			O.target = M
+			O.item = src
+			O.s_loc = user.loc
+			O.t_loc = M.loc
+			O.place = "dnainjector"
+			M.requests += O
+			spawn( 0 )
+				O.process()
+				user.update_clothing()
+				return
+		if(istype(M, /mob/living/carbon/monkey))
+			for(var/mob/O in viewers(M, null))
+				O.show_message(text("\red [] has been injected with [] by [].", M, src, user), 1)
+			inject(M)
+			user.show_message(text("\red You inject [M]"))
+	return
+
 /obj/item/weapon/dnainjector/antihulk
 	name = "DNA-Injector (Anti-Hulk)"
 	desc = "Cures green skin."

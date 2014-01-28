@@ -69,7 +69,7 @@
 			radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/device/radio/attack_self(mob/user as mob)
-	user.machine = src
+	user.set_machine(src)
 	interact(user)
 
 /obj/item/device/radio/interact(mob/user as mob)
@@ -135,7 +135,7 @@ Microphone:"<A href='byond://?src=\ref[src];ch_name=[chan_name];talk=[!broad]'> 
 		)
 		usr << browse(null, "window=radio")
 		return
-	usr.machine = src
+	usr.set_machine(src)
 	if (href_list["track"])
 		var/mob/target = locate(href_list["track"])
 		var/mob/living/silicon/ai/A = locate(href_list["track2"])
@@ -610,7 +610,7 @@ Microphone:"<A href='byond://?src=\ref[src];ch_name=[chan_name];talk=[!broad]'> 
 
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	user.machine = src
+	user.set_machine(src)
 	if (!( istype(W, /obj/item/weapon/screwdriver) ))
 		return
 	b_stat = !( b_stat )

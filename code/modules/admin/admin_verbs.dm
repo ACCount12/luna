@@ -344,70 +344,7 @@
 
 	src.verbs -= src.averbs
 	src.averbs = list()
-	/*
-	src.verbs -= /client/proc/cmd_admin_reset_id
-	src.verbs -= /client/proc/debug_variables
-	src.verbs -= /client/proc/cmd_modify_object_variables
-	src.verbs -= /client/proc/cmd_modify_ticker_variables
-	src.verbs -= /client/proc/cmd_admin_pm
-	src.verbs -= /client/proc/cmd_admin_say
-	src.verbs -= /client/proc/dsay
-	src.verbs -= /client/proc/play_sound
-//	src.verbs -= /client/proc/cmd_admin_gib
-	src.verbs -= /client/proc/cmd_admin_gib_self
-//				src.verbs -= /client/proc/modifytemperature
-	src.verbs -= /client/proc/Jump
-	src.verbs -= /client/proc/cmd_admin_rejuvenate
-	src.verbs -= /client/proc/funbutton
-	src.verbs -= /client/proc/cmd_admin_delete
-	src.verbs -= /client/proc/cmd_admin_mute
-	src.verbs -= /client/proc/cmd_admin_drop_everything
-	src.verbs -= /client/proc/cmd_debug_tog_aliens
-	src.verbs -= /client/proc/cmd_admin_godmode
-	src.verbs -= /client/proc/cmd_admin_add_freeform_ai_law
-	src.verbs -= /client/proc/cmd_admin_check_contents
-	src.verbs -= /client/proc/jumptomob
-	src.verbs -= /client/proc/jumptokey
-	src.verbs -= /client/proc/cmd_admin_alienize
-	src.verbs -= /client/proc/cmd_admin_changelinginize
-//	src.verbs -= /client/proc/cmd_admin_list_admins
-	src.verbs -= /client/proc/Getmob
-	src.verbs -= /client/proc/sendmob
-	src.verbs -= /client/proc/cmd_admin_prison
-	src.verbs -= /client/proc/Debug2
-	src.verbs -= /client/proc/deadchat					//toggles deadchat
-	src.verbs -= /obj/admins/proc/immreboot				//immediate reboot
-	src.verbs -= /obj/admins/proc/vmode   				//start vote
-	src.verbs -= /obj/admins/proc/votekill 				//abort vote
-	src.verbs -= /obj/admins/proc/voteres 				//toggle votes
-	src.verbs -= /obj/admins/proc/restart				//restart
-	src.verbs -= /obj/admins/proc/announce				//global announce
-	src.verbs -= /obj/admins/proc/toggleooc				//toggle ooc
-	src.verbs -= /obj/admins/proc/startnow				//start now bitch
-	src.verbs -= /obj/admins/proc/toggleenter			//Toggle enterting
-	src.verbs -= /obj/admins/proc/toggleAI				//Toggle the AI
-	src.verbs -= /obj/admins/proc/toggleaban			//abandon mob
-	src.verbs -= /obj/admins/proc/adrev					//toggle admin revives
-	src.verbs -= /obj/admins/proc/adspawn				//toggle admin item spawning
-	src.verbs -= /obj/admins/proc/adjump				//toggle admin jumping
-	src.verbs -= /obj/admins/proc/unprison
-	src.verbs -= /client/proc/cmd_admin_create_centcom_report
-	src.verbs -= /client/proc/game_panel
-	src.verbs -= /client/proc/player_panel
-	src.verbs -= /client/proc/unban_panel
-	src.verbs -= /client/proc/secrets
-	src.verbs -= /client/proc/voting
-	src.verbs -= /client/proc/admin_play
-	src.verbs -= /client/proc/admin_observe
-	src.verbs -= /client/proc/stealth
 
-	src.verbs -= /client/proc/general_report
-	//src.verbs -= /client/proc/air_report
-	//src.verbs -= /client/proc/air_status
-
-	src.verbs -= /client/proc/toggle_view_range
-	src.verbs -= /obj/admins/proc/toggle_aliens
-	*/
 	if(src.holder)
 		src.holder.level = 0
 
@@ -910,36 +847,36 @@
 	id.registered = player.real_name
 	id.assignment = job
 	id.name = "[player.real_name]'s [job] ID"
-	player.equip_if_possible(id,player.slot_wear_id)
+	player.equip_if_possible(id,slot_wear_id)
 
-	player.equip_if_possible(new /obj/item/device/radio/headset/headset_sec,player.slot_ears)
+	player.equip_if_possible(new /obj/item/device/radio/headset/headset_sec,slot_ears)
 
 
-	player.equip_if_possible(new /obj/item/weapon/storage/backpack,player.slot_back)
+	player.equip_if_possible(new /obj/item/weapon/storage/backpack,slot_back)
 
 	if(uniform)
-		player.equip_if_possible(new uniform,player.slot_w_uniform)
+		player.equip_if_possible(new uniform,slot_w_uniform)
 	if(gloves)
-		player.equip_if_possible(new gloves,player.slot_gloves)
+		player.equip_if_possible(new gloves,slot_gloves)
 	if(shoes)
-		player.equip_if_possible(new shoes,player.slot_shoes)
+		player.equip_if_possible(new shoes,slot_shoes)
 	if(over)
-		player.equip_if_possible(new over,player.slot_wear_suit)
+		player.equip_if_possible(new over,slot_wear_suit)
 
 	if(back1)
-		player.equip_if_possible(new back1,player.slot_in_backpack)
+		player.equip_if_possible(new back1,slot_in_backpack)
 	if(back2)
-		player.equip_if_possible(new back2,player.slot_in_backpack)
+		player.equip_if_possible(new back2,slot_in_backpack)
 	if(back3)
-		player.equip_if_possible(new back3,player.slot_in_backpack)
+		player.equip_if_possible(new back3,slot_in_backpack)
 	if(back4)
-		player.equip_if_possible(new back4,player.slot_in_backpack)
+		player.equip_if_possible(new back4,slot_in_backpack)
 	if(mask)
-		player.equip_if_possible(new mask,player.slot_wear_mask)
+		player.equip_if_possible(new mask,slot_wear_mask)
 	if(eyes)
-		player.equip_if_possible(new eyes,player.slot_glasses)
+		player.equip_if_possible(new eyes,slot_glasses)
 	if(head)
-		player.equip_if_possible(new head,player.slot_head)
+		player.equip_if_possible(new head,slot_head)
 	player.update_clothing()
 
 

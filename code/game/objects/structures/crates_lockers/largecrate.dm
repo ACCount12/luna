@@ -25,7 +25,7 @@
 
 /obj/structure/largecrate/mule
 	icon_state = "mulecrate"
-/*
+
 /obj/structure/largecrate/lisa
 	icon_state = "lisacrate"
 
@@ -33,7 +33,7 @@
 	if(istype(W, /obj/item/weapon/crowbar))
 		new /mob/living/simple_animal/corgi/Lisa(loc)
 	..()
-
+/*
 /obj/structure/largecrate/cow
 	name = "cow crate"
 	icon_state = "lisacrate"

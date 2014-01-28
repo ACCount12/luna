@@ -1,17 +1,18 @@
+/datum/game_mode
+	var/list/apcs = list() //Adding dis to track APCs the AI hacks. --NeoFite
+
 /datum/game_mode/malfunction
 	name = "AI malfunction"
 	config_tag = "malfunction"
 	enabled = 1
-	var/const/waittime_l = 600
-	var/const/waittime_h = 1800
+
+	var/const/intercept_time = 3000
 
 	var/AI_win_timeleft = 1800
-	var/intercept_hacked = 0
+	var/intercept_hacked	 = 0
 	var/malf_mode_declared = 0
 	var/station_captured = 0
 	var/to_nuke_or_not_to_nuke = 0
-
-	var/list/apcs = list() //Adding dis to track APCs the AI hacks. --NeoFite
 
 /datum/game_mode/malfunction/announce()
 	world << "<B>The current game mode is - AI Malfunction!</B>"
@@ -44,11 +45,12 @@
 
 		var/mob/living/silicon/ai/A = AI_mind.current
 		greet_malf(AI_mind)
+		AI_mind.special_role = "malfunctioning AI"//So they actually have a special role
 
 		A.laws_object = new /datum/ai_laws/malfunction
 		A.malf_picker = new /datum/ai_modules_picker(AI_mind.current)
 		A.decoy = new /mob/living/silicon/decoy(A.loc)
-
+		A.verbs += /datum/game_mode/malfunction/proc/takeover
 
 		for(var/obj/effect/landmark/malf/M in mode_landmarks)
 			if(M.name == "Malf-Spawn")
@@ -108,7 +110,7 @@
 	return
 
 /datum/game_mode/malfunction/check_win()
-	if (AI_win_timeleft == 0)
+	if (AI_win_timeleft <= 0)
 		world << "<FONT size = 3><B>The AI has won!</B></FONT>"
 		world << "<B>It has fully taken control of all of [station_name()]'s systems.</B>"
 		for(var/datum/mind/AI_mind in malf_ais)
@@ -124,6 +126,13 @@
 	if (href_list["ai_win"])
 		ai_win()
 	return
+
+/datum/game_mode/proc/is_malf_ai_dead()
+	var/all_dead = 1
+	for(var/datum/mind/AI_mind in malf_ais)
+		if (istype(AI_mind.current,/mob/living/silicon/ai) && AI_mind.current.stat != DEAD)
+			all_dead = 0
+	return all_dead
 
 /datum/game_mode/malfunction/proc/ai_win()
 	world << "Self-destructing in 10"
@@ -155,11 +164,54 @@
 
 	//explosion(ground_zero, 100, 250, 500, 750, 1)
 
-/obj/effect/landmark/malf
-	name = "Malf-Spawn"
+/obj/effect/landmark/malf/name = "Malf-Spawn"
+/obj/effect/landmark/malf/borg/name = "Borg-Spawn"
+/obj/effect/landmark/malf/mgturret/name = "Turret-Spawn"
+/obj/effect/landmark/malf/scrambler/name = "Scrambler-Spawn"
 
-/obj/effect/landmark/malf/borg
-	name = "Borg-Spawn"
 
-/obj/effect/landmark/malf/mgturret
-	name = "Turret-Spawn"
+/datum/game_mode/malfunction/proc/takeover()
+	set category = "Malfunction"
+	set name = "System Override"
+	set desc = "Start the victory timer"
+	if (!istype(src,/datum/game_mode/malfunction))
+		usr << "You cannot begin a takeover in this round type!"
+		return
+	if (malf_mode_declared)
+		usr << "You've already begun your takeover."
+		return
+	if (apcs.len < 3)
+		usr << "You don't have enough hacked APCs to take over the ship yet. You need to hack at least 3, however hacking more will make the takeover faster. You have hacked [apcs.len] APCs so far."
+		return
+
+	if (alert(usr, "Are you sure you wish to initiate the takeover? The ship hostile runtime detection software is bound to alert everyone. You have hacked [apcs.len] APCs.", "Takeover:", "Yes", "No") != "Yes")
+		return
+
+	command_alert("Hostile runtimes detected in all ship systems! Source: telecommunications relay satellite.", "Anomaly Alert")
+	set_security_level("delta")
+
+	malf_mode_declared = 1
+	for(var/datum/mind/AI_mind in malf_ais)
+		AI_mind.current.verbs -= /datum/game_mode/malfunction/proc/takeover
+	for(var/mob/M in player_list)
+		if(!istype(M,/mob/new_player))
+			M << sound('sound/AI/aimalf.ogg')
+
+
+
+
+/obj/structure/closet/malf_suits
+	desc = "It's a storage unit for operational gear."
+	icon_state = "syndicate"
+	icon_closed = "syndicate"
+	icon_opened = "syndicateopen"
+
+/obj/structure/closet/malf_suits/New()
+	..()
+	sleep(2)
+	new /obj/item/weapon/storage/toolbox/mechanical(src)
+	new /obj/item/device/multitool(src)
+	new /obj/item/weapon/tank/jetpack/void(src)
+	new /obj/item/clothing/suit/space/nasavoid(src)
+	new /obj/item/clothing/mask/breath(src)
+	new /obj/item/clothing/head/helmet/space/nasavoid(src)

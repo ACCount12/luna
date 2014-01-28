@@ -22,7 +22,7 @@ Atmos alert computer
 
 
 /obj/machinery/computer/atmosphere/alerts/interact(mob/user)
-	usr.machine = src
+	usr.set_machine(src)
 	var/dat = "<HEAD><TITLE>Current Ship Alerts</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
 	dat += "<A HREF='?src=\ref[user];mach_close=alerts'>Close</A><br><br>"
 	for (var/cat in src.alarms)

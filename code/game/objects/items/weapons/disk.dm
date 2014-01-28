@@ -8,10 +8,7 @@
 	var/title = "Data Disk"
 	icon_state = "datadisk0"
 	item_state = "card-id"
-	var/file_amount = 32.0
-	var/file_used = 0.0
-	var/data = ""
-	var/data_type = ""
+	var/data
 	var/read_only = 0
 	var/portable = 1
 
@@ -30,9 +27,7 @@
 /obj/item/weapon/disk/data/genetics
 	name = "genetics data disk"
 	icon_state = "datadiskgen0" //Gosh I hope syndies don't mistake them for the nuke disk.
-	data_type = "ui"
-	var/owner = ""
-	var/ue = 0
+	var/datum/dna_buffer/dna
 
 /obj/item/weapon/disk/data/genetics/New()
 	..()

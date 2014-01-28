@@ -205,21 +205,6 @@
 /mob/living/carbon/alien/larva/attack_hand(mob/living/carbon/human/M as mob)
 	..()
 
-	if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
-		var/obj/item/clothing/gloves/G = M.gloves
-		if(G.cell)
-			if(M.a_intent == "harm")//Stungloves.
-				if(G.cell.charge >= 2500)
-					G.cell.charge -= 2500
-					visible_message("<span class='danger'>[src] has been touched with the stun gloves by [M]!</span>")
-
-					Stun(10)
-					Weaken(10)
-					return 1
-				else
-					M << "<span class='notice'>Not enough charge!</span>"
-				return
-
 	if (M.a_intent == "help")
 		if (health > 0)
 			sleeping = 0
@@ -305,7 +290,7 @@
 
 /mob/living/carbon/alien/larva/show_inv(mob/user as mob)
 
-	user.machine = src
+	user.set_machine(src)
 	var/dat = {"
 	<B><HR><FONT size=3>[name]</FONT></B>
 	<BR><HR><BR>

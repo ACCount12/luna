@@ -73,16 +73,6 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 			return
 		if (opened)
 			if(istype(O, /obj/item/weapon/crowbar))
-				playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
-				var/obj/structure/frame/machine/M = new /obj/structure/frame/machine(src.loc)
-				M.state = 2
-				M.icon_state = "box_1"
-				for(var/obj/I in component_parts)
-					if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker))
-						reagents.trans_to(I, reagents.total_volume)
-					if(I.reliability != 100 && crit_fail)
-						I.crit_fail = 1
-					I.loc = src.loc
 				if(g_amount >= 3750)
 					var/obj/item/stack/sheet/glass/G = new /obj/item/stack/sheet/glass(src.loc)
 					G.amount = round(g_amount / 3750)
@@ -92,7 +82,8 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 				if(diamond_amount >= 2000)
 					var/obj/item/stack/sheet/mineral/diamond/G = new /obj/item/stack/sheet/mineral/diamond(src.loc)
 					G.amount = round(diamond_amount / 2000)
-				del(src)
+
+				default_deconstruction_crowbar()
 				return
 			else
 				user << "\red You can't load the [src.name] while it's opened."

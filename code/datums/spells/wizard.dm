@@ -135,7 +135,7 @@
 	summon_lifespan = 300
 
 
-/*obj/effect/proc_holder/spell/aoe_turf/conjure/carp
+/obj/effect/proc_holder/spell/aoe_turf/conjure/carp
 	name = "Summon Carp"
 	desc = "This spell conjures a simple carp."
 
@@ -146,7 +146,7 @@
 	invocation_type = "shout"
 	range = 1
 
-	summon_type = list(/mob/living/simple_animal/hostile/carp)*/
+	summon_type = list(/mob/living/simple_animal/hostile/carp)
 
 
 /*obj/effect/proc_holder/spell/aoe_turf/conjure/construct
@@ -163,7 +163,7 @@
 	summon_type = list(/obj/structure/constructshell)*/
 
 
-/*obj/effect/proc_holder/spell/aoe_turf/conjure/creature
+/obj/effect/proc_holder/spell/aoe_turf/conjure/creature
 	name = "Summon Creature Swarm"
 	desc = "This spell tears the fabric of reality, allowing horrific daemons to spill forth"
 
@@ -175,7 +175,7 @@
 	summon_amt = 10
 	range = 3
 
-	summon_type = list(/mob/living/simple_animal/hostile/creature)*/
+	summon_type = list(/mob/living/simple_animal/hostile/creature)
 
 /obj/effect/proc_holder/spell/targeted/trigger/blind
 	name = "Blind"

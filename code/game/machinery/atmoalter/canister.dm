@@ -14,7 +14,7 @@
 	var/filled = 0.5
 	pressure_resistance = 7*ONE_ATMOSPHERE
 	var/temperature_resistance = 1000 + T0C
-	volume = 1000
+	volume = 2000
 	var/release_log = ""
 	var/obj/item/device/attached_device
 	var/attacher
@@ -144,9 +144,6 @@
 		src.health -= round(Proj.damage / 2)
 		healthcheck()
 	..()
-
-/obj/machinery/portable_atmospherics/canister/return_air()
-	return air_contents
 
 /obj/machinery/portable_atmospherics/canister/proc/return_temperature()
 	var/datum/gas_mixture/GM = src.return_air()

@@ -3,21 +3,21 @@
 		if(M.client.buildmode)
 			M.client.buildmode = 0
 			M.client.show_popup_menus = 1
-			for(var/obj/buildholder/H)
+			for(var/obj/effect/buildholder/H)
 				if(H.cl == M.client)
 					del(H)
 		else
 			M.client.buildmode = 1
 			M.client.show_popup_menus = 0
 
-			var/obj/buildholder/H = new/obj/buildholder()
-			var/obj/builddir/A = new/obj/builddir(H)
+			var/obj/effect/buildholder/H = new/obj/effect/buildholder()
+			var/obj/effect/screen/buildmode/dir/A = new/obj/effect/screen/buildmode/dir(H)
 			A.master = H
-			var/obj/buildhelp/B = new/obj/buildhelp(H)
+			var/obj/effect/screen/buildmode/help/B = new/obj/effect/screen/buildmode/help(H)
 			B.master = H
-			var/obj/buildmode/C = new/obj/buildmode(H)
+			var/obj/effect/screen/buildmode/mode/C = new/obj/effect/screen/buildmode/mode(H)
 			C.master = H
-			var/obj/buildquit/D = new/obj/buildquit(H)
+			var/obj/effect/screen/buildmode/quit/D = new/obj/effect/screen/buildmode/quit(H)
 			D.master = H
 
 			H.builddir = A
@@ -30,61 +30,48 @@
 			M.client.screen += D
 			H.cl = M.client
 
-/obj/builddir
+/obj/effect/screen/buildmode
 	density = 1
 	anchored = 1
 	layer = 20
 	dir = NORTH
 	icon = 'buildmode.dmi'
+	master = null
+
+/obj/effect/screen/buildmode/dir
 	icon_state = "build"
 	screen_loc = "NORTH,WEST"
-	var/obj/buildholder/master = null
-/obj/buildhelp
-	density = 1
-	anchored = 1
-	layer = 20
-	dir = NORTH
-	icon = 'buildmode.dmi'
+
+/obj/effect/screen/buildmode/help
 	icon_state = "buildhelp"
 	screen_loc = "NORTH,WEST+1"
-	var/obj/buildholder/master = null
-/obj/buildmode
-	density = 1
-	anchored = 1
-	layer = 20
-	dir = NORTH
-	icon = 'buildmode.dmi'
+
+/obj/effect/screen/buildmode/mode
 	icon_state = "buildmode1"
 	screen_loc = "NORTH,WEST+2"
-	var/obj/buildholder/master = null
 	var/varholder = "name"
 	var/valueholder = "dongs"
 	var/objholder = "/obj/structure/closet"
-/obj/buildquit
-	density = 1
-	anchored = 1
-	layer = 20
-	dir = NORTH
-	icon = 'buildmode.dmi'
+
+/obj/effect/screen/buildmode/quit
 	icon_state = "buildquit"
 	screen_loc = "NORTH,WEST+3"
-	var/obj/buildholder/master = null
 
-/obj/buildquit/Click()
-	togglebuildmode(master.cl.mob)
+/obj/effect/screen/buildmode/quit/Click()
+	togglebuildmode(master:cl.mob)
 
-/obj/buildholder
+/obj/effect/buildholder
 	density = 0
 	anchored = 1
 	var/client/cl = null
-	var/obj/builddir/builddir = null
-	var/obj/buildhelp/buildhelp = null
-	var/obj/buildmode/buildmode = null
-	var/obj/buildquit/buildquit = null
+	var/obj/effect/screen/buildmode/dir/builddir = null
+	var/obj/effect/screen/buildmode/help/buildhelp = null
+	var/obj/effect/screen/buildmode/mode/buildmode = null
+	var/obj/effect/screen/buildmode/quit/buildquit = null
 	var/list/argL = null
 	var/procname = null
 
-/obj/builddir/Click()
+/obj/effect/screen/buildmode/dir/Click()
 	switch(dir)
 		if(NORTH)
 			dir = EAST
@@ -97,8 +84,8 @@
 		if(NORTHWEST)
 			dir = NORTH
 
-/obj/buildhelp/Click()
-	switch(master.cl.buildmode)
+/obj/effect/screen/buildmode/help/Click()
+	switch(master:cl.buildmode)
 		if(1)
 			usr << "\blue ***********************************************************"
 			usr << "\blue Left Mouse Button        = Construct / Upgrade"
@@ -125,30 +112,30 @@
 			usr << "\blue Right Mouse Button on turf/obj/mob     = Reset var's value"
 			usr << "\blue ***********************************************************"
 
-/obj/buildmode/Click(location, control, params)
+/obj/effect/screen/buildmode/mode/Click(location, control, params)
 	var/list/pa = params2list(params)
 
 	if(pa.Find("left"))
-		switch(master.cl.buildmode)
+		switch(master:cl.buildmode)
 			if(1)
-				master.cl.buildmode = 2
+				master:cl.buildmode = 2
 				src.icon_state = "buildmode2"
 			if(2)
-				master.cl.buildmode = 3
+				master:cl.buildmode = 3
 				src.icon_state = "buildmode3"
 			if(3)
-				if(master.cl.holder && master.cl.holder.rank in list("Host", "Coder"))
-					master.cl.buildmode = 4
+				if(master:cl.holder && master:cl.holder.rank in list("Host", "Coder"))
+					master:cl.buildmode = 4
 					src.icon_state = "procgun"
 				else
-					master.cl.buildmode = 1
+					master:cl.buildmode = 1
 					src.icon_state = "buildmode1"
 			if(4)
-				master.cl.buildmode = 1
+				master:cl.buildmode = 1
 				src.icon_state = "buildmode1"
 
 	else if(pa.Find("right"))
-		switch(master.cl.buildmode)
+		switch(master:cl.buildmode)
 			if(1)
 				return
 			if(2)
@@ -162,27 +149,27 @@
 			if(3)
 				var/list/locked = list("vars", "key", "ckey", "client", "firemut", "ishulk", "telekinesis", "xray", "virus", "cuffed", "ka", "last_eaten", "urine")
 
-				master.buildmode.varholder = input(usr,"Enter variable name:" ,"Name", "name")
-				if(master.buildmode.varholder in locked && !(usr.client.holder.rank in list("Host", "Coder")))
+				master:buildmode.varholder = input(usr,"Enter variable name:" ,"Name", "name")
+				if(master:buildmode.varholder in locked && !(usr.client.holder.rank in list("Host", "Coder")))
 					return
 				var/thetype = input(usr,"Select variable type:" ,"Type") in list("text","number","mob-reference","obj-reference","turf-reference")
 				if(!thetype) return
 				switch(thetype)
 					if("text")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value", "value") as text
+						master:buildmode.valueholder = input(usr,"Enter variable value:" ,"Value", "value") as text
 					if("number")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value", 123) as num
+						master:buildmode.valueholder = input(usr,"Enter variable value:" ,"Value", 123) as num
 					if("mob-reference")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as mob in world
+						master:buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as mob in world
 					if("obj-reference")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as obj in world
+						master:buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as obj in world
 					if("turf-reference")
-						master.buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as turf in world
+						master:buildmode.valueholder = input(usr,"Enter variable value:" ,"Value") as turf in world
 
 			if(4)
-				master.procname = input(usr, "Enter full proc path:", "ProcPath")
+				master:procname = input(usr, "Enter full proc path:", "ProcPath")
 				var/argNum = input("Number of arguments:","Number",null) as num
-				master.argL = new/list()
+				master:argL = new/list()
 				var/class
 				var/i
 				for(i=0; i<argNum; i++)
@@ -192,29 +179,29 @@
 							return
 
 						if("text")
-							master.argL.Add( input("Enter new text:","Text",null) as text )
+							master:argL.Add( input("Enter new text:","Text",null) as text )
 
 						if("num")
-							master.argL.Add( input("Enter new number:","Num",null) as num )
+							master:argL.Add( input("Enter new number:","Num",null) as num )
 
 						if("type")
-							master.argL.Add( input("Enter type:","Type",null) in typesof(/obj,/mob,/area,/turf) )
+							master:argL.Add( input("Enter type:","Type",null) in typesof(/obj,/mob,/area,/turf) )
 
 						if("reference")
-							master.argL.Add( input("Select reference:","Reference",null) as mob|obj|turf|area in world )
+							master:argL.Add( input("Select reference:","Reference",null) as mob|obj|turf|area in world )
 
 						if("icon")
-							master.argL.Add( input("Pick icon:","Icon",null) as icon )
+							master:argL.Add( input("Pick icon:","Icon",null) as icon )
 
 						if("file")
-							master.argL.Add( input("Pick file:","File",null) as file )
+							master:argL.Add( input("Pick file:","File",null) as file )
 
 
 /proc/build_click(var/mob/user, buildmode, location, control, params, var/obj/object)
 
-	var/obj/buildholder/holder = null
+	var/obj/effect/buildholder/holder = null
 
-	for(var/obj/buildholder/H)
+	for(var/obj/effect/buildholder/H)
 		if(H.cl == user.client)
 			holder = H
 			break

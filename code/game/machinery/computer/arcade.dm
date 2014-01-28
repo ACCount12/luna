@@ -58,7 +58,7 @@
 /obj/machinery/computer/arcade/attack_hand(mob/user as mob)
 	if(..())
 		return
-	user.machine = src
+	user.set_machine(src)
 	var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a>"
 	dat += "<center><h4>[enemy_name]</h4></center>"
 

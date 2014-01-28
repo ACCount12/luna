@@ -1,5 +1,9 @@
 /mob/living/carbon/brain/death(gibbed)
 	if(stat == DEAD)	return
+
+	living_mob_list -= src
+	dead_mob_list |= src
+
 	if(!gibbed && container && istype(container, /obj/item/device/mmi))//If not gibbed but in a container.
 		for(var/mob/O in viewers(container, null))
 			O.show_message(text("\red <B>[]'s MMI flatlines!</B>", src), 1, "\red You hear something flatline.", 2)

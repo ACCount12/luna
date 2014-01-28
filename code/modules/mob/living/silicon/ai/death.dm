@@ -3,6 +3,10 @@
 	canmove = 0
 	if(blind)
 		blind.layer = 0
+
+	living_mob_list -= src
+	dead_mob_list |= src
+
 	sight |= SEE_TURFS
 	sight |= SEE_MOBS
 	sight |= SEE_OBJS

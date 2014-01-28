@@ -175,7 +175,7 @@ FLASHBANG
 		if(istype(A, /obj/machinery/clonepod))
 			A:malfunction()
 
-	for(var/obj/shielding/shield/S in range(world.view-1, T))
+	for(var/obj/effect/shielding/shield/S in range(world.view-1, T))
 		S.disabled = 1
 		var/obj/overlay/pulse2 = new/obj/overlay ( S.loc )
 		pulse2.icon = 'effects.dmi'

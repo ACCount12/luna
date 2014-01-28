@@ -119,21 +119,20 @@ vs_control/var/FIRE_PLASMA_ENERGY_RELEASED_DESC = "Determines the temp increase 
 #define DROWSY		"drowsy"
 
 //ITEM INVENTORY SLOT BITMASKS
-#define SLOT_OCLOTHING	1
+#define SLOT_OCLOTHING	1 //
 #define SLOT_ICLOTHING	2
-#define SLOT_GLOVES		4
-#define SLOT_EYES		8
-#define SLOT_EARS		16
-#define SLOT_MASK		32
+#define SLOT_GLOVES		4 //
+#define SLOT_EYES		8 //
+#define SLOT_EARS		16 //
+#define SLOT_MASK		32 //
 #define SLOT_HEAD		64
-#define SLOT_FEET		128
-#define SLOT_ID			256
-#define SLOT_BELT		512
-#define SLOT_BACK		1024
+#define SLOT_FEET		128 //
+#define SLOT_ID			256 //
+#define SLOT_BELT		512 //
+#define SLOT_BACK		1024 //
 #define SLOT_POCKET		2048	//this is to allow items with a w_class of 3 or 4 to fit in pockets.
 #define SLOT_DENYPOCKET	4096	//this is to deny items with a w_class of 2 or 1 to fit in pockets.
 
-#define NOSLIP		1024 		//prevents from slipping on wet floors, in space etc
 
 //FLAGS BITMASK
 
@@ -152,6 +151,8 @@ vs_control/var/FIRE_PLASMA_ENERGY_RELEASED_DESC = "Determines the temp increase 
 #define NOHIT			128		// no displaying hit message
 #define FPRINT			256		// takes a fingerprint
 #define ON_BORDER		512		// item has priority to check when entering or leaving
+
+#define NOSLIP			1024 	// shoes - prevents from slipping on wet floors, in space etc
 
 #define GLASSESCOVERSEYES	1024
 #define MASKCOVERSEYES		1024	// get rid of some of the other retardation in these flags
@@ -179,9 +180,9 @@ vs_control/var/FIRE_PLASMA_ENERGY_RELEASED_DESC = "Determines the temp increase 
 #define NOJAUNT		1
 
 
-#define BLIND			1
-#define MUTE			2
-#define DEAF			4
+#define BLIND		1
+#define MUTE		2
+#define DEAF		4
 
 
 //Bit flags for the flags_inv variable, which determine when a piece of clothing hides another. IE a helmet hiding glasses.
@@ -201,7 +202,7 @@ vs_control/var/FIRE_PLASMA_ENERGY_RELEASED_DESC = "Determines the temp increase 
 #define ORGAN_ROBOTIC 		2
 
 //slots
-/*#define slot_back			1
+#define slot_back			1
 #define slot_wear_mask		2
 #define slot_handcuffed		3
 #define slot_l_hand			4
@@ -219,7 +220,7 @@ vs_control/var/FIRE_PLASMA_ENERGY_RELEASED_DESC = "Determines the temp increase 
 #define slot_r_store		16
 #define slot_s_store		17
 #define slot_in_backpack	18
-#define slot_legcuffed		19*/
+#define slot_legcuffed		19
 
 // mob/var/stat things
 #define CONSCIOUS	0
@@ -366,3 +367,37 @@ var/const
 #define IMPLOYAL_HUD	5 // loyality implant
 #define IMPCHEM_HUD		6 // chemical implant
 #define IMPTRACK_HUD	7 // tracking implant
+
+
+// for prefs list
+#define BE_TRAITOR		"traitor"
+#define BE_HEADREV		"headrev"
+#define BE_OPERATIVE	"operative"
+#define BE_MALF			"malf"
+
+#define BE_CHANGELING	"changeling"
+#define BE_WIZARD		"wizard"
+#define BE_CULTIST		"cultist"
+#define BE_ALIEN		"alien"
+#define BE_MONKEY		"monkey"
+#define BE_NINJA		"ninja"
+
+#define BE_PAI			"pai"
+#define BE_BADMIN		"badmin" // for ERT / deathsquad
+#define BE_OTHER		"other" // for WIP
+
+var/list/be_special_flags = list(
+	"Traitor" = BE_TRAITOR,
+	"Operative" = BE_OPERATIVE,
+	"Changeling" = BE_CHANGELING,
+	"Wizard" = BE_WIZARD,
+	"Malf AI" = BE_MALF,
+	"Revolutionary" = BE_HEADREV,
+	"Alien" = BE_ALIEN,
+	"pAI" = BE_PAI,
+	"Cultist" = BE_CULTIST,
+	"Monkey" = BE_MONKEY,
+	"Ninja" = BE_NINJA,
+	"ERT or Deathsquad operative" = BE_BADMIN,
+	"Other roles" = BE_OTHER
+	)

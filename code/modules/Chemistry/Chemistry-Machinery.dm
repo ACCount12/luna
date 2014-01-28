@@ -63,7 +63,7 @@
 	if(usr.stat || usr.restrained()) return
 	if(!in_range(src, usr)) return
 
-	usr.machine = src
+	usr.set_machine(src)
 
 	if (href_list["eject"] && beaker)
 		beaker.loc = src.loc
@@ -112,7 +112,7 @@
 
 /obj/machinery/chem_dispenser/attack_hand(mob/user as mob)
 	if(stat & BROKEN) return
-	user.machine = src
+	user.set_machine(src)
 	var/dat = ""
 	if (beaker)
 		var/datum/reagents/R = beaker.reagents

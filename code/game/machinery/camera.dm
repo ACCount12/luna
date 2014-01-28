@@ -38,7 +38,7 @@
 	if (stat & (NOPOWER|BROKEN))
 		return
 
-	user.machine = src
+	user.set_machine(src)
 
 	var/list/L = list()
 	for (var/obj/machinery/camera/C in world)
@@ -80,7 +80,7 @@
 	if (stat == 2)
 		return
 
-	user.machine = src
+	user.set_machine(src)
 
 	var/list/L = list()
 	for (var/obj/machinery/camera/C in world)
@@ -256,16 +256,20 @@
 				O << "[U] holds \a [itemname] up to one of the cameras ..."
 				O << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", itemname, info), text("window=[]", itemname))
 
-	else if (istype(W, /obj/item/device/camera_bug))
+	else if (istype(W, /obj/item/device/hacktool))
 		if (!src.can_use())
 			user << "\blue Camera non-functional"
 			return
+
 		if(bugged)
 			user << "\blue Camera bug removed."
+			bugged_cameras -= src.c_tag
 			bugged = 0
 		else
 			user << "\blue Camera bugged."
 			bugged = 1
+			bugged_cameras[src.c_tag] = src
+
 	else
 		..()
 	return

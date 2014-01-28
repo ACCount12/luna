@@ -225,7 +225,7 @@
 /obj/machinery/vending/attack_hand(mob/user as mob)
 	if(stat & (BROKEN|NOPOWER))
 		return
-	user.machine = src
+	user.set_machine(src)
 
 	if(src.seconds_electrified != 0)
 		if(src.shock(user, 100))
@@ -294,7 +294,7 @@
 		return
 
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))))
-		usr.machine = src
+		usr.set_machine(src)
 		if ((href_list["vend"]) && (src.vend_ready))
 
 			if ((!src.allowed(usr)) && (!src.emagged) && (src.wires & WIRE_SCANID)) //For SECURE VENDING MACHINES YEAH
@@ -504,7 +504,6 @@
 
 
 
-
 /obj/machinery/vending/medical
 	name = "NanoMed Plus"
 	desc = "Medical Equipment dispenser."
@@ -544,20 +543,6 @@
 	hidden_prices = ""
 	charge_type = "toxins"
 
-/obj/machinery/vending/robotics
-	name = "Robotech Deluxe"
-	desc = "All the tools you need to create your own robot army."
-	icon_state = "robotics"
-	icon_deny = "robotics-deny"
-	req_access_txt = "29"
-	points = 10
-	product_paths = "/obj/item/clothing/suit/storage/labcoat;/obj/item/clothing/under/rank/roboticist;/obj/item/weapon/cable_coil/power;/obj/item/device/flash;/obj/item/weapon/circuitboard/circuitry;/obj/item/weapon/cell/supercharged;/obj/item/device/prox_sensor;/obj/item/device/radio/signaler;/obj/item/device/healthanalyzer;/obj/item/weapon/surgical/scalpel;/obj/item/weapon/surgical/circular_saw;/obj/item/weapon/tank/anesthetic;/obj/item/clothing/mask/breath/medical;/obj/item/weapon/screwdriver;/obj/item/weapon/crowbar"
-	//product_amounts = "4;4;4;4;12"
-	product_prices = "1;1;1;1;1;3;2;2;2;4;4;2;1;1;1"
-	product_hidden = ""
-	hidden_prices = ""
-	charge_type = "robotics"
-
 /obj/machinery/vending/kitchen
     name = "Kitchen Mate Plus"
     desc = "The Kitchen Mate Plus.  Better ingredients.  Better burgers."
@@ -592,17 +577,3 @@
     product_hidden = ""
     hidden_prices = ""
     charge_type = "kitchen"
-
-/obj/machinery/vending/engineering
-	name = "Robco Tool Maker"
-	desc = "Everything you need for do-it-yourself ship repair."
-	icon_state = "engi"
-	icon_deny = "engi-deny"
-	req_access_txt = "10"
-	points = 10
-	product_paths = "/obj/item/clothing/under/rank/chief_engineer;/obj/item/clothing/under/rank/engineer;/obj/item/clothing/shoes/orange;/obj/item/clothing/head/helmet/hardhat;/obj/item/weapon/storage/belt/utility;/obj/item/clothing/glasses/meson;/obj/item/clothing/gloves/yellow;/obj/item/weapon/screwdriver;/obj/item/weapon/crowbar;/obj/item/weapon/wirecutters;/obj/item/device/multitool;/obj/item/weapon/wrench;/obj/item/device/t_scanner;/obj/item/weapon/cable_coil/power;/obj/item/weapon/circuitboard/circuitry;/obj/item/weapon/cell;/obj/item/weapon/weldingtool;/obj/item/clothing/head/helmet/welding;/obj/item/weapon/light/tube;/obj/item/clothing/suit/fire"
-	//product_amounts = "4;4;4;4;12"
-	product_prices = "1;1;1;2;2;1;2;1;1;2;2;1;1;1;2;2;1;1;1;2"
-	product_hidden = ""
-	hidden_prices = ""
-	charge_type = "engineering"

@@ -774,7 +774,7 @@ steam.start() -- spawns the effect
 			reagents.reaction(A, 1, 1)
 	..()
 
-/obj/effect/effect/foam/proc/process()
+/obj/effect/effect/foam/process()
 	if(--amount < 0)
 		return
 

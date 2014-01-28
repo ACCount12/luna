@@ -287,17 +287,18 @@
 		playsound(src.loc, 'sound/items/bikehorn.ogg', 30, 1)
 	else
 		playsound(src.loc, 'sound/machines/airlock.ogg', 30, 1)
-	if(src.closeOther != null && istype(src.closeOther, /obj/machinery/door/airlock/) && !src.closeOther.density)
+	if(src.closeOther && istype(src.closeOther, /obj/machinery/door/airlock/) && !src.closeOther.density)
 		src.closeOther.close()
 
-	if(autoclose  && normalspeed)
-		spawn(150)
-			autoclose()
-	else if(autoclose && !normalspeed)
-		spawn(5)
-			autoclose()
+	if(autoclose)
+		if(normalspeed)
+			spawn(150)
+				autoclose()
+		else
+			spawn(5)
+				autoclose()
 
-	return ..()
+	return ..(0)
 
 /obj/machinery/door/airlock/forceopen()
 	if(!density)
@@ -435,31 +436,30 @@ About the airlock wires panel:
 
 
 /obj/machinery/door/airlock/proc/loseMainPower()
-	if (src.secondsMainPowerLost <= 0)
+	if(src.secondsMainPowerLost <= 0)
 		src.secondsMainPowerLost = 60
-		if (src.secondsBackupPowerLost < 10)
+		if(src.secondsBackupPowerLost < 10)
 			src.secondsBackupPowerLost = 10
-	if (!src.spawnPowerRestoreRunning)
+	if(!src.spawnPowerRestoreRunning)
 		src.spawnPowerRestoreRunning = 1
 		spawn(0)
 			var/cont = 1
 			while (cont)
 				sleep(10)
 				cont = 0
-				if (src.secondsMainPowerLost>0)
-					if ((!src.isWireCut(AIRLOCK_WIRE_MAIN_POWER1)) && (!src.isWireCut(AIRLOCK_WIRE_MAIN_POWER2)))
+				if(src.secondsMainPowerLost>0)
+					if((!src.isWireCut(AIRLOCK_WIRE_MAIN_POWER1)) && (!src.isWireCut(AIRLOCK_WIRE_MAIN_POWER2)))
 						src.secondsMainPowerLost -= 1
 						src.updateDialog()
 					cont = 1
 
-				if (src.secondsBackupPowerLost>0)
-					if ((!src.isWireCut(AIRLOCK_WIRE_BACKUP_POWER1)) && (!src.isWireCut(AIRLOCK_WIRE_BACKUP_POWER2)))
+				if(src.secondsBackupPowerLost>0)
+					if((!src.isWireCut(AIRLOCK_WIRE_BACKUP_POWER1)) && (!src.isWireCut(AIRLOCK_WIRE_BACKUP_POWER2)))
 						src.secondsBackupPowerLost -= 1
 						src.updateDialog()
 					cont = 1
 			src.spawnPowerRestoreRunning = 0
 			src.updateDialog()
-
 
 /obj/machinery/door/airlock/proc/loseBackupPower()
 	if (src.secondsBackupPowerLost < 60)
@@ -541,7 +541,7 @@ About the airlock wires panel:
 		return
 
 	//Interface for the AI.
-	user.machine = src
+	user.set_machine(src)
 	user << browse(get_control_screen(), "window=airlock")
 	onclose(user, "airlock")
 
@@ -668,7 +668,6 @@ About the airlock wires panel:
 						safe = 0
 					else
 						usr << text("Firmware reports safeties already overriden.")
-
 
 
 				if(9)

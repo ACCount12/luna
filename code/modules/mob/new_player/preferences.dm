@@ -4,9 +4,8 @@ datum/preferences
 	var/age = 30
 	var/b_type = "A+"
 
-	var/be_syndicate = 0
-	var/be_nuke_agent = 0
-	var/be_takeover_agent = 0
+	var/list/roles = list()
+
 	var/be_random_name = 0
 	var/underwear = 1
 
@@ -252,14 +251,12 @@ datum/preferences
 */
 		dat += "<hr>"
 		if(!jobban_isbanned(user, "Syndicate"))
-			dat += "<b>Be syndicate?:</b> <a href =\"byond://?src=\ref[user];preferences=1;b_syndicate=1\"><b>[(be_syndicate ? "Yes" : "No")]</b></a><br>"
-			dat += "<b>Be nuke agent?:</b> <a href =\"byond://?src=\ref[user];preferences=1;b_nuke_agent=1\"><b>[(be_nuke_agent ? "Yes" : "No")]</b></a><br>"
-			dat += "<b>Be takeover agent?:</b> <a href =\"byond://?src=\ref[user];preferences=1;b_takeover_agent=1\"><b>[(be_takeover_agent ? "Yes" : "No")]</b></a><br>"
+			for(var/role in be_special_flags)
+				dat += "<b>Be [role]: </b>"
+				dat += "<a href ='byond://?src=\ref[user];preferences=1;be_role=[be_special_flags[role]]'><b>[(be_special_flags[role] in roles) ? "Yes" : "No"]</b></a><br>"
 		else
-			dat += "<b> You are banned from being syndicate.</b>"
-			be_syndicate = 0
-			be_nuke_agent = 0
-			be_takeover_agent = 0
+			dat += "<b> You are banned from being special roles.</b>"
+			roles = list()
 		dat += "<a href =\"byond://?src=\ref[user];preferences=1;editbio=1\">Edit Biography</a><br>"
 		//dat += "<b>Show Profile?:</b> <a href =\"byond://?src=\ref[user];preferences=1;b_syndicate=1\"><b>[(be_syndicate ? "Yes" : "No")]</b></a><br>
 		dat += "<hr>"
@@ -622,14 +619,11 @@ datum/preferences
 				else
 					underwear = 1
 
-		if (link_tags["b_syndicate"])
-			be_syndicate = !be_syndicate
-
-		if (link_tags["b_nuke_agent"])
-			be_nuke_agent = !be_nuke_agent
-
-		if (link_tags["b_takeover_agent"])
-			be_takeover_agent = !be_takeover_agent
+		if (link_tags["be_role"])
+			if(link_tags["be_role"] in roles)
+				roles.Remove(link_tags["be_role"])
+			else
+				roles.Add(link_tags["be_role"])
 
 		if (link_tags["b_random_name"])
 			be_random_name = !be_random_name
@@ -640,7 +634,7 @@ datum/preferences
 				var/slot = link_tags["saveslot"]
 				var/bio2 = dbcon.Quote(bio)
 				var/
-				var/DBQuery/query = dbcon.NewQuery("REPLACE INTO `players` (`ckey`,`slot`,`slotname`,`real_name`, `gender`, `ages`, `occupation1`, `occupation2`, `occupation3`,`hair_red`, `hair_green`, `hair_blue`, `facial_red`, `facial_green`, `facial_blue`, `skin_tone`, `hair_style_name`, `facial_style_name`, `eyes_red`,`eyes_green`, `eyes_blue`, `blood_type`, `be_syndicate`, `be_nuke_agent`, `be_takeover_agent`, `underwear`,`name_is_always_random`,`bios`) VALUES ('[user.ckey]','[slot]',[dbcon.Quote(slotname)] ,[dbcon.Quote(real_name)], '[lowertext(gender)]', '[age]', '[occupation1]','[occupation2]', '[occupation3]', '[r_hair]', '[g_hair]', '[b_hair]', '[r_facial]', '[g_facial]', '[b_facial]', '[s_tone]', '[h_style]', '[f_style]', '[r_eyes]', '[g_eyes]', '[b_eyes]', '[b_type]', '[be_syndicate]', '[be_nuke_agent]', '[be_takeover_agent]', '[underwear]','[be_random_name]',[bio2]);")
+				var/DBQuery/query = dbcon.NewQuery("REPLACE INTO `players` (`ckey`,`slot`,`slotname`,`real_name`, `gender`, `ages`, `occupation1`, `occupation2`, `occupation3`,`hair_red`, `hair_green`, `hair_blue`, `facial_red`, `facial_green`, `facial_blue`, `skin_tone`, `hair_style_name`, `facial_style_name`, `eyes_red`,`eyes_green`, `eyes_blue`, `blood_type`, `be_syndicate`, `underwear`,`name_is_always_random`,`bios`) VALUES ('[user.ckey]','[slot]',[dbcon.Quote(slotname)] ,[dbcon.Quote(real_name)], '[lowertext(gender)]', '[age]', '[occupation1]','[occupation2]', '[occupation3]', '[r_hair]', '[g_hair]', '[b_hair]', '[r_facial]', '[g_facial]', '[b_facial]', '[s_tone]', '[h_style]', '[f_style]', '[r_eyes]', '[g_eyes]', '[b_eyes]', '[b_type]', '[list2params(roles)]', '[underwear]','[be_random_name]',[bio2]);")
 				if(!query.Execute())
 					usr << query.ErrorMsg()
 					usr << "Report this."
@@ -685,7 +679,7 @@ datum/preferences
 				return
 			var/slotname = input(usr,"Choose a name for your slot","Name","Default")
 			slotname = dbcon.Quote(slotname)
-			var/DBQuery/query = dbcon.NewQuery("REPLACE INTO `players` (`ckey`,`slot`,`slotname`,`real_name`, `gender`, `ages`, `occupation1`, `occupation2`, `occupation3`,`hair_red`, `hair_green`, `hair_blue`, `facial_red`, `facial_green`, `facial_blue`, `skin_tone`, `hair_style_name`, `facial_style_name`, `eyes_red`,`eyes_green`, `eyes_blue`, `blood_type`, `be_syndicate`, `be_nuke_agent`, `be_takeover_agent`, `underwear`,`name_is_always_random`,`bios`) VALUES ('[user.ckey]','[count]',[slotname] ,'New Char', 'MALE', '30', 'No Preference','No Preference', 'No Preference', '0', '0', '0', '0', '0', '0', '0', 'Short Hair', 'Shaved', '0', '0', '0', 'A+', '0', '0', '0', '1','0','Nothing here yet...');")
+			var/DBQuery/query = dbcon.NewQuery("REPLACE INTO `players` (`ckey`,`slot`,`slotname`,`real_name`, `gender`, `ages`, `occupation1`, `occupation2`, `occupation3`,`hair_red`, `hair_green`, `hair_blue`, `facial_red`, `facial_green`, `facial_blue`, `skin_tone`, `hair_style_name`, `facial_style_name`, `eyes_red`,`eyes_green`, `eyes_blue`, `blood_type`, `be_syndicate`, `underwear`,`name_is_always_random`,`bios`) VALUES ('[user.ckey]','[count]',[slotname] ,'New Char', 'MALE', '30', 'No Preference','No Preference', 'No Preference', '0', '0', '0', '0', '0', '0', '0', 'Short Hair', 'Shaved', '0', '0', '0', 'A+', '0', '1','0','Nothing here yet...');")
 			if(!query.Execute())
 				usr << query.ErrorMsg()
 				usr << "Report this."
@@ -705,7 +699,7 @@ datum/preferences
 			occupation2 = "No Preference"
 			occupation3 = "No Preference"
 			underwear = 1
-			be_syndicate = 0
+			roles = list()
 			be_random_name = 0
 			r_hair = 0.0
 			g_hair = 0.0
@@ -724,11 +718,12 @@ datum/preferences
 
 		ShowChoices(user)
 
-	proc/copy_to(mob/living/carbon/human/character)
+	proc/copy_to(mob/living/carbon/human/character, var/client/client)
 		if(be_random_name)
 			randomize_name()
 		character.real_name = real_name
-		character.be_syndicate = be_syndicate
+
+		client.prefs.Copy(roles)
 
 		character.gender = gender
 

@@ -34,6 +34,7 @@
 	icon_state = "unknown"
 	layer = 10
 	mouse_opacity = 0
+	//invisibility = 101
 	var/lightswitch = 1
 
 	var/redalert = 0

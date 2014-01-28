@@ -1,6 +1,10 @@
 /mob/living/carbon/alien/humanoid/death(gibbed)
 	if(stat == 2)
 		return
+
+	living_mob_list -= src
+	dead_mob_list |= src
+
 	if(healths)
 		healths.icon_state = "health6"
 	stat = 2

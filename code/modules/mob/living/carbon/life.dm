@@ -7,17 +7,51 @@
 	if (monkeyizing)
 		return
 
-	if (stat != 2) //still breathing
-		if(lastbreathT <= world.timeofday - 40)
-			//Only try to take a breath every 4 seconds, unless suffocating
-			lastbreathT = world.timeofday
-			breathe()
-			if(lastbreathT > world.timeofday)	//Midnight rollover check
-				lastbreathT = 0
-		else //Still give containing object the chance to interact
-			if(istype(loc, /obj))
-				var/obj/location_as_object = loc
-				location_as_object.handle_internal_lifeform(src, 0)
+	// Ling stuff, chem regeneration
+	handle_changeling()
+
+	//Being buckled to a chair or bed
+	check_if_buckled()
+
+	//Status updates, death etc.
+	handle_regular_status_updates()
+
+	if(client)
+		handle_regular_hud_updates()
+
+	if(lyingcheck != lying)		//This is a fix for falling down / standing up not updating icons.  Instead of going through and changing every
+		update_clothing()		//instance in the code where lying is modified, I've just added a new variable "lyingcheck" which will be compared
+		lyingcheck = lying		//to lying, so if lying ever changes, update_clothing() will run like normal.
+
+
+	update_canmove()
+	clamp_values()
+	//Mutations and radiation
+	handle_mutations_and_radiation()
+
+
+	// Grabbing
+	for(var/obj/item/weapon/grab/G in src)
+		G.process()
+
+
+	if (stat == DEAD)
+		return // No more life for dead.
+	else
+		living_mob_list |= src
+		dead_mob_list -= src
+
+
+	if(lastbreathT <= world.timeofday - 40)
+		//Only try to take a breath every 4 seconds, unless suffocating
+		lastbreathT = world.timeofday
+		breathe()
+		if(lastbreathT > world.timeofday)	//Midnight rollover check
+			lastbreathT = 0
+	else //Still give containing object the chance to interact
+		if(istype(loc, /obj))
+			var/obj/location_as_object = loc
+			location_as_object.handle_internal_lifeform(src, 0)
 
 	//Apparently, the person who wrote this code designed it so that
 	//blinded get reset each cycle and then get activated later in the
@@ -31,48 +65,19 @@
 		handle_environment(environment)
 	// else world << "I hate badmins."
 
-	//Mutations and radiation
-	handle_mutations_and_radiation()
-
 	//Chemicals in the body
 	handle_chemicals_in_body()
-
-	// Ling stuff, chem regeneration
-	handle_changeling()
 
 	//stuff in the stomach
 	handle_stomach()
 
+	// LSD power!
 	handle_hallucinations()
 
 	//Disabilities
 	handle_disabilities()
 
-	//Status updates, death etc.
-	handle_regular_status_updates()
-
 	handle_pain()
-
-	// Update clothing
-	//update_clothing()		Strumpet - Removing this to see if it's really necessary.  Could save some processing.
-	if(lyingcheck != lying)		//This is a fix for falling down / standing up not updating icons.  Instead of going through and changing every
-		update_clothing()		//instance in the code where lying is modified, I've just added a new variable "lyingcheck" which will be compared
-		lyingcheck = lying		//to lying, so if lying ever changes, update_clothing() will run like normal.
-
-	if(client)
-		handle_regular_hud_updates()
-
-	//Being buckled to a chair or bed
-	check_if_buckled()
-
-	// Yup.
-	update_canmove()
-
-	clamp_values()
-
-	// Grabbing
-	for(var/obj/item/weapon/grab/G in src)
-		G.process()
 
 /mob/living/carbon/proc/breathe()
 	if(reagents.has_reagent("lexorin")) return

@@ -4,12 +4,12 @@
 //2 = SEC_LEVEL_RED
 //3 = SEC_LEVEL_DELTA
 
-/proc/set_security_level(var/level)
-	var/const/alert_desc_green = "All threats to the station have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
-	var/const/alert_desc_blue_upto = "The station has received reliable information about possible hostile activity on the station. Security staff may have weapons visible, random searches are permitted."
+/proc/set_security_level(var/level, var/silent = 0)
+	var/const/alert_desc_green = "All threats to the ship have passed. Security may not have weapons visible, privacy laws are once again fully enforced."
+	var/const/alert_desc_blue_upto = "The ship has received reliable information about possible hostile activity on the ship. Security staff may have weapons visible, random searches are permitted."
 	var/const/alert_desc_blue_downto = "The immediate threat has passed. Security may no longer have weapons drawn at all times, but may continue to have them visible. Random searches are still allowed."
-	var/const/alert_desc_red_upto = "There is an immediate serious threat to the station. Security may have weapons unholstered at all times. Random searches are allowed and advised."
-	var/const/alert_desc_red_downto = "The self-destruct mechanism has been deactivated, there is still however an immediate serious threat to the station. Security may have weapons unholstered at all times, random searches are allowed and advised."
+	var/const/alert_desc_red_upto = "There is an immediate serious threat to the ship. Security may have weapons unholstered at all times. Random searches are allowed and advised."
+	var/const/alert_desc_red_downto = "The self-destruct mechanism has been deactivated, there is still however an immediate serious threat to the ship. Security may have weapons unholstered at all times, random searches are allowed and advised."
 	var/const/alert_desc_delta = "The ship's self-destruct mechanism has been engaged. All crew are instructed to obey all instructions given by heads of staff. Any violations of these orders can be punished by death. This is not a drill."
 	switch(level)
 		if("green")
@@ -25,30 +25,33 @@
 	if(level >= SEC_LEVEL_GREEN && level <= SEC_LEVEL_DELTA && level != security_level)
 		switch(level)
 			if(SEC_LEVEL_GREEN)
-				world << "<font size=4 color='red'>Attention! Security level lowered to green</font>"
-				world << "<font color='red'>[alert_desc_green]</font>"
+				if(!silent)
+					world << "<font size=4 color='red'>Attention! Security level lowered to green</font>"
+					world << "<font color='red'>[alert_desc_green]</font>"
 				security_level = SEC_LEVEL_GREEN
 				for(var/obj/machinery/firealarm/FA in world)
 					FA.overlays = list()
 					FA.overlays += image('icons/obj/monitors.dmi', "overlay_green")
 			if(SEC_LEVEL_BLUE)
-				if(security_level < SEC_LEVEL_BLUE)
-					world << "<font size=4 color='red'>Attention! Security level elevated to blue</font>"
-					world << "<font color='red'>[alert_desc_blue_upto]</font>"
-				else
-					world << "<font size=4 color='red'>Attention! Security level lowered to blue</font>"
-					world << "<font color='red'>[alert_desc_blue_downto]</font>"
+				if(!silent)
+					if(security_level < SEC_LEVEL_BLUE)
+						world << "<font size=4 color='red'>Attention! Security level elevated to blue</font>"
+						world << "<font color='red'>[alert_desc_blue_upto]</font>"
+					else
+						world << "<font size=4 color='red'>Attention! Security level lowered to blue</font>"
+						world << "<font color='red'>[alert_desc_blue_downto]</font>"
 				security_level = SEC_LEVEL_BLUE
 				for(var/obj/machinery/firealarm/FA in world)
 					FA.overlays = list()
 					FA.overlays += image('icons/obj/monitors.dmi', "overlay_blue")
 			if(SEC_LEVEL_RED)
-				if(security_level < SEC_LEVEL_RED)
-					world << "<font size=4 color='red'>Attention! Code red!</font>"
-					world << "<font color='red'>[alert_desc_red_upto]</font>"
-				else
-					world << "<font size=4 color='red'>Attention! Code red!</font>"
-					world << "<font color='red'>[alert_desc_red_downto]</font>"
+				if(!silent)
+					if(security_level < SEC_LEVEL_RED)
+						world << "<font size=4 color='red'>Attention! Code red!</font>"
+						world << "<font color='red'>[alert_desc_red_upto]</font>"
+					else
+						world << "<font size=4 color='red'>Attention! Code red!</font>"
+						world << "<font color='red'>[alert_desc_red_downto]</font>"
 				security_level = SEC_LEVEL_RED
 
 				/*	- At the time of commit, setting status displays didn't work properly
@@ -60,8 +63,9 @@
 					FA.overlays = list()
 					FA.overlays += image('icons/obj/monitors.dmi', "overlay_red")
 			if(SEC_LEVEL_DELTA)
-				world << "<font size=4 color='red'>Attention! Delta security level reached!</font>"
-				world << "<font color='red'>[alert_desc_delta]</font>"
+				if(!silent)
+					world << "<font size=4 color='red'>Attention! Delta security level reached!</font>"
+					world << "<font color='red'>[alert_desc_delta]</font>"
 				security_level = SEC_LEVEL_DELTA
 				for(var/obj/machinery/firealarm/FA in world)
 					FA.overlays = list()

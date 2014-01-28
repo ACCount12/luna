@@ -1,7 +1,3 @@
-#define APC_WIRE_IDSCAN 1
-#define APC_WIRE_MAIN_POWER1 2
-#define APC_WIRE_MAIN_POWER2 3
-#define APC_WIRE_AI_CONTROL 4
 var/fillertext = {" Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur magna cupidatat do ullamco velit Excepteur consectetur sint do id esse est Duis quis ea cillum ut minim irure consequat. ullamco sint pariatur. dolor aliqua. laboris adipisicing ad nostrud qui Duis anim incididunt in eu commodo cupidatat minim ullamco sunt exercitation adipisicing proident, exercitation dolor sit "}
 // the Area Power Controller (APC), formerly Power Distribution Unit (PDU)
@@ -11,9 +7,9 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 // may be opened to change power cell
 // three different channels (lighting/equipment/environ) - may each be set to on, off, or auto
 
-
 //NOTE: STUFF STOLEN FROM AIRLOCK.DM thx
 
+#define APC_UPDATE_ICON_COOLDOWN 100 // 10 seconds
 
 /obj/machinery/power/apc
 	name = "area power controller"
@@ -54,54 +50,35 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 	var/environ_consumption = 0
 	var/crit = 0
 	var/wiresexposed = 0
-	var/apcwires = 15
+	var/apcwires = 15 // for del
 	var/eventoff = 0
+
+	var/longtermpower = 10
+	var/datum/wires/apc/wires = null
+
 //	luminosity = 1
 
-/proc/RandomAPCWires()
-	//to make this not randomize the wires, just set index to 1 and increment it in the flag for loop (after doing everything else).
-	var/list/apcwires = list(0, 0, 0, 0)
-	APCIndexToFlag = list(0, 0, 0, 0)
-	APCIndexToWireColor = list(0, 0, 0, 0)
-	APCWireColorToIndex = list(0, 0, 0, 0)
-	var/flagIndex = 1
-	for (var/flag=1, flag<16, flag+=flag)
-		var/valid = 0
-		while (!valid)
-			var/colorIndex = rand(1, 4)
-			if (apcwires[colorIndex]==0)
-				valid = 1
-				apcwires[colorIndex] = flag
-				APCIndexToFlag[flagIndex] = flag
-				APCIndexToWireColor[flagIndex] = colorIndex
-				APCWireColorToIndex[colorIndex] = flagIndex
-		flagIndex+=1
-	return apcwires
 
 /obj/machinery/power/apc/updateUsrDialog()
-	var/list/nearby = viewers(1, src)
 	if (!(stat & BROKEN)) // unbroken
-		for(var/mob/M in nearby)
-			if ((M.client && M.machine == src))
-				src.interact(M)
-	if (istype(usr, /mob/living/silicon))
-		if (!(usr in nearby))
-			if (usr.client && usr.machine==src) // && M.machine == src is omitted because if we triggered this by using the dialog, it doesn't matter if our machine changed in between triggering it and this - the dialog is probably still supposed to refresh.
-				src.interact(usr)
+		..()
 
-/obj/machinery/power/apc/updateDialog()
-	if(!(stat & BROKEN)) // unbroken
-		var/list/nearby = viewers(1, src)
-		for(var/mob/M in nearby)
-			if (M.client && M.machine == src)
-				src.interact(M)
-	AutoUpdateAI(src)
+/obj/machinery/var/updating_icon = 0
+/obj/machinery/proc/queue_icon_update(var/cooldown = 20)
+	if(!updating_icon)
+		updating_icon = 1
+		// Start the update
+		spawn(cooldown)
+			update_icon()
+			updating_icon = 0
 
-/obj/machinery/power/apc/New()
+/obj/machinery/power/apc/New(turf/loc, var/ndir, var/building=0)
 	..()
-
+	wires = new(src)
 	// offset 24 pixels in direction of dir
 	// this allows the APC to be embedded in a wall, yet still inside an area
+	if (building)
+		dir = ndir
 
 	tdir = dir		// to fix Vars bug
 	dir = SOUTH
@@ -129,7 +106,7 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 
 	// create a terminal object at the same position as original turf loc
 	// wires will attach to this
-	terminal = new/obj/machinery/power/terminal(src.loc)
+	terminal = new /obj/machinery/power/terminal(src.loc)
 	terminal.dir = tdir
 	terminal.master = src
 
@@ -262,12 +239,10 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 		icon_state = "apc0"
 
 		// if closed, update overlays for channel status
-
 		src.overlays = null
 
 		overlays += image('power.dmi', "apcox-[locked]")	// 0=blue 1=red
 		overlays += image('power.dmi', "apco3-[charging]") // 0=red, 1=yellow/black 2=green
-
 
 		if(operating)
 			overlays += image('power.dmi', "apco0-[equipment]")	// 0=red, 1=green, 2=blue
@@ -298,9 +273,6 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 			user << "\blue You detach the old wiring."
 		else if(repair_state == 4 && istype(W,/obj/item/weapon/cable_coil))
 			var/obj/item/weapon/cable_coil/S = W
-			if(S.CableType != /obj/cabling/power)
-				user << "This is the wrong cable type!"
-				return
 			if(!S.use(5))
 				user << "Not enough wiring"
 				return
@@ -373,11 +345,15 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 			if(prob(50))
 				emagged = 1
 				locked = 0
+				wiresexposed = 1
 				user << "You emag the APC interface."
 				update_icon()
 			else
 				user << "You fail to [ locked ? "unlock" : "lock"] the APC interface."
 	else
+		if (!opened && wiresexposed && IsWiresHackingTool(W))
+			return src.attack_hand(user)
+
 		var/aforce = W.force
 		src.health = max(0, src.health - aforce)
 		if (src.health <= 0)
@@ -392,10 +368,9 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 // attack with hand - remove cell (if cover open) or interact with the APC
 
 /obj/machinery/power/apc/attack_hand(mob/user)
-
 	add_fingerprint(user)
-
 	if(stat & BROKEN) return
+
 	if(opened && (!istype(user, /mob/living/silicon)))
 		if(cell)
 			cell.loc = usr
@@ -413,15 +388,15 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 			charging = 0
 			src.update_icon()
 
-	else
-		// do APC interaction
+	else if(wiresexposed)
+		wires.Interact(user)
+	else // do APC interaction
 		src.interact(user)
 
 
 
 /obj/machinery/power/apc/interact(mob/user)
-
-	if ( (get_dist(src, user) > 1 ))
+	if (get_dist(src, user) > 1 )
 		if (!istype(user, /mob/living/silicon))
 			user.machine = null
 			user << browse(null, "window=apc")
@@ -430,30 +405,8 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 			user << "AI control for this APC interface has been disabled."
 			user << browse(null, "window=apc")
 			return
-	if(wiresexposed && (!istype(user, /mob/living/silicon)))
-		user.machine = src
-		var/t1 = text("<B>Access Panel</B><br>\n")
-		var/list/apcwires = list(
-			"Orange" = 1,
-			"Dark red" = 2,
-			"White" = 3,
-			"Yellow" = 4,
-		)
-		for(var/wiredesc in apcwires)
-			var/is_uncut = src.apcwires & APCWireColorToFlag[apcwires[wiredesc]]
-			t1 += "[wiredesc] wire: "
-			if(!is_uncut)
-				t1 += "<a href='?src=\ref[src];apcwires=[apcwires[wiredesc]]'>Mend</a>"
-			else
-				t1 += "<a href='?src=\ref[src];apcwires=[apcwires[wiredesc]]'>Cut</a> "
-				t1 += "<a href='?src=\ref[src];pulse=[apcwires[wiredesc]]'>Pulse</a> "
-			t1 += "<br>"
-		t1 += text("<br>\n[(src.locked ? "The APC is locked." : "The APC is unlocked.")]<br>\n[(src.shorted ? "The APCs power has been shorted." : "The APC is working properly!")]<br>\n[(src.aidisabled ? "The 'AI control allowed' light is off." : "The 'AI control allowed' light is on.")]")
-		t1 += text("<p><a href='?src=\ref[src];close2=1'>Close</a></p>\n")
-		user << browse(t1, "window=apcwires")
-		onclose(user, "apcwires")
 
-	user.machine = src
+	user.set_machine(src)
 	var/t = "<TT><B>Area Power Controller</B> ([area.name])<HR>"
 
 	if(locked && (!istype(user, /mob/living/silicon)))
@@ -601,7 +554,6 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 	return src.apcElectrocute(user, prb, net)
 
 /obj/machinery/power/apc/proc/apcElectrocute(mob/user, prb, netnum)
-
 	if(stat == 2)
 		return 0
 	if(!prob(prb))
@@ -662,107 +614,11 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 		M.show_message("\red [user.name] was shocked by the [src.name]!", 3, "\red You hear a heavy electrical crack", 2)
 	return 1
 
-
-/obj/machinery/power/apc/proc/cut(var/wireColor)
-	var/wireFlag = APCWireColorToFlag[wireColor]
-	var/wireIndex = APCWireColorToIndex[wireColor]
-	apcwires &= ~wireFlag
-	switch(wireIndex)
-		if(APC_WIRE_MAIN_POWER1)
-			src.shock(usr, 50)			//this doesn't work for some reason, give me a while I'll figure it out
-			src.shorted = 1
-			src.updateUsrDialog()
-		if(APC_WIRE_MAIN_POWER2)
-			src.shock(usr, 50)
-			src.shorted = 1
-			src.updateUsrDialog()
-		if (APC_WIRE_AI_CONTROL)
-			if (src.aidisabled == 0)
-				src.aidisabled = 1
-			src.updateUsrDialog()
-//		if(APC_WIRE_IDSCAN)		nothing happens when you cut this wire, add in something if you want whatever
-
-
-/obj/machinery/power/apc/proc/mend(var/wireColor)
-	var/wireFlag = APCWireColorToFlag[wireColor]
-	var/wireIndex = APCWireColorToIndex[wireColor] //not used in this function
-	apcwires |= wireFlag
-	switch(wireIndex)
-		if(APC_WIRE_MAIN_POWER1)
-			if ((!src.isWireCut(APC_WIRE_MAIN_POWER1)) && (!src.isWireCut(APC_WIRE_MAIN_POWER2)))
-				src.shorted = 0
-				src.shock(usr, 50)
-				src.updateUsrDialog()
-		if(APC_WIRE_MAIN_POWER2)
-			if ((!src.isWireCut(APC_WIRE_MAIN_POWER1)) && (!src.isWireCut(APC_WIRE_MAIN_POWER2)))
-				src.shorted = 0
-				src.shock(usr, 50)
-				src.updateUsrDialog()
-		if (APC_WIRE_AI_CONTROL)
-			//one wire for AI control. Cutting this prevents the AI from controlling the door unless it has hacked the door through the power connection (which takes about a minute). If both main and backup power are cut, as well as this wire, then the AI cannot operate or hack the door at all.
-			//aidisabledDisabled: If 1, AI control is disabled until the AI hacks back in and disables the lock. If 2, the AI has bypassed the lock. If -1, the control is enabled but the AI had bypassed it earlier, so if it is disabled again the AI would have no trouble getting back in.
-			if (src.aidisabled == 1)
-				src.aidisabled = 0
-			src.updateUsrDialog()
-//		if(APC_WIRE_IDSCAN)		nothing happens when you cut this wire, add in something if you want whatever
-
-/obj/machinery/power/apc/proc/pulse(var/wireColor)
-	//var/wireFlag = apcWireColorToFlag[wireColor] //not used in this function
-	var/wireIndex = APCWireColorToIndex[wireColor]
-	switch(wireIndex)
-		if(APC_WIRE_IDSCAN)			//unlocks the APC for 30 seconds, if you have a better way to hack an APC I'm all ears
-			src.locked = 0
-			spawn(300)
-				src.locked = 1
-				src.updateDialog()
-		if (APC_WIRE_MAIN_POWER1)
-			if(shorted == 0)
-				shorted = 1
-			spawn(1200)
-				if(shorted == 1)
-					shorted = 0
-				src.updateDialog()
-		if (APC_WIRE_MAIN_POWER2)
-			if(shorted == 0)
-				shorted = 1
-			spawn(1200)
-				if(shorted == 1)
-					shorted = 0
-				src.updateDialog()
-		if (APC_WIRE_AI_CONTROL)
-			if (src.aidisabled == 0)
-				src.aidisabled = 1
-			src.updateDialog()
-			spawn(10)
-				if (src.aidisabled == 1)
-					src.aidisabled = 0
-				src.updateDialog()
-
-
 /obj/machinery/power/apc/Topic(href, href_list)
 	..()
-	if (((in_range(src, usr) && istype(src.loc, /turf))) || ((istype(usr, /mob/living/silicon) && !(src.aidisabled))))
-		usr.machine = src
-		if (href_list["apcwires"])
-			var/t1 = text2num(href_list["apcwires"])
-			if (!( istype(usr.equipped(), /obj/item/weapon/wirecutters) ))
-				usr << "You need wirecutters!"
-				return
-			if (src.isWireColorCut(t1))
-				src.mend(t1)
-			else
-				src.cut(t1)
-		else if (href_list["pulse"])
-			var/t1 = text2num(href_list["pulse"])
-			if (!istype(usr.equipped(), /obj/item/device/multitool))
-				usr << "You need a multitool!"
-				return
-			if (src.isWireColorCut(t1))
-				usr << "You can't pulse a cut wire."
-				return
-			else
-				src.pulse(t1)
-		else if (href_list["lock"])
+	if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon) && !src.aidisabled))
+		usr.set_machine(src)
+		if (href_list["lock"])
 			coverlocked = !coverlocked
 
 		else if (href_list["breaker"])
@@ -772,7 +628,6 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 
 		else if (href_list["eqp"])
 			var/val = text2num(href_list["eqp"])
-
 			equipment = (val==1) ? 0 : val
 
 			update_icon()
@@ -780,14 +635,12 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 
 		else if (href_list["lgt"])
 			var/val = text2num(href_list["lgt"])
-
 			lighting = (val==1) ? 0 : val
 
 			update_icon()
 			update()
 		else if (href_list["env"])
 			var/val = text2num(href_list["env"])
-
 			environ = (val==1) ? 0 :val
 
 			update_icon()
@@ -831,22 +684,10 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 		return 0
 
 /obj/machinery/power/apc/process()
-
-	if(stat & BROKEN)
+	if(stat & (BROKEN|MAINT))
 		return
 	if(!area.requires_power)
 		return
-
-
-	/*
-	if (equipment > 1) // off=0, off auto=1, on=2, on auto=3
-		use_power(src.equip_consumption, EQUIP)
-	if (lighting > 1) // off=0, off auto=1, on=2, on auto=3
-		use_power(src.light_consumption, LIGHT)
-	if (environ > 1) // off=0, off auto=1, on=2, on auto=3
-		use_power(src.environ_consumption, ENVIRON)
-
-	area.calc_lighting() */
 
 	lastused_light = area.usage(LIGHT)
 	lastused_equip = area.usage(EQUIP)
@@ -877,15 +718,12 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 			perapc = TerminalController.PowerPerAPC
 
 	if(cell && !shorted)
-
 		// draw power from cell as before
-
 		var/cellused = min(cell.charge, CELLRATE * lastused_total)	// clamp deduction to a max, amount left in cell
 		cell.use(cellused)
 
 		if(excess > 0 || perapc > lastused_total)		// if power excess, or enough anyway, recharge the cell
 														// by the same amount just used
-
 			cell.give(cellused)
 			AddLoad(cellused/CELLRATE)		// add the load used to recharge the cell
 
@@ -893,7 +731,6 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 		else		// no excess, and not enough per-apc
 
 			if( (cell.charge/CELLRATE+perapc) >= lastused_total)		// can we draw enough from cell+grid to cover last usage?
-
 				cell.charge = min(cell.maxcharge, cell.charge + CELLRATE * perapc)	//recharge with what we can
 				AddLoad(perapc)		// so draw what we can from the grid
 				charging = 0
@@ -908,22 +745,28 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 
 		// set channels depending on how much charge we have left
 
-		if(cell.charge <= 0)					// zero charge, turn all off
+		// Allow the APC to operate as normal if the cell can charge
+		if(charging && longtermpower < 10)
+			longtermpower += 1
+		else if(longtermpower > -10)
+			longtermpower -= 2
+
+		if(cell.charge <= 0)								// zero charge, turn all off
 			equipment = autoset(equipment, 0)
 			lighting = autoset(lighting, 0)
 			environ = autoset(environ, 0)
 			area.poweralert(0, src)
-		else if(cell.percent() < 15)			// <15%, turn off lighting & equipment
+		else if(cell.percent() < 15 && longtermpower < 0)	// <15%, turn off lighting & equipment
 			equipment = autoset(equipment, 2)
 			lighting = autoset(lighting, 2)
 			environ = autoset(environ, 1)
 			area.poweralert(0, src)
-		else if(cell.percent() < 30)			// <30%, turn off lighting
+		else if(cell.percent() < 30 && longtermpower < 0)	// <30%, turn off lighting
 			equipment = autoset(equipment, 1)
 			lighting = autoset(lighting, 2)
 			environ = autoset(environ, 1)
 			area.poweralert(0, src)
-		else									// otherwise all can be on
+		else												// otherwise all can be on
 			equipment = autoset(equipment, 1)
 			lighting = autoset(lighting, 1)
 			environ = autoset(environ, 1)
@@ -965,7 +808,6 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 			chargecount = 0
 
 	else // no cell, switch everything off
-
 		charging = 0
 		chargecount = 0
 		equipment = autoset(equipment, 0)
@@ -976,16 +818,15 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 	// update icon & area power if anything changed
 
 	if(last_lt != lighting || last_eq != equipment || last_en != environ || last_ch != charging)
-		update_icon()
+		queue_icon_update(100)
 		update()
 
-	src.updateDialog()
+	//src.updateDialog()
 
 // val 0=off, 1=off(auto) 2=on 3=on(auto)
 // on 0=off, 1=on, 2=autooff
 
 /proc/autoset(var/val, var/on)
-
 	if(on==0)
 		if(val==2)			// if on, return off
 			return 0
@@ -1051,3 +892,5 @@ Do deserunt Ut cillum in ad Duis et laboris dolore do voluptate anim Excepteur m
 					L.on = 1
 					L.broken()
 					sleep(1)
+
+#undef APC_UPDATE_ICON_COOLDOWN

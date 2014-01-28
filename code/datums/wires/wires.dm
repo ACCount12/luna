@@ -298,3 +298,7 @@ proc/GetWireColorByFlag(var/flag, var/holder_type)
 			return wire
 
 	return null
+
+/datum/wires/proc/Shuffle()
+	wires_status = 0
+	GenerateWires()

@@ -1,5 +1,9 @@
 /mob/living/silicon/pai/death(gibbed)
 	if(stat == DEAD)	return
+
+	living_mob_list -= src
+	dead_mob_list |= src
+
 	stat = DEAD
 	canmove = 0
 	if(blind)	blind.layer = 0

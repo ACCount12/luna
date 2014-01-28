@@ -1,5 +1,5 @@
-
 // fun if you want to typecast humans/monkeys/etc without writing long path-filled lines.
+
 /proc/ishuman(A)
 	if(istype(A, /mob/living/carbon/human))
 		return 1
@@ -10,10 +10,10 @@
 		return 1
 	return 0
 
-/*proc/isbrain(A)
+/proc/isbrain(A)
 	if(A && istype(A, /mob/living/carbon/brain))
 		return 1
-	return 0*/
+	return 0
 
 /proc/isalien(A)
 	if(istype(A, /mob/living/carbon/alien))
@@ -45,7 +45,7 @@
 		return 1
 	return 0
 
-/*proc/isanimal(A)
+/proc/isanimal(A)
 	if(istype(A, /mob/living/simple_animal))
 		return 1
 	return 0
@@ -83,7 +83,7 @@
 /proc/isclown(A)
 	if(istype(A, /mob/living/simple_animal/hostile/retaliate/clown))
 		return 1
-	return 0*/
+	return 0
 
 /proc/isAI(A)
 	if(istype(A, /mob/living/silicon/ai))

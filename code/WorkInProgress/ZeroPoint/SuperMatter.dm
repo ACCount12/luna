@@ -49,10 +49,10 @@
 	var/datum/gas_mixture/removed = env.remove(transfer_moles)
 
 	previousdet = det
-	det += (removed.temperature - 1100) / 150
+	det += (removed.temperature - 1150) / 150
 	det = max(det, 0)
 
-	if(det > 0 && removed.temperature > 1100) // while the core is still damaged and it's still worth noting its status
+	if(det > 0 && removed.temperature > 1150) // while the core is still damaged and it's still worth noting its status
 		if((world.realtime - lastwarning) / 10 >= warningtime)
 			lastwarning = world.realtime
 			if(explosiondet - det <= 300)
@@ -81,7 +81,7 @@
 	//Get the collective laser power
 	for(var/dir in cardinal)
 		var/turf/T = get_step(L, dir)
-		for(var/obj/beam/e_beam/item in T)
+		for(var/obj/effect/beam/e_beam/item in T)
 			power += item.power*2
 
 	//Ok, 100% oxygen atmosphere = best reaction

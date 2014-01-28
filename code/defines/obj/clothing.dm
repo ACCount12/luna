@@ -24,6 +24,8 @@
 	name = "Ears"
 	w_class = 1.0
 	throwforce = 2
+	slot_flags = SLOT_EARS
+
 
 /obj/item/clothing/ears/earmuffs
 	name = "earmuffs"
@@ -31,28 +33,8 @@
 	protective_temperature = 500
 	item_state = "earmuffs"
 
-// NO GLOVES NO LOVES
-
-/obj/item/clothing/gloves
-	name = "gloves"
-	w_class = 2.0
-	icon = 'gloves.dmi'
-	protective_temperature = 400
-	heat_transfer_coefficient = 0.25
-	siemens_coefficient = 0.50
-	var/wired = 0
-	var/obj/item/weapon/cell/cell = 0
-	body_parts_covered = HANDS
-	flags = FPRINT
-
 
 // HATS. OH MY WHAT A FINE CHAPEAU, GOOD SIR.
-
-/obj/item/clothing/head
-	name = "head"
-	icon = 'hats.dmi'
-	body_parts_covered = HEAD
-
 /obj/item/clothing/head/bio_hood
 	name = "bio hood"
 	icon_state = "bio_hood"
@@ -89,20 +71,17 @@
 /obj/item/clothing/head/helmet/swat
 	name = "SWAT helmet"
 	icon_state = "swat"
-	flags = FPRINT | HEADCOVERSEYES
 	item_state = "swat"
 
 /obj/item/clothing/head/helmet/thunderdome
 	name = "thunderdome helmet"
 	icon_state = "thunderdome"
-	flags = FPRINT | HEADCOVERSEYES
 	item_state = "thunderdome"
 
 
 /obj/item/clothing/head/helmet/plump
 	name = "plump helmet helmet"
 	icon_state = "plump"
-	flags = FPRINT | HEADCOVERSEYES
 	item_state = "plump"
 
 /obj/item/clothing/head/helmet/cargosoft
@@ -121,18 +100,17 @@
 	item_state = "that"
 
 /obj/item/clothing/head/helmet/wardencap
-	name = "Warden Cap"
+	name = "warden cap"
 	icon_state = "wardencap"
 	item_state = "that"
 
 // MASK WAS THAT MOVIE WITH THAT GUY WITH THE MESSED UP FACE. WHAT'S HIS NAME . . . JIM CARREY, I THINK.
-
 /obj/item/clothing/mask
 	name = "Mask"
 	icon = 'masks.dmi'
 	var/vchange = 0
 	body_parts_covered = HEAD
-	flags = FPRINT
+	slot_flags = SLOT_MASK
 
 /obj/item/clothing/mask/gas
 	name = "gas mask"
@@ -146,7 +124,6 @@
 	heat_transfer_coefficient = 0.01
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
-
 
 /obj/item/clothing/mask/gas/emergency
 	name = "emergency gas mask"
@@ -176,7 +153,7 @@
 	gas_transfer_coefficient = 0.10
 	permeability_coefficient = 0.50
 
-/obj/item/clothing/mask/breath/milbreath
+/obj/item/clothing/mask/breath/mil
 	name = "military breath mask"
 	desc = "A hard, dark plastic version of the normal breath mask, usually used by military personnel. Not rated for operations in vacuum."
 	icon_state = "milbreath"
@@ -243,6 +220,7 @@
 	icon = 'shoes.dmi'
 	var/chained = 0
 	slowdown = -1
+	slot_flags = SLOT_FEET
 
 	body_parts_covered = FEET
 
@@ -268,6 +246,7 @@
 	var/airflowprot = 0
 	var/reflectchance = 0
 	var/blood_overlay_type
+	slot_flags = SLOT_OCLOTHING
 
 /obj/item/clothing/suit/bio_suit
 	name = "bio suit"

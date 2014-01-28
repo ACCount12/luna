@@ -174,3 +174,32 @@
 	desc = "A helmet made out of chitinous alien hide."
 	flags = FPRINT | BLOCKHAIR
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
+
+
+
+/obj/item/clothing/head/helmet/rebel
+	name = "helmet"
+	desc = "Protects the head from impacts."
+	icon_state = "rebel_helm"
+	flags = FPRINT | HEADCOVERSEYES
+	item_state = "rebel_helm"
+	armor = list(melee = 50, bullet = 15, laser = 30,energy = 20, bomb = 25, bio = 0, rad = 30)
+	flags_inv = HIDEEARS
+	siemens_coefficient = 0.7
+
+/obj/item/clothing/head/helmet/rebel/pilot
+	icon_state = "rebel_pilot_helm"
+	item_state = "rebel_pilot_helm"
+
+/obj/item/clothing/head/helmet/jedi
+	name = "hood"
+	desc = "A traditional hood."
+	icon_state = "jedi_hood"
+	item_state = "jedi_hood"
+	armor = list(melee = 50, bullet = 15, laser = 50,energy = 10, bomb = 25, bio = 0, rad = 0)
+	flags_inv = HIDEEARS
+	siemens_coefficient = 0.7
+
+/obj/item/clothing/head/helmet/jedi/sith
+	icon_state = "sith_hood"
+	item_state = "sith_hood"

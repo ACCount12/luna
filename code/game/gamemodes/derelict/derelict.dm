@@ -49,18 +49,18 @@
 	del player.wear_suit
 	del player.w_uniform
 
-	player.equip_if_possible(new /obj/item/device/radio/headset(player), player.slot_ears)
-	player.equip_if_possible(new /obj/item/clothing/suit/fire(player), player.slot_wear_suit)
-	player.equip_if_possible(new /obj/item/clothing/under/color/black(player), player.slot_w_uniform)
-	player.equip_if_possible(new /obj/item/clothing/mask/gas(player), player.slot_wear_mask)
-	player.equip_if_possible(new /obj/item/weapon/tank/emergency_oxygen/engi(player), player.slot_l_store)
-	player.equip_if_possible(new /obj/item/weapon/storage/belt/utility(player), player.slot_belt)
-	player.equip_if_possible(new /obj/item/clothing/head/helmet/hardhat/red(player), player.slot_head)
+	player.equip_if_possible(new /obj/item/device/radio/headset(player), slot_ears)
+	player.equip_if_possible(new /obj/item/clothing/suit/fire(player), slot_wear_suit)
+	player.equip_if_possible(new /obj/item/clothing/under/color/black(player), slot_w_uniform)
+	player.equip_if_possible(new /obj/item/clothing/mask/gas(player), slot_wear_mask)
+	player.equip_if_possible(new /obj/item/weapon/tank/emergency_oxygen/engi(player), slot_l_store)
+	player.equip_if_possible(new /obj/item/weapon/storage/belt/utility(player), slot_belt)
+	player.equip_if_possible(new /obj/item/clothing/head/helmet/hardhat/red(player), slot_head)
 
-	player.equip_if_possible(new /obj/item/weapon/storage/backpack(player), player.slot_back)
-	player.equip_if_possible(new /obj/item/weapon/storage/box/circuity(player), player.slot_in_backpack)
-	player.equip_if_possible(new /obj/item/weapon/cell/high(player), player.slot_in_backpack)
-	player.equip_if_possible(new /obj/item/weapon/cell/high(player), player.slot_in_backpack)
+	player.equip_if_possible(new /obj/item/weapon/storage/backpack(player), slot_back)
+	player.equip_if_possible(new /obj/item/weapon/storage/box/circuity(player), slot_in_backpack)
+	player.equip_if_possible(new /obj/item/weapon/cell/high(player), slot_in_backpack)
+	player.equip_if_possible(new /obj/item/weapon/cell/high(player), slot_in_backpack)
 
 	player.wear_id = new /obj/item/weapon/card/id(player)
 	player.wear_id.registered = player.real_name
@@ -68,15 +68,15 @@
 	player.wear_id.name = "[player.real_name]'s Scavenger ID"
 	player.wear_id.layer = 40
 
-	if(prob(55)) player.equip_if_possible(new /obj/item/weapon/storage/toolbox/mechanical(player), player.slot_l_hand)
-	else		 player.equip_if_possible(new /obj/item/weapon/storage/toolbox/electrical(player), player.slot_l_hand)
+	if(prob(55)) player.equip_if_possible(new /obj/item/weapon/storage/toolbox/mechanical(player), slot_l_hand)
+	else		 player.equip_if_possible(new /obj/item/weapon/storage/toolbox/electrical(player), slot_l_hand)
 
-	if(prob(50)) player.equip_if_possible(new /obj/item/clothing/shoes/magnetic(player), player.slot_shoes)
-	else		 player.equip_if_possible(new /obj/item/clothing/shoes/black(player), player.slot_shoes)
+	if(prob(50)) player.equip_if_possible(new /obj/item/clothing/shoes/magnetic(player), slot_shoes)
+	else		 player.equip_if_possible(new /obj/item/clothing/shoes/black(player), slot_shoes)
 
-	if(prob(45)) player.equip_if_possible(new /obj/item/device/multitool(player), player.slot_r_store)
+	if(prob(45)) player.equip_if_possible(new /obj/item/device/multitool(player), slot_r_store)
 
-	if(prob(40)) player.equip_if_possible(new /obj/item/clothing/gloves/yellow(player), player.slot_gloves)
+	if(prob(40)) player.equip_if_possible(new /obj/item/clothing/gloves/yellow(player), slot_gloves)
 
 	player.update_clothing()
 

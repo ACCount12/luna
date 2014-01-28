@@ -124,6 +124,7 @@
 	var/lastKnownCkey = null
 	var/lastKnownID = null
 	var/obj/structure/stool/bed/buckled = null
+
 	var/obj/item/weapon/handcuffs/handcuffed = null
 	var/obj/item/l_hand = null
 	var/obj/item/r_hand = null
@@ -131,6 +132,7 @@
 	var/obj/item/weapon/tank/internal = null
 	var/obj/item/weapon/storage/s_active = null
 	var/obj/item/clothing/mask/wear_mask = null
+
 	var/r_epil = 0
 	var/r_ch_cou = 0
 	var/r_Tourette = 0
@@ -158,10 +160,12 @@
 	var/logged_in = 0
 
 	var/underwear = 1
-	var/be_syndicate = 0
+
+/*	var/be_syndicate = 0
 	var/be_nuke_agent = 0
 	var/be_takeover_agent = 0
-	var/be_random_name = 0
+	var/be_random_name = 0*/
+
 	var/const/blindness = 1
 	var/const/deafness = 2
 	var/const/muteness = 4
@@ -171,13 +175,6 @@
 	var/radiation = 0.0
 
 	var/list/mutations = list()
-///mob/telekinesis = 1
-///mob/firemut = 2
-///mob/xray = 4
-///mob/hulk = 8
-///mob/clumsy = 16
-///mob/obese = 32
-///mob/husk = 64
 
 	var/voice_name = "unidentifiable voice"
 	var/voice_message = null
@@ -191,7 +188,7 @@
 	var/status_flags = CANSTUN|CANWEAKEN|CANPARALYSE|CANPUSH	//bitflags defining which status effects can be inflicted (replaces canweaken, canstun, etc)
 	var/area/lastarea = null
 	var/digitalcamo = 0 // Can they be tracked by the AI?
-
+	var/faction = "neutral" //Used for checking whether hostile simple animals will attack you, possibly more stuff later
 
 /mob/proc/Cell()
 	set category = "Admin"
@@ -1024,7 +1021,7 @@ mob/verb/turnwest()
 		if("Reset Machine")
 			usr.machine = null
 		if("internal")
-			if ((!( usr.stat ) && usr.canmove && !( usr.restrained() )))
+			if (!usr.stat && usr.canmove && !usr.restrained())
 				usr.internal = null
 		if("pull")
 			usr.pulling = null
@@ -1045,7 +1042,7 @@ mob/verb/turnwest()
 			if (usr.next_move < world.time)
 				return
 			usr.next_move = world.time + 20
-			if ((!( usr.stat ) && usr.canmove && !( usr.restrained() )))
+			if (!usr.stat && usr.canmove && !usr.restrained())
 				for(var/obj/O in usr.requests)
 					del(O)
 				for(var/obj/item/weapon/grab/G in usr.grabbed_by)
@@ -1119,7 +1116,7 @@ mob/verb/turnwest()
 	user.db_click(name, using)
 	return
 
-/obj/equip_e/proc/process()
+/obj/equip_e/process()
 	return
 
 /obj/equip_e/proc/done()
@@ -1135,11 +1132,23 @@ mob/verb/turnwest()
 	..()
 	return
 
-/mob/New()
-	health = health_full
-	mob_list += src
+/mob/Del()
+	mob_list -= src
+	dead_mob_list -= src
+	living_mob_list -= src
+	//ghostize()
 	..()
 
+var/next_mob_id = 0
+/mob/New()
+	health = health_full
+	tag = "mob_[next_mob_id++]"
+	mob_list += src
+	if(stat == DEAD)
+		dead_mob_list += src
+	else
+		living_mob_list += src
+	..()
 
 
 /mob/living/carbon/human/Topic(href, href_list)
@@ -1268,6 +1277,9 @@ mob/verb/turnwest()
 	return
 
 /mob/proc/death(gibbed)
+	living_mob_list -= src
+	dead_mob_list |= src
+
 	if (mind)
 		var/tod = time2text(world.realtime,"hh:mm:ss") //weasellos time of death patch
 		mind.store_memory("Time of death: [tod]", 0)
@@ -1389,7 +1401,7 @@ mob/verb/turnwest()
 	return
 
 /mob/proc/show_inv(mob/user as mob)
-	user.machine = src
+	user.set_machine(src)
 	var/dat = text("<TT>\n<B><FONT size=3>[]</FONT></B><BR>\n\t<B>Head(Mask):</B> <A href='?src=\ref[];item=mask'>[]</A><BR>\n\t<B>Left Hand:</B> <A href='?src=\ref[];item=l_hand'>[]</A><BR>\n\t<B>Right Hand:</B> <A href='?src=\ref[];item=r_hand'>[]</A><BR>\n\t<B>Back:</B> <A href='?src=\ref[];item=back'>[]</A><BR>\n\t[]<BR>\n\t[]<BR>\n\t[]<BR>\n\t<A href='?src=\ref[];item=pockets'>Empty Pockets</A><BR>\n<A href='?src=\ref[];mach_close=mob[]'>Close</A><BR>\n</TT>", name, src, (wear_mask ? text("[]", wear_mask) : "Nothing"), src, (l_hand ? text("[]", l_hand) : "Nothing"), src, (r_hand ? text("[]", r_hand) : "Nothing"), src, (back ? text("[]", back) : "Nothing"), ((istype(wear_mask, /obj/item/clothing/mask) && istype(back, /obj/item/weapon/tank) && !( internal )) ? text(" <A href='?src=\ref[];item=internal'>Set Internal</A>", src) : ""), (internal ? text("<A href='?src=\ref[];item=internal'>Remove Internal</A>", src) : ""), (handcuffed ? text("<A href='?src=\ref[];item=handcuff'>Handcuffed</A>", src) : text("<A href='?src=\ref[];item=handcuff'>Not Handcuffed</A>", src)), src, user, name)
 	user << browse(dat, text("window=mob[];size=325x500", name))
 	onclose(user, "mob[name]")
@@ -1937,21 +1949,24 @@ mob/verb/turnwest()
 /client/Move(n, direct)
 	if(istype(mob, /mob/dead))
 		return mob.Move(n,direct)
-	if (moving)
+	if(moving)
 		return 0
-	if (world.time < move_delay)
+	if(world.time < move_delay)
 		return
-	if (!( mob ))
+	if(!mob)
 		return
-	if (mob.stat == 2)
+	if(mob.stat == 2)
 		return
 	if(istype(mob, /mob/living/silicon/ai))
 		return AIMove(n,direct,mob)
-	if (mob.monkeyizing)
+	if(mob.monkeyizing)
 		return
 
+	if(mob.buckled)	//if we're buckled to something, tell it we moved.
+		return mob.buckled.relaymove(mob, direct)
+
 	var/is_monkey = istype(mob, /mob/living/carbon/monkey)
-	if (locate(/obj/item/weapon/grab, locate(/obj/item/weapon/grab, mob.grabbed_by.len)))
+	if(locate(/obj/item/weapon/grab, locate(/obj/item/weapon/grab, mob.grabbed_by.len)))
 		var/list/grabbing = list(  )
 		if (istype(mob.l_hand, /obj/item/weapon/grab))
 			var/obj/item/weapon/grab/G = mob.l_hand
@@ -1979,8 +1994,7 @@ mob/verb/turnwest()
 							del(G)
 						else
 							return
-	if (mob.canmove)
-
+	if(mob.canmove)
 		if(mob.m_intent == "face")
 			mob.dir = direct
 
@@ -2098,8 +2112,7 @@ mob/verb/turnwest()
 	var/isbanned = CheckBan(src)
 	if (isbanned)
 		log_access("Failed Login: [src] ID:[src.computer_id] / IP: [address] - Banned")
-		message_admins("\blue Failed Login: [src]  ID:[src.computer_id] / IP:[address] - Banned")
-		alert(src,"You have been banned.\nReason : [isbanned]","You're banned!","OK")
+		message_admins("\blue Failed Login: [src]  ID:[src.computer_id] / IP:[address] - Banned. ALERT! OLD BANS SYSTEM FIRED! REPORT THIS TO CODER!")
 		del(src)
 	if(IsGuestKey(src.key))
 		alert(src,"Animus doesn't allow guest accounts to play. Please go to http://www.byond.com/ and register for a key.","Guest","OK")
@@ -2118,10 +2131,10 @@ mob/verb/turnwest()
 	//////////////Added by Strumpetplaya - Alert Changes - Draw current lights for new players joining
 	//If this is causing lag, may need to change the light spawning code to create a list to use instead
 	//of using the world list.
-	for(var/obj/alertlighting/firelight/F in world)
+	for(var/obj/effect/alertlighting/firelight/F in world)
 		var/image/imagelight = image('alert.dmi',F,icon_state = "blue")
 		src << imagelight
-	for(var/obj/alertlighting/atmoslight/G in world)
+	for(var/obj/effect/alertlighting/atmoslight/G in world)
 		var/image/imagelight = image('alert.dmi',G,icon_state = "blueold")
 		src << imagelight
 	//////////////End Strumpetplaya Add
@@ -2291,7 +2304,7 @@ mob/verb/turnwest()
 	L += contents
 	for(var/obj/item/weapon/storage/S in contents)
 		L += S.return_inv()
-	for(var/obj/item/weapon/secstorage/S in contents)
+	for(var/obj/item/weapon/storage/secure/S in contents)
 		L += S.return_inv()
 	for(var/obj/item/weapon/gift/G in contents)
 		L += G.gift
@@ -2308,7 +2321,7 @@ mob/verb/turnwest()
 	L += contents
 	for(var/obj/item/weapon/storage/S in contents)
 		L += S.return_inv()
-	for(var/obj/item/weapon/secstorage/S in contents)
+	for(var/obj/item/weapon/storage/secure/S in contents)
 		L += S.return_inv()
 	for(var/obj/item/weapon/gift/G in contents)
 		L += G.gift
@@ -2418,6 +2431,9 @@ mob/verb/turnwest()
 		M.loc = null // HACK, but whatever, this works
 
 		if(!M)
+			return 0
+
+		if(!M.hud_used.station_explosion)
 			return 0
 
 		var/obj/effect/screen/boom = M.hud_used.station_explosion

@@ -578,7 +578,7 @@
 		del(src)
 		return
 
-/*obj/item/weapon/reagent_containers/food/snacks/grown/killertomato
+/obj/item/weapon/reagent_containers/food/snacks/grown/killertomato
 	seed = "/obj/item/seeds/killertomatoseed"
 	name = "killer-tomato"
 	desc = "I say to-mah-to, you say tom-mae-to... OH GOD IT'S EATING MY LEGS!!"
@@ -596,7 +596,7 @@
 	new /mob/living/simple_animal/tomato(user.loc)
 	del(src)
 
-	user << "<span class='notice'>You plant the killer-tomato.</span>"*/
+	user << "<span class='notice'>You plant the killer-tomato.</span>"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato
 	seed = "/obj/item/seeds/bloodtomatoseed"
@@ -816,7 +816,7 @@
 			reagents.add_reagent("nutriment", 2+round((potency / 10), 1))
 			bitesize = 1+round(reagents.total_volume / 2, 1)
 
-/*obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/walkingmushroom
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/walkingmushroom
 	seed = "/obj/item/seeds/walkingmushroom"
 	name = "walking mushroom"
 	desc = "<I>Plumus Locomotus</I>: The beginning of the great walk."
@@ -833,7 +833,7 @@
 	new /mob/living/simple_animal/mushroom(user.loc)
 	del(src)
 
-	user << "<span class='notice'>You plant the walking mushroom.</span>"*/
+	user << "<span class='notice'>You plant the walking mushroom.</span>"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chanterelle
 	seed = "/obj/item/seeds/chantermycelium"

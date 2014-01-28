@@ -5,6 +5,7 @@
 	item_state = "headset"
 	g_amt = 0
 	m_amt = 75
+	slot_flags = SLOT_EARS
 
 	var/protective_temperature = 0
 	var/translate_binary = 0

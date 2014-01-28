@@ -185,7 +185,7 @@ IMPLANTER
 
 /obj/item/weapon/implantpad/attack_self(mob/user as mob)
 
-	user.machine = src
+	user.set_machine(src)
 	var/dat = "<B>Implant Mini-Computer:</B><HR>"
 	if (src.case)
 		if (src.case.imp)
@@ -254,7 +254,7 @@ No Implant Specifics"}
 	if (usr.stat)
 		return
 	if (usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf)))
-		usr.machine = src
+		usr.set_machine(src)
 		if (href_list["freq"])
 			if (istype(src.case, /obj/item/weapon/implantcase) && istype(src.case.imp, /obj/item/weapon/implant/tracking))
 				var/obj/item/weapon/implant/tracking/T = src.case.imp

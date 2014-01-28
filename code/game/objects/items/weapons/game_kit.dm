@@ -57,7 +57,7 @@ THAT STUPID GAME KIT
 	if (flag)
 		return ..()
 	else
-		user.machine = src
+		user.set_machine(src)
 		if (!( src.data ))
 			update()
 		user << browse(src.data, "window=game_kit")

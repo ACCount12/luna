@@ -166,7 +166,7 @@
 		user << browse(null, "window=turbine")
 		return
 
-	user.machine = src
+	user.set_machine(src)
 
 	var/t = "<TT><B>Gas Turbine Generator</B><HR><PRE>"
 
@@ -271,7 +271,7 @@
 	return
 
 /obj/machinery/computer/turbine_computer/attack_hand(var/mob/user as mob)
-	user.machine = src
+	user.set_machine(src)
 	var/dat
 	if(src.compressor)
 		dat += {"<BR><B>Gas turbine remote control system</B><HR>
@@ -298,7 +298,7 @@
 	if(..())
 		return
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
-		usr.machine = src
+		usr.set_machine(src)
 
 		if( href_list["view"] )
 			usr.client.eye = src.compressor

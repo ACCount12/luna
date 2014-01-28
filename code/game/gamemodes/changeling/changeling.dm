@@ -2,17 +2,8 @@
 	name = "changeling"
 	config_tag = "changeling"
 
-	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
-	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
-
-	var/changelingdeathticker = 0
-
-/datum/game_mode/changeling/pre_setup()
-		// Can't pick a changeling here, as we don't want him to then become the AI.
-	return 1
 
 /datum/game_mode/changeling/post_setup()
-
 	var/list/possible_changelings = get_possible_changelings()
 
 	if(possible_changelings.len>0)
@@ -35,20 +26,19 @@
 
 /datum/game_mode/changeling/proc/get_possible_changelings()
 	var/list/candidates = list()
-	for(var/mob/living/carbon/player in world)
+	for(var/mob/living/carbon/player in mob_list)
 		if (player.client)
-			if(player.be_syndicate)
+			if(BE_CHANGELING in player.client.prefs)
 				candidates += player.mind
 
 	if(candidates.len < 1)
-		for(var/mob/living/carbon/player in world)
+		for(var/mob/living/carbon/player in mob_list)
 			if (player.client)
 				candidates += player.mind
 
 	return candidates
 
 //Centcom Update - in testing, copied mostly from Wizard.
-
 /datum/game_mode/changeling/send_intercept()
 	var/intercepttext = "<FONT size = 3><B>Cent. Com. Update</B> Requested staus information:</FONT><HR>"
 	intercepttext += "<B> Cent. Com has recently been contacted by the following syndicate affiliated organisations in your area, please investigate any information you may have:</B>"
@@ -77,24 +67,6 @@
 
 	command_alert("Summary downloaded and printed out at all communications consoles.", "Enemy communication intercept. Security Level Elevated.")
 	world << sound('intercept.ogg')
-
-/datum/game_mode/changeling/check_finished()
-	if(!changeling)
-		return 1
-
-	if(!istype(changeling.current,/mob/living/carbon))
-		return 1
-
-	if(changeling.current.stat==2)
-		if(changelingdeathticker>=600)
-			return 1
-		changelingdeathticker++
-
-	if(changeling.current.stat!=2)
-		if(changelingdeathticker)
-			changelingdeathticker = 0
-
-	return ..()
 
 /datum/game_mode/changeling/declare_completion()
 	for(var/datum/mind/mind in changelings)

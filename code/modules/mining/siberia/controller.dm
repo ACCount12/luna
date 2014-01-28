@@ -1,7 +1,7 @@
 var/datum/siberia_controller/siberia_controller
 
 /datum/siberia_controller
-	var/list/prisoners = list("Unknown" = 87) // prisoner.name = points
+	var/list/prisoners = list("Unknown" = 87)
 	var/list/maint_doors
 	var/obj/machinery/mineral/stacking_machine/stacker
 	var/maint_status = "closed"
@@ -16,8 +16,7 @@ var/datum/siberia_controller/siberia_controller
 
 
 	proc/stacker_drop()
-		if(stacker)
-			stacker.drop_stacks()
+		if(stacker)	stacker.drop_stacks()
 
 	proc/toggle_maint()
 		if(maint_status == "closed")
@@ -29,7 +28,7 @@ var/datum/siberia_controller/siberia_controller
 				D.close()
 			maint_status = "closed"
 
-	proc/get_points(var/name = "Unknown") // Returns points by prisoner's name.
+	proc/get_points(var/name = "Unknown")
 		if(!(name in prisoners))
 			prisoners[name] = 500 // If there is no prisoner, create him!
 		return prisoners[name]

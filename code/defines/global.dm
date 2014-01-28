@@ -1,16 +1,9 @@
 var/global
-	obj/datacore/data_core = null
+	obj/effect/datacore/data_core = null
 	obj/overlay/plmaster = null
 	obj/overlay/slmaster = null
 
 	//obj/hud/main_hud1 = null
-
-	list/machines = list()
-	list/processing_items = list()
-	list/processing_others = list() // The few exceptions that don't fit in the other lists
-	list/processing_turfs = list()
-	list/active_diseases = list()
-		//items that ask to be called every cycle
 
 	defer_cables_rebuild = 0		// true if all unified networks will be rebuilt on post-event
 
@@ -178,17 +171,20 @@ var
 	//Routing table used for networking
 	//datum/rtable/routingtable = new /datum/rtable()
 
+/** OUTDATED BECAUSE WIRES DATUMS. USE WIRES DATUMS! **/
 	//airlockWireColorToIndex takes a number representing the wire color, e.g. the orange wire is always 1, the dark red wire is always 2, etc. It returns the index for whatever that wire does.
 	//airlockIndexToWireColor does the opposite thing - it takes the index for what the wire does, for example AIRLOCK_WIRE_IDSCAN is 1, AIRLOCK_WIRE_POWER1 is 2, etc. It returns the wire color number.
 	//airlockWireColorToFlag takes the wire color number and returns the flag for it (1, 2, 4, 8, 16, etc)
-//	list/airlockWireColorToFlag = RandomAirlockWires()
-//	list/airlockIndexToFlag
-//	list/airlockIndexToWireColor
-//	list/airlockWireColorToIndex
-	list/APCWireColorToFlag = RandomAPCWires()
+/*	list/airlockWireColorToFlag = RandomAirlockWires()
+	list/airlockIndexToFlag
+	list/airlockIndexToWireColor
+	list/airlockWireColorToIndex*/
+	list/APCWireColorToFlag //= RandomAPCWires()
 	list/APCIndexToFlag
 	list/APCIndexToWireColor
 	list/APCWireColorToIndex
+
+
 
 	const/SPEED_OF_LIGHT = 3e8 //not exact but hey!
 	const/SPEED_OF_LIGHT_SQ = 9e+16

@@ -22,8 +22,8 @@
 		var/obj/mecha/Mech = O
 		if( Mech.occupant )
 			turretTargets |= Mech
-//	else if(istype(O,/mob/living/simple_animal))
-//		turretTargets |= O
+	else if(istype(O,/mob/living/simple_animal))
+		turretTargets |= O
 	return 1
 
 /area/turret_protected/Exited(O)
@@ -142,11 +142,11 @@
 			var/obj/mecha/ME = T
 			if( ME.occupant )
 				return 1
-//		else if(istype(T,/mob/living/simple_animal))
-//			var/mob/living/simple_animal/A = T
-//			if( !A.stat )
-//				if(lasers)
-//					return 1
+		else if(istype(T,/mob/living/simple_animal))
+			var/mob/living/simple_animal/A = T
+			if( !A.stat )
+				if(lasers)
+					return 1
 	return 0
 
 /obj/machinery/turret/proc/get_new_target()
@@ -159,9 +159,9 @@
 	for(var/obj/mecha/M in protected_area.turretTargets)
 		if(M.occupant)
 			new_targets += M
-//	for(var/mob/living/simple_animal/M in protected_area.turretTargets)
-//		if(!M.stat)
-//			new_targets += M
+	for(var/mob/living/simple_animal/M in protected_area.turretTargets)
+		if(!M.stat)
+			new_targets += M
 	if(new_targets.len)
 		new_target = pick(new_targets)
 	return new_target
@@ -408,18 +408,18 @@
 	popup.open()
 
 
-/*obj/machinery/turret/attack_animal(mob/living/simple_animal/M as mob)
+/obj/machinery/turret/attack_animal(mob/living/simple_animal/M as mob)
 	if(M.melee_damage_upper == 0)	return
 	if(!(stat & BROKEN))
 		visible_message("\red <B>[M] [M.attacktext] [src]!</B>")
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
+		//M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
 		//src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 		src.health -= M.melee_damage_upper
 		if (src.health <= 0)
 			src.die()
 	else
 		M << "\red That object is useless to you."
-	return*/
+	return
 
 
 

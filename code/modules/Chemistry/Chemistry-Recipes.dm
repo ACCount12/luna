@@ -649,7 +649,7 @@ datum
 				var/obj/item/stack/sheet/plasteel/P = new /obj/item/stack/sheet/plasteel
 				P.amount = 5
 				P.loc = get_turf_loc(holder.my_atom)
-/*
+
 //Gold
 		slimecrit
 			name = "Slime Crit"
@@ -674,7 +674,7 @@ datum
 					/mob/living/simple_animal/hostile/syndicate/melee/space,
 					/mob/living/simple_animal/hostile/syndicate/ranged,
 					/mob/living/simple_animal/hostile/syndicate/ranged/space,
-					/mob/living/simple_animal/hostile/alien/queen/large,
+					//mob/living/simple_animal/hostile/alien/queen/large,
 					/mob/living/simple_animal/hostile/retaliate,
 					/mob/living/simple_animal/hostile/retaliate/clown
 					)//exclusion list for things you don't want the reaction to create.
@@ -702,7 +702,7 @@ datum
 				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
 				for(var/mob/living/carbon/human/M in viewers(get_turf_loc(holder.my_atom), null))
-					if(M:eyecheck() <= 0)
+					if(M.eyecheck() <= 0)
 						flick("e_flash", M.flash)
 
 				for(var/i = 1, i <= 5, i++)
@@ -737,7 +737,7 @@ datum
 					/mob/living/simple_animal/hostile/syndicate/melee/space,
 					/mob/living/simple_animal/hostile/syndicate/ranged,
 					/mob/living/simple_animal/hostile/syndicate/ranged/space,
-					/mob/living/simple_animal/hostile/alien/queen/large,
+					//mob/living/simple_animal/hostile/alien/queen/large,
 					/mob/living/simple_animal/hostile/retaliate,
 					/mob/living/simple_animal/hostile/retaliate/clown
 					)//exclusion list for things you don't want the reaction to create.
@@ -765,7 +765,7 @@ datum
 				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
 				for(var/mob/living/carbon/human/M in viewers(get_turf_loc(holder.my_atom), null))
-					if(M:eyecheck() <= 0)
+					if(M.eyecheck() <= 0)
 						flick("e_flash", M.flash)
 
 				var/chosen = pick(critters)
@@ -789,7 +789,7 @@ datum
 				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
 				for(var/mob/living/carbon/human/M in viewers(get_turf_loc(holder.my_atom), null))
-					if(M:eyecheck() <= 0)
+					if(M.eyecheck() <= 0)
 						flick("e_flash", M.flash)
 
 				for(var/i = 1, i <= 4 + rand(1,2), i++)
@@ -818,7 +818,7 @@ datum
 				playsound(get_turf_loc(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
 				for(var/mob/living/carbon/human/M in viewers(get_turf_loc(holder.my_atom), null))
-					if(M:eyecheck() <= 0)
+					if(M.eyecheck() <= 0)
 						flick("e_flash", M.flash)
 
 				for(var/i = 1, i <= 4 + rand(1,2), i++)
@@ -829,7 +829,7 @@ datum
 						if(prob(50))
 							for(var/j = 1, j <= rand(1, 3), j++)
 								step(B, pick(NORTH,SOUTH,EAST,WEST))
-*/
+
 
 //Blue
 		slimefrost

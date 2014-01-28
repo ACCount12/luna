@@ -36,7 +36,7 @@ proc/process_teleport_locs()
 	origin_tech = "bluespace=4"
 
 /obj/item/weapon/teleportation_scroll/attack_self(mob/user as mob)
-	user.machine = src
+	user.set_machine(src)
 	var/dat = "<B>Teleportation Scroll:</B><BR>"
 	dat += "Number of uses: [src.uses]<BR>"
 	dat += "<HR>"
@@ -55,7 +55,7 @@ proc/process_teleport_locs()
 	if (!istype(H))
 		return 1
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))))
-		usr.machine = src
+		usr.set_machine(src)
 		if (href_list["spell_teleport"])
 			if (src.uses >= 1)
 				src.uses -= 1
@@ -80,7 +80,7 @@ proc/process_teleport_locs()
 	A = input("Area to jump to", "BOOYEA", A) in teleportlocs
 	var/area/thearea = teleportlocs[A]
 
-	var/datum/effect/system/harmless_smoke_spread/smoke = new /datum/effect/system/harmless_smoke_spread()
+	var/datum/effect/effect/system/harmless_smoke_spread/smoke = new /datum/effect/effect/system/harmless_smoke_spread()
 	smoke.set_up(5, 0, usr.loc)
 	smoke.attach(usr)
 	smoke.start()

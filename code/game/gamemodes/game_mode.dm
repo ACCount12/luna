@@ -1,8 +1,14 @@
 /datum/game_mode
 	var/name = "Invalid"
 	var/config_tag = null
+
+	var/const/waittime_l = 600 // Lower bound on time before intercept arrives (in tenths of seconds)
+	var/const/waittime_h = 1800 // Upper bound on time before intercept arrives (in tenths of seconds)
+
 	var/votable = 1
 	var/probability = 1
+	var/enabled = 1
+
 
 	// Antags.
 	var/list/datum/mind/traitors = list()
@@ -44,14 +50,11 @@
 /obj/item/weapon/aiModule/freeform:3:Freeform AI module;
 /obj/item/device/powersink:5:Power sink;
 /obj/item/weapon/syndie/c4explosive:4:Low power explosive charge;
-/obj/item/weapon/syndie/c4explosive/heavy:7:HIGH power explosive charge;
+/obj/item/device/syndicatebomb:7:HIGH power timed bomb;
 /obj/item/weapon/reagent_containers/pill/cyanide:4:Cyanide Pill
 	"}
 	var/uplink_uses = 10
-
 	var/list/allwords = list("travel","self","see","hell","blood","join","tech","destroy", "other", "hide")
-
-	var/enabled = 1
 
 /datum/game_mode/proc/announce()
 	world << "<B>The current game mode is - [name]!</B>"

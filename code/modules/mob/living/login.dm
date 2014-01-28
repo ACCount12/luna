@@ -1,6 +1,5 @@
 /mob/living/Login()
 	..()
-
 	mind_initialize()	//updates the mind (or creates and initializes one if one doesn't exist)
 
 	if (!isturf(loc))

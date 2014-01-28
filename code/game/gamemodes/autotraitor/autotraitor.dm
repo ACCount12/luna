@@ -66,14 +66,13 @@
 		var/playercount = 0
 		var/traitorcount = 0
 		var/possible_traitors[0]
-		for(var/mob/living/player in world)
-
-			if (player.client && player.stat != 2)
+		for(var/mob/living/player in mob_list)
+			if (player.client && player.stat != DEAD && player.mind)
 				playercount += 1
-			if (player.client && player.mind && player.mind.special_role && player.stat != 2)
-				traitorcount += 1
-			if (player.client && player.mind && !player.mind.special_role && player.stat != 2 && player.be_syndicate)
-				possible_traitors += player
+				if (player.mind.special_role)
+					traitorcount += 1
+				else if(BE_TRAITOR in player.client.prefs)
+					possible_traitors += player
 		message_admins("Live Players: [playercount]")
 		message_admins("Live Traitors: [traitorcount]")
 //		message_admins("Potential Traitors:")
@@ -158,17 +157,18 @@
 	if(LaunchControl.departed)
 		return
 	message_admins("Late Join Check")
-	if(character.be_syndicate == 1)
-		message_admins("Late Joiner has Be Syndicate")
+	if(character.client && (BE_TRAITOR in character.client.prefs))
+		message_admins("Late Joiner has BE_TRAITOR")
 		message_admins("Checking number of players")
 		var/playercount = 0
 		var/traitorcount = 0
-		for(var/mob/living/player in world)
 
-			if (player.client && player.stat != 2)
+		for(var/mob/living/player in mob_list)
+			if (player.client && player.stat != DEAD && player.mind)
 				playercount += 1
-			if (player.mind && player.mind.special_role && player.stat != 2)
-				traitorcount += 1
+				if (player.mind.special_role)
+					traitorcount += 1
+
 		message_admins("Live Players: [playercount]")
 		message_admins("Live Traitors: [traitorcount]")
 

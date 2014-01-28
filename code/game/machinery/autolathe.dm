@@ -127,12 +127,12 @@ var/global/list/autolathe_recipes_hidden = list( \
 	interact(mob/user as mob)
 		if(..())
 			return
-		if (src.shocked)
+		if (shocked)
 			src.shock(user,50)
-		if (src.opened)
+		if (opened)
 			wires.Interact(user)
 			return
-		if (src.disabled)
+		if (disabled)
 			user << "\red You press the button, but nothing happens."
 			return
 		regular_win(user)
@@ -151,21 +151,14 @@ var/global/list/autolathe_recipes_hidden = list( \
 			return 1
 		if (opened)
 			if(istype(O, /obj/item/weapon/crowbar))
-				playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
-				var/obj/structure/frame/machine/M = new /obj/structure/frame/machine(src.loc)
-				M.state = 2
-				M.icon_state = "box_1"
-				for(var/obj/I in component_parts)
-					if(I.reliability != 100 && crit_fail)
-						I.crit_fail = 1
-					I.loc = src.loc
 				if(m_amount >= 3750)
 					var/obj/item/stack/sheet/metal/G = new /obj/item/stack/sheet/metal(src.loc)
 					G.amount = round(m_amount / 3750)
 				if(g_amount >= 3750)
 					var/obj/item/stack/sheet/glass/G = new /obj/item/stack/sheet/glass(src.loc)
 					G.amount = round(g_amount / 3750)
-				del(src)
+
+				default_deconstruction_crowbar()
 				return 1
 			else
 				user.set_machine(src)
@@ -185,7 +178,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 			user << "\red This object does not contain significant amounts of metal or glass, or cannot be accepted by the autolathe due to size or hazardous materials."
 			return 1
 	/*
-		if (istype(O, /obj/item/weapon/grab) && src.hacked)
+		if (istype(O, /obj/item/weapon/grab) && hacked)
 			var/obj/item/weapon/grab/G = O
 			if (prob(25) && G.affecting)
 				G.affecting.gib()

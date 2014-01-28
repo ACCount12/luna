@@ -131,15 +131,9 @@
 
 /datum/supply_packs/medical/virus
 	name = "Virus crate"
-	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/virus/flu_virion,
-					/obj/item/weapon/reagent_containers/glass/bottle/virus/cold,
-					/obj/item/weapon/reagent_containers/glass/bottle/virus/epiglottis_virion,
-					/obj/item/weapon/reagent_containers/glass/bottle/virus/liver_enhance_virion,
-					/obj/item/weapon/reagent_containers/glass/bottle/virus/fake_gbs,
-					/obj/item/weapon/reagent_containers/glass/bottle/virus/magnitis,
-					/obj/item/weapon/reagent_containers/glass/bottle/virus/pierrot_throat,
-					/obj/item/weapon/reagent_containers/glass/bottle/virus/brainrot,
-					/obj/item/weapon/reagent_containers/glass/bottle/virus/hullucigen_virion,
+	contains = list(/obj/item/weapon/storage/fancy/vials/virusall1,
+					/obj/item/weapon/storage/fancy/vials/virusall2,
+					/obj/item/weapon/storage/fancy/vials/full,
 					/obj/item/weapon/storage/box/syringes,
 					/obj/item/weapon/storage/box/beaker,
 					/obj/item/weapon/reagent_containers/glass/bottle/mutagen)

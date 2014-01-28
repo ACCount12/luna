@@ -6,6 +6,45 @@ KNIFE
 SPOON
 */
 
+/*
+ * Kitchen knives
+ */
+/obj/item/weapon/kitchenknife
+	name = "kitchen knife"
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "knife"
+	desc = "A general purpose Chef's Knife made by SpaceCook Incorporated. Guaranteed to stay sharp for years to come."
+	flags = FPRINT | CONDUCT
+	force = 10
+	w_class = 2
+	throwforce = 20
+	throw_speed = 3
+	throw_range = 7
+	m_amt = 12000
+	origin_tech = "materials=1"
+	attack_verb = list("slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+
+/obj/item/weapon/kitchenknife/ritual
+	name = "ritual knife"
+	desc = "The unearthly energies that once powered this blade are now dormant."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "render"
+
+/*
+ * Bucher's cleaver
+ */
+/obj/item/weapon/kitchenknife/butch
+	name = "butcher's Cleaver"
+	icon_state = "butch"
+	desc = "A huge thing used for chopping and chopping up meat. This includes clowns and clown-by-products."
+	force = 15
+	origin_tech = "materials=1"
+	attack_verb = list("cleaved", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+
+/obj/item/weapon/butch/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	return ..()
+
 /obj/item/weapon/kitchen
 	icon = 'kitchen.dmi'
 

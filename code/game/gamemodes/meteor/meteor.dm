@@ -3,6 +3,7 @@
 	config_tag = "meteor"
 	var/meteortime = 0
 	votable = 0
+	enabled = 0
 
 /datum/game_mode/meteor/announce()
 	world << "<B>The current game mode is - Meteor!</B>"
@@ -29,7 +30,7 @@
 			var/condition = survivors[survivor]
 			switch(condition)
 				if("shuttle")
-					world << "\t <B><FONT size = 2>[survivor] escaped on the shuttle!</FONT></B>"
+					world << "\t <B><FONT size = 2>[survivor] escaped on an escape pod!</FONT></B>"
 				if("pod")
 					world << "\t <FONT size = 2>[survivor] escaped on an escape pod!</FONT>"
 				if("alive")

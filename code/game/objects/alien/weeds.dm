@@ -1,6 +1,3 @@
-/obj/alien/proc/process()
-	return
-
 /obj/item/alien/weeds/
 	layer = 2
 	health = 15

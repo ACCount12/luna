@@ -43,7 +43,7 @@
 
 /obj/machinery/hologram_ai/proc/show_console(var/mob/user as mob)
 	var/dat
-	user.machine = src
+	user.set_machine(src)
 	if (src.temp)
 		dat = text("[]<BR><BR><A href='?src=\ref[];temp=1'>Clear</A>", src.temp, src)
 	else

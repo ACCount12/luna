@@ -30,7 +30,8 @@
 			g_eyes = text2num(column_data["eyes_green"])
 			b_eyes = text2num(column_data["eyes_blue"])
 			b_type = column_data["blood_type"]
-			be_syndicate = text2num(column_data["be_syndicate"])
+			roles = params2list(column_data["be_syndicate"])
+			if(!islist(roles)) roles = list()
 			underwear = text2num(column_data["underwear"])
 			be_random_name = text2num(column_data["name_is_always_random"])
 			slotname = column_data["slotname"]

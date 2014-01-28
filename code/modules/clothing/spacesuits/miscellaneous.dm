@@ -97,3 +97,38 @@
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_magazine,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_oxygen)
 	slowdown = 0
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+
+/obj/item/clothing/suit/space/stormtrooper
+	name = "stormtrooper armor"
+	desc = "Reliable Old Republic armor."
+	icon_state = "stormtrooper"
+	item_state = "stormtrooper"
+	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_magazine,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank)
+	armor = list(melee = 20, bullet = 40, laser = 30, energy = 50, bomb = 20, bio = 100, rad = 50)
+	siemens_coefficient = 0.5
+
+/obj/item/clothing/head/helmet/space/stormtrooper
+	name = "stormtrooper helmet"
+	desc = "Reliable Old Republic helmet."
+	icon_state = "stormtrooper_helmet"
+	flags = FPRINT | HEADCOVERSEYES
+	item_state = "stormtrooper_helmet"
+	armor = list(melee = 20, bullet = 40, laser = 30, energy = 50, bomb = 20, bio = 100, rad = 50)
+	flags_inv = HIDEEARS|HIDEEYES|HIDEEYES
+	siemens_coefficient = 0.5
+
+
+
+/obj/item/clothing/suit/space/stormtrooper/vader
+	name = "Darth Vader's armor"
+	desc = "Lord Vader personal armor"
+	icon_state = "darth_vader"
+	item_state = "darth_vader"
+	armor = list(melee = 50, bullet = 60, laser = 70, energy = 60, bomb = 25, bio = 100, rad = 60)
+
+/obj/item/clothing/head/helmet/space/stormtrooper/vader
+	name = "Lord Vader's helmet"
+	desc = "Lord Vader's personal helmet."
+	icon_state = "darth_vader_helm"
+	item_state = "darth_vader_helm"
+	armor = list(melee = 50, bullet = 60, laser = 70,energy = 60, bomb = 25, bio = 100, rad = 60)

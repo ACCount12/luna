@@ -30,7 +30,7 @@
 	if(..())
 		return
 	var/dat = "<HTML><BODY><TT><B>Brig Computer</B><br><br>"
-	user.machine = src
+	user.set_machine(src)
 	for(var/obj/machinery/door/window/brigdoor/M in world)
 		if(M.id == 1)
 			dat += text("<A href='?src=\ref[src];setid=1'>Door 1: [(M.density ? "Closed" : "Opened")]</A><br>")
@@ -55,7 +55,7 @@
 	if(..())
 		return
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
-		usr.machine = src
+		usr.set_machine(src)
 		if (href_list["setid"])
 			if(src.allowed(usr))
 				src.id = text2num(href_list["setid"])
@@ -150,7 +150,7 @@
 		return
 
 	var/dat = "<HTML><BODY><TT><B>Door [src.id] controls</B>"
-	user.machine = src
+	user.set_machine(src)
 	var/d2
 	if (src.timing)
 		d2 = text("<A href='?src=\ref[];time=0'>Stop Timed</A><br>", src)
@@ -177,7 +177,7 @@
 	if(..())
 		return
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
-		usr.machine = src
+		usr.set_machine(src)
 		if (href_list["time"])
 			if(src.allowed(usr))
 				src.timing = text2num(href_list["time"])

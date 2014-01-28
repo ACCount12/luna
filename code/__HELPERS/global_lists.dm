@@ -17,6 +17,15 @@ var/global/list/landmarks_list = list()				//list of all landmarks created
 var/global/list/surgeries_list = list()				//list of all surgeries by name, associated with their path.
 var/global/list/mechas_list = list()				//list of all mechs. Used by hostile mobs target tracking.
 
+var/global/list/machines = list() // No longer used for processing
+var/global/list/processing_items = list()
+var/global/list/processing_fires = list()
+var/global/list/processing_turfs = list()
+var/global/list/processing_objects = list()
+var/global/list/processing_others = list() // The few exceptions that don't fit in the other lists
+var/global/list/active_diseases = list()
+	//items that ask to be called every cycle
+
 var/global/list/portals = list()					//for use by portals
 
 //////////////////////////

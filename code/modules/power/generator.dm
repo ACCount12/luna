@@ -104,7 +104,7 @@
 		user << browse(null, "window=teg")
 		return
 
-	user.machine = src
+	user.set_machine(src)
 
 	var/t = "<PRE><B>Thermo-Electric Generator</B><HR>"
 

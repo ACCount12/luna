@@ -49,7 +49,7 @@
 	Topic(href, href_list)
 		if(..())
 			return
-		usr.machine = src
+		usr.set_machine(src)
 
 		if(href_list["open"])
 			door_in.close()

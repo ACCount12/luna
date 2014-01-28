@@ -1,11 +1,7 @@
 //Meant for simple animals to drop lootable human bodies.
-
 //If someone can do this in a neater way, be my guest-Kor
-
 //This has to be seperate from the Away Mission corpses, because New() doesn't work for those, and initialize() doesn't work for these.
-
 //To do: Allow corpses to appear mangled, bloody, etc. Allow customizing the bodies appearance (they're all bald and white right now).
-
 
 /obj/effect/landmark/mobcorpse
 	name = "Unknown"
@@ -61,29 +57,27 @@
 	if(src.corpseid == 1)
 		var/obj/item/weapon/card/id/W = new(M)
 		W.name = "[M.real_name]'s ID Card"
-		var/datum/job/jobdatum
-		for(var/jobtype in typesof(/datum/job))
-			var/datum/job/J = new jobtype
-			if(J.title == corpseidaccess)
-				jobdatum = J
-				break
+//		var/datum/job/jobdatum
+//		for(var/jobtype in typesof(/datum/job))
+//			var/datum/job/J = new jobtype
+//			if(J.title == corpseidaccess)
+//				jobdatum = J
+//				break
 		if(src.corpseidicon)
 			W.icon_state = corpseidicon
-		if(src.corpseidaccess)
+/*		if(src.corpseidaccess)
 			if(jobdatum)
 				W.access = jobdatum.get_access()
 			else
-				W.access = list()
+				W.access = list()*/
 		if(corpseidjob)
 			W.assignment = corpseidjob
-		W.registered_name = M.real_name
+		W.registered = M.real_name
 		M.equip_to_slot_or_del(W, slot_wear_id)
 	del(src)
 
 
-
 //List of different corpse types
-
 /obj/effect/landmark/mobcorpse/syndicatesoldier
 	name = "Syndicate Operative"
 	corpseuniform = /obj/item/clothing/under/syndicate
@@ -99,7 +93,6 @@
 	corpseidaccess = "Syndicate"
 
 
-
 /obj/effect/landmark/mobcorpse/syndicatecommando
 	name = "Syndicate Commando"
 	corpseuniform = /obj/item/clothing/under/syndicate
@@ -107,14 +100,13 @@
 	corpseshoes = /obj/item/clothing/shoes/swat
 	corpsegloves = /obj/item/clothing/gloves/swat
 	corpseradio = /obj/item/device/radio/headset
-	corpsemask = /obj/item/clothing/mask/gas/syndicate
+	corpsemask = /obj/item/clothing/mask/breath/mil
 	corpsehelmet = /obj/item/clothing/head/helmet/space/rig/syndi
-	corpseback = /obj/item/weapon/tank/jetpack/oxygen
+	corpseback = /obj/item/weapon/tank/jetpack/syndie
 	corpsepocket1 = /obj/item/weapon/tank/emergency_oxygen
 	corpseid = 1
 	corpseidjob = "Operative"
 	corpseidaccess = "Syndicate"
-
 
 
 /obj/effect/landmark/mobcorpse/clown
@@ -130,7 +122,6 @@
 	corpseidaccess = "Clown"
 
 
-
 /obj/effect/landmark/mobcorpse/pirate
 	name = "Pirate"
 	corpseuniform = /obj/item/clothing/under/pirate
@@ -139,12 +130,10 @@
 	corpsehelmet = /obj/item/clothing/head/bandana
 
 
-
 /obj/effect/landmark/mobcorpse/pirate/ranged
 	name = "Pirate Gunner"
 	corpsesuit = /obj/item/clothing/suit/pirate
 	corpsehelmet = /obj/item/clothing/head/pirate
-
 
 
 /obj/effect/landmark/mobcorpse/russian
@@ -154,4 +143,4 @@
 	corpsehelmet = /obj/item/clothing/head/bearpelt
 
 /obj/effect/landmark/mobcorpse/russian/ranged
-	corpsehelmet = /obj/item/clothing/head/ushanka
+	corpsehelmet = /obj/item/clothing/head/helmet/ushanka

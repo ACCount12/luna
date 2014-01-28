@@ -2,8 +2,6 @@
 	icon = 'syndieweapons.dmi'
 
 /*C-4 explosive charge and etc, replaces the old syndie transfer valve bomb.*/
-
-
 /*The explosive charge itself.  Flashes for five seconds before exploding.*/
 
 /obj/item/weapon/syndie/c4explosive

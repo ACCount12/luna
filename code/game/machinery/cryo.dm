@@ -1,26 +1,22 @@
 /obj/machinery/atmospherics/unary/cryo_cell
 	name = "cryo cell"
-	icon = 'Cryogenic2.dmi'
-	icon_state = "celltop-P"
+	icon = 'cryogenics.dmi'
+	icon_state = "cell-off"
 	density = 1
-	anchored = 1.0
+	anchored = 1
 	layer = 5
 
 	var/on = 0
 	var/temperature_archived
 	var/obj/overlay/O1 = null
 	var/mob/living/occupant = null
-	var/beaker = null
+	var/obj/item/weapon/reagent_containers/beaker = null
 	var/next_trans = 0
-
 	var/current_heat_capacity = 50
-
-
 
 	New()
 
 		..()
-		build_icon()
 		initialize_directions = SOUTH
 
 	initialize()
@@ -66,7 +62,7 @@
 		return
 
 	attack_hand(mob/user as mob)
-		user.machine = src
+		user.set_machine(src)
 		var/beaker_text = ""
 		var/health_text = ""
 		var/temp_text = ""
@@ -102,9 +98,9 @@
 		if (( usr.machine==src && ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
 			if(href_list["start"])
 				src.on = !src.on
-				build_icon()
+				update_icon()
 			if(href_list["eject"])
-				beaker:loc = src.loc
+				beaker.loc = src.loc
 				beaker = null
 
 			src.updateUsrDialog()
@@ -137,33 +133,12 @@
 			M.loc = src
 			src.occupant = M
 			src.add_fingerprint(user)
-			build_icon()
+			update_icon()
 			del(G)
 		src.updateUsrDialog()
 		return
 
 	proc
-		add_overlays()
-			src.addalloverlays(list(O1))
-
-		build_icon()
-			if(on)
-				if(src.occupant)
-					icon_state = "celltop_1"
-				else
-					icon_state = "celltop"
-			else
-				icon_state = "celltop-p"
-			O1 = new /obj/overlay(  )
-			O1.icon = 'Cryogenic2.dmi'
-			if(src.node)
-				O1.icon_state = "cryo_bottom_[src.on]"
-			else
-				O1.icon_state = "cryo_bottom"
-			O1.pixel_y = -32.0
-			src.pixel_y = 32
-			add_overlays()
-
 		process_occupant()
 			if(air_contents.total_moles() < 10)
 				return
@@ -217,16 +192,16 @@
 			loc.assume_air(expel_gas)
 
 		go_out()
-			if(!( src.occupant ))
+			if(!src.occupant)
 				return
-			//for(var/obj/O in src)
-			//	O.loc = src.loc
 			if (src.occupant.client)
 				src.occupant.client.eye = src.occupant.client.mob
 				src.occupant.client.perspective = MOB_PERSPECTIVE
 			src.occupant.loc = src.loc
 			src.occupant = null
-			build_icon()
+			for(var/obj/O in src)
+				O.loc = src.loc
+			update_icon()
 			return
 
 	verb
@@ -256,13 +231,20 @@
 			usr.client.eye = src
 			usr.loc = src
 			src.occupant = usr
-			/*for(var/obj/O in src)
-				O.loc = src.loc*/
 			src.add_fingerprint(usr)
-			build_icon()
+			update_icon()
 			return
 
 
+
+/obj/machinery/atmospherics/unary/cryo_cell/update_icon()
+	if(on)
+		if(occupant)
+			icon_state = "cell-occupied"
+			return
+		icon_state = "cell-on"
+		return
+	icon_state = "cell-off"
 
 
 

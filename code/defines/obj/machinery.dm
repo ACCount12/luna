@@ -1,20 +1,5 @@
-/obj/machinery/emp_act(severity)
-	if(use_power && stat == 0)
-		use_power(7500/severity)
-
-		var/obj/effect/overlay/pulse2 = new/obj/effect/overlay ( src.loc )
-		pulse2.icon = 'icons/effects/effects.dmi'
-		pulse2.icon_state = "empdisable"
-		pulse2.name = "emp sparks"
-		pulse2.anchored = 1
-		pulse2.dir = pick(cardinal)
-
-		spawn(10)
-			pulse2.delete()
-	..()
-
 /obj/machinery/alarm
-	name = "alarm"
+	name = "air alarm"
 	icon = 'monitors.dmi'
 	icon_state = "alarm0"
 	anchored = 1.0
@@ -33,18 +18,8 @@
 	var/mob/occupant = null
 	anchored = 1.0
 
-/obj/machinery/dna_scannernew
-	name = "DNA Scanner"
-	icon = 'Cryogenic2.dmi'
-	icon_state = "scanner_0"
-	density = 1
-	var/locked = 0.0
-	var/mob/occupant = null
-	anchored = 1.0
-
-
 /obj/machinery/firealarm
-	name = "Fire Alarm"
+	name = "fire alarm"
 	icon = 'monitors.dmi'
 	icon_state = "fire0"
 	var/detecting = 1.0
@@ -96,7 +71,7 @@
 	flags = ON_BORDER
 
 /obj/machinery/mass_driver
-	name = "Mass Driver"
+	name = "mass driver"
 	desc = "A device for launching objects into space"
 	icon = 'stationobjs.dmi'
 	icon_state = "mass_driver"

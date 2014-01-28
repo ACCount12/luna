@@ -272,13 +272,13 @@
 			reagents.add_reagent("nutriment", 1+round((potency / 10), 1))
 			bitesize = 1+round(reagents.total_volume / 2, 1)
 
-/*obj/item/weapon/reagent_containers/food/snacks/grown/killertomato/attack_self(mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/killertomato/attack_self(mob/user as mob)
 	if(istype(user.loc,/turf/space))
 		return
 	new /mob/living/simple_animal/tomato(user.loc)
 	del(src)
 
-	user << "<span class='notice'>You plant the killer-tomato.</span>"*/
+	user << "<span class='notice'>You plant the killer-tomato.</span>"
 
 /obj/item/seeds/bluetomatoseed
 	name = "pack of blue-tomato seeds"

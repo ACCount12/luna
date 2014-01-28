@@ -3,7 +3,7 @@
 /obj/machinery/computer/security/verb/station_map()
 	set name = ".map"
 	set src in view(1)
-	usr.machine = src
+	usr.set_machine(src)
 
 	log_game("[usr]([usr.key]) used station map L[maplevel] in [src.loc.loc]")
 

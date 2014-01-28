@@ -129,7 +129,6 @@ mob/living/silicon/robot/uses_hud = 1
 /obj/hud/var/obj/effect/screen/move_intent
 
 /obj/hud/proc/instantiate()
-
 	mymob = src.loc
 	ASSERT(istype(mymob, /mob))
 
@@ -158,9 +157,5 @@ mob/living/silicon/robot/uses_hud = 1
 		src.robot_hud()
 		return
 
-	if(istype(mymob, /mob/dead/observer))
-		src.ghost_hud()
-		return
-	if(istype(mymob,/mob/dead/official))
-		src.ghost_hud()
-		return
+	src.ghost_hud()
+	return

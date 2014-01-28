@@ -57,10 +57,10 @@
 		return
 
 	user.set_machine(src)
-	var/loc = src.loc
-	if (istype(loc, /turf))
+	var/turf/loc = get_turf(src)
+	if(istype(loc))
 		loc = loc:loc
-	if (!istype(loc, /area))
+	if(!istype(loc, /area))
 		user << text("Turret badly positioned - loc.loc is [].", loc)
 		return
 
@@ -79,12 +79,12 @@
 /obj/machinery/ai_slipper/Topic(href, href_list)
 	if(..())
 		return
-	if (src.locked)
+	if (locked)
 		if (!istype(usr, /mob/living/silicon))
 			usr << "Control panel is locked!"
 			return
 	if (href_list["toggleUse"])
-		if(world.timeofday < cooldown_time)
+		if((world.timeofday < cooldown_time) || !uses)
 			return
 		else
 			flags |= NOREACT
@@ -92,6 +92,7 @@
 				reagents.add_reagent(reagent, chemicals[reagent])
 			flags &= ~NOREACT
 			reagents.handle_reactions()
+			cooldown_time = world.timeofday + 100
 			uses--
 
 	src.attack_hand(usr)

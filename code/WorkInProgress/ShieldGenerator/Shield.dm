@@ -1,7 +1,7 @@
 //Shield Generator - Shield Object
 //The interactable shielding object
 
-/obj/shielding/shield
+/obj/effect/shielding/shield
 	name = "shield"
 	desc = "An energy shield."
 	icon = 'effects.dmi'
@@ -18,7 +18,7 @@
 	var/emitterdist = 0
 
 //Shield Density controller
-/obj/shielding/shield/CanPass(atom/movable/mover, turf/source, height=1.5, air_group = 0)
+/obj/effect/shielding/shield/CanPass(atom/movable/mover, turf/source, height=1.5, air_group = 0)
 	if (density)
 		//Block all atmos flow & explosions, but optionally allow movement through
 		return !air_group && blockatmosonly
@@ -26,7 +26,7 @@
 		return 1 //Shield is off; do nothing
 
 //Explosion Handling - Includes support for preblast handling
-/obj/shielding/shield/ex_act(strength)
+/obj/effect/shielding/shield/ex_act(strength)
 	if (strength <= 0)
 		strength = -strength
 		if (emitter && emitter.online)

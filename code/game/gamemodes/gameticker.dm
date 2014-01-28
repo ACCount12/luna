@@ -35,11 +35,9 @@ var/datum/roundinfo/roundinfo = new()
 	spawn setup()
 
 
-
 var/list/postsetuphooks = list()
 
 /datum/controller/gameticker/proc/setup()
-
 	//Create and announce mode
 	if(master_mode=="secret")
 		src.hide_mode = 1
@@ -114,6 +112,9 @@ var/list/postsetuphooks = list()
 	spawn master_controller.process()
 
 /datum/controller/gameticker
+	var/obj/effect/screen/cinematic
+
+
 	proc/distribute_jobs()
 		DivideOccupations()
 
@@ -142,9 +143,7 @@ var/list/postsetuphooks = list()
 		if(current_state != GAME_STATE_PLAYING)
 			return 0
 
-
 		mode.process()
-
 
 	//	main_shuttle.process()
 
@@ -169,15 +168,67 @@ var/list/postsetuphooks = list()
 
 		return 1
 
+	//Plus it provides an easy way to make cinematics for other events. Just use this as a template :)
+	proc/station_explosion_cinematic(var/station_missed=0, var/mode_name = null)
+		if(cinematic)
+			return	//already a cinematic in progress!
+
+		//initialise our cinematic screen object
+		cinematic = new(src)
+		cinematic.icon = 'icons/effects/station_explosion.dmi'
+		cinematic.icon_state = "start"
+		cinematic.layer = 20
+		cinematic.mouse_opacity = 0
+		//cinematic.screen_loc = "1,0"
+		cinematic.screen_loc = "1,3"
+
+		var/obj/structure/stool/bed/temp_buckle = new(src)
+		for(var/mob/M in mob_list)
+			M.buckled = temp_buckle				//buckles the mob so it can't do anything
+			if(M.client)
+				M.client.screen += cinematic	//show every client the cinematic
+			if(!station_missed && M.stat != DEAD)
+				var/turf/T = get_turf(M)
+				if(T && (T.z in list(1,2,3,4)))
+					M.death(0) //no mercy
+
+		//Now animate the cinematic
+		if(station_missed) //nuke was nearby but (mostly) missed
+			flick("start_nuke",cinematic)
+			spawn(13)
+				world << sound('sound/effects/explosionfar.ogg')
+
+		else	//station was destroyed
+			switch( mode_name )
+				if("AI malfunction") //Malf
+					flick("start_malf",cinematic)
+					sleep(74)
+					flick("explode",cinematic)
+					spawn(13)
+						world << sound('sound/effects/explosionfar.ogg')
+					cinematic.icon_state = "loss_malf"
+				else //Station nuked
+					flick("start_nuke",cinematic)
+					sleep(35)
+					flick("explode",cinematic)
+					world << sound('sound/effects/explosionfar.ogg')
+					cinematic.icon_state = "loss_nuke"
+
+		//If its actually the end of the round, wait for it to end.
+		//Otherwise if its a verb it will continue on afterwards.
+		sleep(300)
+
+		if(cinematic)	del(cinematic)		//end the cinematic
+		if(temp_buckle)	del(temp_buckle)	//release everybody
+		return
+
 /*
 /datum/controller/gameticker/proc/timeup()
-
 	if (shuttle_left) //Shuttle left but its leaving or arriving again
 		check_win()	  //Either way, its not possible
 		return
 
 	if (src.shuttle_location == shuttle_z)
-
 		move_shuttle(locate(/area/shuttle), locate(/area/arrival/shuttle))
 
 		src.timeleft = shuttle_time_in_station
@@ -193,9 +244,8 @@ var/list/postsetuphooks = list()
 	return
 */
 /datum/controller/gameticker/proc/declare_completion()
-
 	for (var/mob/living/silicon/ai/aiPlayer in world)
-		if (aiPlayer.stat != 2)
+		if (aiPlayer.stat != DEAD)
 			world << "<b>The AI's laws at the end of the game were:</b>"
 		else
 			world << "<b>The AI's laws when it was deactivated were:</b>"

@@ -1,4 +1,6 @@
 /mob/Login()
+	player_list |= src
+
 	log_access("Login: [key_name(src)] from [client.address ? client.address : "localhost"]")
 	lastKnownIP = client.address
 	lastKnownID = client.computer_id

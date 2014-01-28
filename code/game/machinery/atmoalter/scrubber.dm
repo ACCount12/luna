@@ -72,8 +72,6 @@
 	src.update_icon()
 	return
 
-/obj/machinery/portable_atmospherics/scrubber/return_air()
-	return air_contents
 
 /obj/machinery/portable_atmospherics/scrubber/attack_ai(var/mob/user as mob)
 	return src.attack_hand(user)
@@ -83,7 +81,7 @@
 
 /obj/machinery/portable_atmospherics/scrubber/attack_hand(var/mob/user as mob)
 
-	user.machine = src
+	user.set_machine(src)
 	var/holding_text
 
 	if(holding)
@@ -111,7 +109,7 @@ Target Pressure: <A href='?src=\ref[src];volume_adj=-10'>-</A> <A href='?src=\re
 		return
 
 	if (((get_dist(src, usr) <= 1) && istype(src.loc, /turf)))
-		usr.machine = src
+		usr.set_machine(src)
 
 		if(href_list["power"])
 			on = !on

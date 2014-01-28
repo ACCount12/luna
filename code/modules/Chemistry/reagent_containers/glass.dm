@@ -1,6 +1,5 @@
-
 ////////////////////////////////////////////////////////////////////////////////
-/// (Mixing)Glass.
+/// Mixing Glass
 ////////////////////////////////////////////////////////////////////////////////
 /obj/item/weapon/reagent_containers/glass
 	name = "glass"
@@ -24,7 +23,7 @@
 		/obj/item/weapon/grenade/chem_grenade,
 		/obj/machinery/bot/medbot,
 		/obj/machinery/computer/pandemic,
-		/obj/item/weapon/secstorage/ssafe,
+		/obj/item/weapon/storage/secure/safe,
 		/obj/machinery/disposal,
 	)
 
@@ -43,8 +42,18 @@
 				else
 					usr << "[reagents.total_volume] units of something"
 
-	attackby()
-		return
+		if (!is_open_container())
+			usr << "\blue Airtight lid seals it completely."
+
+	attack_self()
+		..()
+		if (is_open_container())
+			usr << "<span class = 'notice'>You put the lid on \the [src]."
+			flags ^= OPENCONTAINER
+		else
+			usr << "<span class = 'notice'>You take the lid off \the [src]."
+			flags |= OPENCONTAINER
+		update_icon()
 
 	afterattack(obj/target, mob/user , flag)
 		for(var/type in can_be_placed_into)
@@ -138,15 +147,27 @@
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		overlays += filling
 
+	if (!is_open_container())
+		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
+		overlays += lid
+
+/obj/item/weapon/reagent_containers/glass/beaker/attack_self()
+	..()
+	if (is_open_container())
+		usr << "<span class = 'notice'>You put the lid on \the [src]."
+		flags ^= OPENCONTAINER
+	else
+		usr << "<span class = 'notice'>You take the lid off \the [src]."
+		flags |= OPENCONTAINER
+	update_icon()
+
 /obj/item/weapon/reagent_containers/glass/beaker/large
 	name = "large beaker"
 	desc = "A large beaker. Can hold up to 100 units."
 	icon_state = "beakerlarge"
 	g_amt = 5000
 	volume = 100
-	amount_per_transfer_from_this = 10
 	possible_transfer_amounts = list(5,10,15,25,30,50,100)
-	flags = FPRINT | OPENCONTAINER
 
 /obj/item/weapon/reagent_containers/glass/beaker/large/cleaner
 	New()
@@ -155,12 +176,14 @@
 		update_icon()
 
 /obj/item/weapon/reagent_containers/glass/beaker/large/antiviral
+	name = "large beaker (spaceacillin)"
 	New()
 		..()
 		reagents.add_reagent("spaceacillin", 100)
 		update_icon()
 
 /obj/item/weapon/reagent_containers/glass/beaker/large/sulphuric
+	name = "large beaker (sulphuric acid)"
 	New()
 		..()
 		reagents.add_reagent("sacid", 100)
@@ -174,6 +197,7 @@
 		update_icon()
 
 /obj/item/weapon/reagent_containers/glass/beaker/sulphuric
+	name = "beaker (sulphuric acid)"
 	New()
 		..()
 		reagents.add_reagent("sacid", 50)
@@ -186,6 +210,7 @@
 		update_icon()
 
 /obj/item/weapon/reagent_containers/glass/beaker/plasma
+	name = "beaker (plasma)"
 	New()
 		..()
 		reagents.add_reagent("plasma", 30)
@@ -223,7 +248,7 @@
 	amount_per_transfer_from_this = 10
 	flags = FPRINT | OPENCONTAINER | NOREACT
 
-/obj/item/weapon/reagent_containers/glass/beaker/bluespace
+/obj/item/weapon/reagent_containers/glass/beaker/large/bluespace
 	name = "bluespace beaker"
 	desc = "A bluespace beaker, powered by experimental bluespace technology and Element Cuban combined with the Compound Pete. Can hold up to 300 units."
 	icon_state = "beakerbluespace"

@@ -1,20 +1,20 @@
 // the laser beam
 
 
-/obj/beam/laser
+/obj/effect/beam/laser
 	name = "laser beam"
 	icon = 'beam.dmi'
 	icon_state = "full"
 	density = 0
 	mouse_opacity = 0
 
-	flags = TABLEPASS
+	pass_flags = PASSTABLE | PASSGLASS
 
 	var/wavelength 		// the (vaccuum) wavelength of the beam
 	var/width = 1		// 1=thin, 2=medium, 3=wide
 
-	var/obj/beam/laser/next
-	var/obj/beam/laser/prev
+	var/obj/effect/beam/laser/next
+	var/obj/effect/beam/laser/prev
 	var/obj/master
 
 	New(var/atom/newloc, var/dirn, var/lambda, var/omega=1, var/half=0)
@@ -98,7 +98,7 @@
 
 
 	HasEntered(var/atom/movable/AM)
-		if(istype(AM, /obj/beam))
+		if(istype(AM, /obj/effect/beam))
 			return
 		if(blocked(AM))
 			remove(src)

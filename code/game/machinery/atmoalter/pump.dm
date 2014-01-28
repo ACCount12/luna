@@ -87,9 +87,6 @@
 	src.updateDialog()
 	return
 
-/obj/machinery/portable_atmospherics/pump/return_air()
-	return air_contents
-
 /obj/machinery/portable_atmospherics/pump/attack_ai(var/mob/user as mob)
 	return src.attack_hand(user)
 

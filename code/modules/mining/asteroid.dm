@@ -1,6 +1,7 @@
-var/global/list/possiblethemes = list("organharvest","cult","wizden","cavein",/*"xenoden",*/"hitech","speakeasy","plantlab")
-
+var/global/list/possiblethemes = list("organharvest",/*"cult",*/"wizden","cavein",/*"xenoden",*/"hitech","speakeasy"/*,"plantlab"*/)
 var/global/max_secret_rooms = 3
+
+/area/asteroid/artifactroom
 
 proc/spawn_room(var/atom/start_loc, var/x_size, var/y_size, var/list/walltypes, var/floor, var/name)
 	var/list/room_turfs = list("walls"=list(),"floors"=list())
@@ -56,13 +57,13 @@ proc/make_mining_asteroid_secret()
 	areapoints = x_size * y_size
 
 	switch(pick(possiblethemes))//what kind of room is this gonna be?
-		if("organharvest")
+/*		if("organharvest")
 			walltypes = list(/turf/simulated/wall/r_wall=2,/turf/simulated/wall=2,/turf/simulated/mineral/random/high_chance=1)
 			floortypes = list(/turf/simulated/floor,/turf/simulated/floor/engine)
 			treasureitems = list(/obj/item/device/mass_spectrometer/adv=1,/obj/machinery/bot/medbot/mysterious=1)
 			fluffitems = list(/obj/effect/decal/cleanable/blood=5,/obj/item/organ/appendix=2,/obj/structure/closet/crate/freezer=2,
 							  /obj/structure/optable=1,/obj/item/weapon/surgical/scalpel=1,/obj/item/weapon/storage/firstaid/regular=3,
-							  /obj/item/weapon/tank/anesthetic=1, /obj/item/clothing/glasses/hud/health=1, /obj/item/weapon/surgical_drapes=2)
+							  /obj/item/weapon/tank/anesthetic=1, /obj/item/clothing/glasses/hud/health=1, /obj/item/weapon/surgical/drapes=2)*/
 
 /*		if("cult")
 			theme = "cult"
@@ -72,18 +73,18 @@ proc/make_mining_asteroid_secret()
 			fluffitems = list(/obj/effect/gateway=1,/obj/effect/gibspawner=1,/obj/structure/cult/talisman=1,/obj/item/toy/crayon/red=2,
 							  /obj/effect/decal/cleanable/blood=4,/obj/structure/table/woodentable=2,/obj/item/weapon/ectoplasm=3)*/
 
-		if("wizden")
+/*		if("wizden")
 			theme = "wizden"
 			walltypes = list(/turf/simulated/wall/mineral/plasma=3,/turf/simulated/mineral/random/high_chance=1)
 			floortypes = list(/turf/simulated/floor/wood)
 			treasureitems = list(/obj/item/weapon/veilrender/vealrender=1,/obj/item/clothing/glasses/monocle=1,/obj/item/key=1)
 			fluffitems = list(/obj/structure/safe/floor=1,/obj/structure/dresser=1,/obj/item/weapon/storage/belt/soulstone=1,/obj/item/trash/candle=3,
-							  /obj/item/weapon/dice=3,/obj/item/weapon/staff=2,/obj/effect/decal/cleanable/dirt=3,/obj/item/weapon/coin/mythril=3)
+							  /obj/item/weapon/dice=3,/obj/item/weapon/staff=2,/obj/effect/decal/cleanable/dirt=3,/obj/item/weapon/coin/mythril=3)*/
 
 		if("cavein")
 			theme = "cavein"
 			walltypes = list(/turf/simulated/mineral/random/high_chance=1)
-			floortypes = list(/turf/simulated/floor/plating/airless/asteroid, /turf/simulated/floor/beach/sand)
+			floortypes = list(/turf/simulated/floor/plating/airless/asteroid)
 			treasureitems = list(/obj/mecha/working/ripley/mining=2,/obj/item/weapon/pickaxe/jackhammer=1,/obj/item/weapon/pickaxe/diamonddrill=2,)
 			fluffitems = list(/obj/effect/decal/cleanable/blood=3,/obj/effect/decal/remains/human=1,/obj/item/clothing/under/overalls=1,
 							  /obj/item/weapon/reagent_containers/food/snacks/grown/chili=1,/obj/item/weapon/tank/oxygen/red=2)
@@ -98,11 +99,11 @@ proc/make_mining_asteroid_secret()
 		if("hitech")
 			theme = "hitech"
 			walltypes = list(/turf/simulated/wall/r_wall=5,/turf/simulated/mineral/random=1)
-			floortypes = list(/turf/simulated/floor/greengrid,/turf/simulated/floor/bluegrid)
-			treasureitems = list(/obj/item/weapon/weldingtool/plasmacutter=1,/obj/machinery/shieldgen=1,/obj/item/weapon/cell/hyper=1)
+			floortypes = list(/turf/simulated/floor/grid/*,/turf/simulated/floor/bluegrid*/)
+			treasureitems = list(/obj/item/weapon/weldingtool/plasmacutter=1,/obj/item/weapon/cell/hyper=1)
 			fluffitems = list(/obj/structure/table/reinforced=2,/obj/item/weapon/stock_parts/scanning_module/phasic=3,
 							  /obj/item/weapon/stock_parts/matter_bin/super=3,/obj/item/weapon/stock_parts/manipulator/pico=3,
-							  /obj/item/weapon/stock_parts/capacitor/super=3,/obj/item/device/pda/clear=1)
+							  /obj/item/weapon/stock_parts/capacitor/super=3/*,/obj/item/device/pda/clear=1*/)
 
 		if("speakeasy")
 			theme = "speakeasy"
@@ -112,17 +113,26 @@ proc/make_mining_asteroid_secret()
 							  /obj/item/weapon/reagent_containers/food/drinks/shaker=1,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine=3,
 							  /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey=3,/obj/item/clothing/shoes/laceup=2)
 
-		if("plantlab")
+		if("starwars")
+			theme = "starwars"
+			walltypes = list(/turf/simulated/wall/dstar)
+			floortypes = list(/turf/simulated/floor/engine/dstar)
+			treasureitems = list(/obj/item/weapon/melee/energy/sword/*,/obj/structure/closet/syndicate/resources=2*/)
+			fluffitems = list(/obj/structure/table/woodentable=2,/obj/structure/reagent_dispensers/beerkeg=1,
+							  /obj/item/weapon/reagent_containers/food/drinks/shaker=1,/obj/item/weapon/reagent_containers/food/drinks/bottle/wine=3,
+							  /obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey=3,/obj/item/clothing/shoes/laceup=2)
+
+/*		if("plantlab")
 			theme = "plantlab"
 			treasureitems = list(/obj/item/weapon/gun/energy/floragun=2,/obj/item/seeds/novaflowerseed=1,/obj/item/seeds/bluespacetomatoseed=2)
-			fluffitems = list(/obj/structure/flora/kirbyplants=1,/obj/structure/table/reinforced=2,/obj/machinery/hydroponics=1,
+			fluffitems = list(/obj/structure/table/reinforced=2,/obj/machinery/hydroponics=1,
 							  /obj/effect/glowshroom/single=2,/obj/item/weapon/reagent_containers/syringe/antitoxin=2,
-							  /obj/item/weapon/reagent_containers/glass/bottle/diethylamine=3,/obj/item/weapon/reagent_containers/glass/bottle/ammonia=3)
+							  /obj/item/weapon/reagent_containers/glass/bottle/diethylamine=3,/obj/item/weapon/reagent_containers/glass/bottle/ammonia=3)*/
 
 	possiblethemes -= theme //once a theme is selected, it's out of the running!
 	var/floor = pick(floortypes)
 
-	turfs = get_area_turfs(/area/mine/unexplored)
+	turfs = get_area_turfs(/area/asteroid, 1)
 
 	if(!turfs.len)
 		return 0

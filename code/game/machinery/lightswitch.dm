@@ -6,8 +6,8 @@
 	density = 0
 	icon_state = "light1"
 	var/area/area = null
-	var/area/otherarea = null
-	var/id
+	var/otherarea = null
+	var/id = ""
 	var/use_area = 0
 
 	attack_paw(mob/user)
@@ -152,7 +152,7 @@
 
 	var/location = machines
 	if(use_area)
-		location = area
+		location = area.alldoors
 
 	for(var/obj/machinery/door/poddoor/M in location)
 		if(M.id == src.id)

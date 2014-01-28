@@ -2,6 +2,9 @@
 	stat = 2
 	canmove = 0
 
+	living_mob_list -= src
+	dead_mob_list |= src
+
 	camera.status = 0.0
 
 	if(blind)

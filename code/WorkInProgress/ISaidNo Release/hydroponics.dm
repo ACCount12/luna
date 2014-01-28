@@ -1181,7 +1181,7 @@
 	///obj/item/weapon/reagent_containers/poo)	/* Strumpetplaya - commenting this out as it has components we don't support.
 
 	attack_hand(var/mob/user as mob)
-		user.machine = src
+		user.set_machine(src)
 		if (src.working)
 			var/dat = {"<B>Reagent Extractor</B><BR>
 			<HR><BR>
@@ -1381,7 +1381,7 @@
 	var/obj/item/weapon/seed/seed2 = null
 
 	attack_hand(var/mob/user as mob)
-		user.machine = src
+		user.set_machine(src)
 		var/dat = "<B>Plant Gene Manipulator</B><BR><HR><BR>"
 		if (src.screen == 1)
 			var/currentseed = null
@@ -1599,9 +1599,9 @@
 
 	attack_paw(mob/user as mob)
 		return src.attack_hand(user)
-
+/*
 	attack_hand(var/mob/user as mob)
-		user.machine = src
+		user.set_machine(src)
 		var/dat = "<B>[src.name]</B><BR><HR>"
 		dat += "<b>amount to Vend</b>: <A href='?src=\ref[src];amount=1'>[src.vendamt]</A><br><br>"
 		dat += "<b>Tomato</b>: <A href='?src=\ref[src];vend=1'><U>Vend</U></A><br>"
@@ -1802,7 +1802,7 @@
 			if (WIRE_POWER)
 				if (src.working) src.working = 0
 				else src.working = 1
-
+*/
 
 /obj/item/weapon/plantanalyzer/
 	name = "Plant Analyzer"

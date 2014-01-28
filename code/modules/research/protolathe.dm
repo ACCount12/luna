@@ -81,16 +81,6 @@ Note: Must be placed west/left of and R&D console to function.
 		return
 	if (opened)
 		if(istype(O, /obj/item/weapon/crowbar))
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/structure/frame/machine/M = new /obj/structure/frame/machine(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker))
-					reagents.trans_to(I, reagents.total_volume)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
 			if(m_amount >= 3750)
 				var/obj/item/stack/sheet/metal/G = new /obj/item/stack/sheet/metal(src.loc)
 				G.amount = round(m_amount / G.perunit)
@@ -118,7 +108,8 @@ Note: Must be placed west/left of and R&D console to function.
 			if(adamantine_amount >= 2000)
 				var/obj/item/stack/sheet/mineral/adamantine/G = new /obj/item/stack/sheet/mineral/adamantine(src.loc)
 				G.amount = round(adamantine_amount / G.perunit)
-			del(src)
+
+			default_deconstruction_crowbar()
 			return 1
 		else
 			user << "\red You can't load the [src.name] while it's opened."

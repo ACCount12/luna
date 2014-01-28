@@ -55,46 +55,24 @@ proc/countJob(rank)
 			jobCount++
 	return jobCount
 
-/mob/living/carbon/human/var/const
-	slot_back = 1
-	slot_wear_mask = 2
-	slot_handcuffed = 3
-	slot_l_hand = 4
-	slot_r_hand = 5
-	slot_belt = 6
-	slot_wear_id = 7
-	slot_ears = 8
-	slot_glasses = 9
-	slot_gloves = 10
-	slot_head = 11
-	slot_shoes = 12
-	slot_wear_suit = 13
-	slot_w_uniform = 14
-	slot_l_store = 15
-	slot_r_store = 16
-//	slot_w_radio = 17
-	slot_in_backpack = 18
-
-
-
 /mob/living/carbon/human/proc/equip_if_possible(obj/item/weapon/W, slot) // since byond doesn't seem to have pointers, this seems like the best way to do this :/
 	//warning: icky code
 	var/equipped = 0
-	if((slot == l_store || slot == r_store || slot == belt || slot == wear_id) && !src.w_uniform)
+	if((slot == l_store || slot == r_store || slot == belt || slot == wear_id) && !w_uniform)
 		del(W)
 		return
 	switch(slot)
 		if(slot_back)
-			if(!src.back)
-				src.back = W
+			if(!back)
+				back = W
 				equipped = 1
 		if(slot_wear_mask)
-			if(!src.wear_mask)
-				src.wear_mask = W
+			if(!wear_mask)
+				wear_mask = W
 				equipped = 1
 		if(slot_handcuffed)
-			if(!src.handcuffed)
-				src.handcuffed = W
+			if(!handcuffed)
+				handcuffed = W
 				equipped = 1
 		if(slot_l_hand)
 			if(!src.l_hand)
@@ -105,56 +83,52 @@ proc/countJob(rank)
 				src.r_hand = W
 				equipped = 1
 		if(slot_belt)
-			if(!src.belt)
-				src.belt = W
+			if(!belt)
+				belt = W
 				equipped = 1
 		if(slot_wear_id)
-			if(!src.wear_id)
-				src.wear_id = W
+			if(!wear_id)
+				wear_id = W
 				equipped = 1
 		if(slot_ears)
-			if(!src.ears)
-				src.ears = W
+			if(!ears)
+				ears = W
 				equipped = 1
 		if(slot_glasses)
-			if(!src.glasses)
-				src.glasses = W
+			if(!glasses)
+				glasses = W
 				equipped = 1
 		if(slot_gloves)
-			if(!src.gloves)
-				src.gloves = W
+			if(!gloves)
+				gloves = W
 				equipped = 1
 		if(slot_head)
-			if(!src.head)
-				src.head = W
+			if(!head)
+				head = W
 				equipped = 1
 		if(slot_shoes)
-			if(!src.shoes)
-				src.shoes = W
+			if(!shoes)
+				shoes = W
 				equipped = 1
 		if(slot_wear_suit)
-			if(!src.wear_suit)
-				src.wear_suit = W
+			if(!wear_suit)
+				wear_suit = W
 				equipped = 1
 		if(slot_w_uniform)
-			if(!src.w_uniform)
-				src.w_uniform = W
+			if(!w_uniform)
+				w_uniform = W
 				equipped = 1
 		if(slot_l_store)
-			if(!src.l_store)
-				src.l_store = W
+			if(!l_store)
+				l_store = W
 				equipped = 1
 		if(slot_r_store)
-			if(!src.r_store)
-				src.r_store = W
+			if(!r_store)
+				r_store = W
 				equipped = 1
-//		if(slot_w_radio)
-//			if(!src.w_radio)
-//				src.w_radio = W
-//				equipped = 1
 		if(slot_in_backpack)
-			if (src.back && istype(src.back, /obj/item/weapon/storage/backpack))
-				var/obj/item/weapon/storage/backpack/B = src.back
+			if (back && istype(back, /obj/item/weapon/storage/backpack))
+				var/obj/item/weapon/storage/backpack/B = back
 				if(B.contents.len < 7 && W.w_class <= 3)
 					W.loc = B
 					equipped = 1
@@ -167,8 +141,12 @@ proc/countJob(rank)
 	else
 		del(W)
 
+
 /proc/AutoUpdateAI(obj/subject)
+	var/is_in_use = 0
 	if (subject!=null)
-		for(var/mob/living/silicon/ai/M in world)
-			if ((M.client && M.machine == subject))
+		for(var/mob/living/silicon/ai/M in mob_list)
+			if(M.client && M.machine == subject)
+				is_in_use = 1
 				subject.attack_ai(M)
+	return is_in_use

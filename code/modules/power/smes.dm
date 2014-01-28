@@ -189,7 +189,7 @@
 			user << browse(null, "window=smes")
 			return
 
-	user.machine = src
+	user.set_machine(src)
 
 
 	var/t = "<TT><B>SMES Power Storage Unit</B> [n_tag? "([n_tag])" : null]<HR><PRE>"

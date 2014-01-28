@@ -240,3 +240,22 @@
 	item_state = "xenos_helm"
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS|HANDS
 	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
+
+
+/obj/item/clothing/suit/armor/jedirobe
+	name = "robe"
+	desc = "A traditional robe."
+	icon_state = "jedi"
+	item_state = "jedi"
+	body_parts_covered = CHEST|GROIN|LEGS|FEET|HANDS
+	armor = list(melee = 15, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
+	flags_inv = HIDEJUMPSUIT
+	siemens_coefficient = 0.5
+
+/obj/item/clothing/suit/armor/jedirobe/sith
+	icon_state = "sith"
+	item_state = "sith"
+
+/obj/item/clothing/suit/armor/jedirobe/sith/lord
+	icon_state = "lord_sith"
+	item_state = "lord_sith"

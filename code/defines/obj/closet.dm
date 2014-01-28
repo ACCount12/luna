@@ -14,7 +14,7 @@
 	flags = FPRINT*/
 
 
-/obj/spresent
+/obj/structure/spresent
 	desc = "It's a ... present?"
 	name = "strange present"
 	icon = 'items.dmi'
@@ -107,9 +107,3 @@
 	icon_state = "syndicate1"
 	icon_closed = "syndicate1"
 	icon_opened = "syndicate1open"
-
-/obj/structure/closet/malf/suits
-	desc = "Gear preperations closet."
-	icon_state = "syndicate"
-	icon_closed = "syndicate"
-	icon_opened = "syndicateopen"

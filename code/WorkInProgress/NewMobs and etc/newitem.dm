@@ -1,7 +1,3 @@
-/obj/item/proc/process()
-	processing_items.Remove(src)
-	return null
-
 /obj/item/proc/attack_self()
 	return
 
@@ -29,6 +25,162 @@
 //
 // ***TODO: implement unequipped()
 //
+
+/obj/item/proc/mob_can_equip(var/mob/M, slot, disable_warning = 0)
+	if(!slot) return 0
+	if(!M) return 0
+	if(!M.has_organ_for_slot(slot)) return 0
+
+
+	if(ishuman(M))	//START HUMAN
+		var/mob/living/carbon/human/H = M
+
+		switch(slot)
+			if(slot_l_hand)
+				if(H.l_hand || H.restrained()) return 0
+				return 1
+			if(slot_r_hand)
+				if(H.r_hand || H.restrained()) return 0
+				return 1
+			if(slot_wear_mask)
+				if(H.wear_mask) return 0
+				if( !(slot_flags & SLOT_MASK) )
+					return 0
+				return 1
+			if(slot_back)
+				if(H.back) return 0
+				if( !(slot_flags & SLOT_BACK) )
+					return 0
+				return 1
+			if(slot_wear_suit)
+				if(H.wear_suit)	return 0
+				if( !(slot_flags & SLOT_OCLOTHING) )
+					return 0
+				return 1
+			if(slot_gloves)
+				if(H.gloves) return 0
+				if( !(slot_flags & SLOT_GLOVES) )
+					return 0
+				return 1
+			if(slot_shoes)
+				if(H.shoes)	return 0
+				if( !(slot_flags & SLOT_FEET) )
+					return 0
+				return 1
+			if(slot_belt)
+				if(H.belt) return 0
+				if(!H.w_uniform)
+					if(!disable_warning)
+						H << "\red You need a jumpsuit before you can attach this [name]."
+					return 0
+				if( !(slot_flags & SLOT_BELT) )
+					return
+				return 1
+			if(slot_glasses)
+				if(H.glasses) return 0
+				if( !(slot_flags & SLOT_EYES) )
+					return 0
+				return 1
+			if(slot_head)
+				if(H.head) return 0
+				if( !(slot_flags & SLOT_HEAD) )
+					return 0
+				return 1
+			if(slot_ears)
+				if(H.ears)	return 0
+				if( !(slot_flags & SLOT_EARS) && w_class > 1)
+					return 0
+				return 1
+			if(slot_w_uniform)
+				if(H.w_uniform)	return 0
+				if( !(slot_flags & SLOT_ICLOTHING) )
+					return 0
+				return 1
+			if(slot_wear_id)
+				if(H.wear_id) return 0
+				if(!H.w_uniform)
+					if(!disable_warning)
+						H << "\red You need a jumpsuit before you can attach this [name]."
+					return 0
+				if( !(slot_flags & SLOT_ID) )
+					return 0
+				return 1
+			if(slot_l_store)
+				if(H.l_store) return 0
+				if(!H.w_uniform)
+					if(!disable_warning)
+						H << "\red You need a jumpsuit before you can attach this [name]."
+					return 0
+				if(slot_flags & SLOT_DENYPOCKET)
+					return 0
+				if( w_class <= 2 || (slot_flags & SLOT_POCKET) )
+					return 1
+			if(slot_r_store)
+				if(H.r_store) return 0
+				if(!H.w_uniform)
+					if(!disable_warning)
+						H << "\red You need a jumpsuit before you can attach this [name]."
+					return 0
+				if(slot_flags & SLOT_DENYPOCKET)
+					return 0
+				if( w_class <= 2 || (slot_flags & SLOT_POCKET) )
+					return 1
+				return 0
+			if(slot_s_store)
+				if(H.s_store) return 0
+				if(!H.wear_suit)
+					if(!disable_warning)
+						H << "\red You need a suit before you can attach this [name]."
+					return 0
+				if(!H.wear_suit.allowed)
+					return 0
+				if(src.w_class > 3)
+					if(!disable_warning)
+						usr << "The [name] is too big to attach."
+					return 0
+				if( istype(src, /obj/item/device/pda) || istype(src, /obj/item/weapon/pen) || is_type_in_list(src, H.wear_suit.allowed) )
+					return 1
+				return 0
+			if(slot_handcuffed)
+				if(H.handcuffed) return 0
+				if(!istype(src, /obj/item/weapon/handcuffs))
+					return 0
+				return 1
+			if(slot_in_backpack)
+				if (H.back && istype(H.back, /obj/item/weapon/storage/backpack))
+					var/obj/item/weapon/storage/backpack/B = H.back
+					if(B.contents.len < B.storage_slots && w_class <= 3)
+						return 1
+				return 0
+		return 0 //Unsupported slot
+		//END HUMAN
+
+	else if(ismonkey(M)) //START MONKEY
+		var/mob/living/carbon/monkey/MO = M
+
+		switch(slot)
+			if(slot_l_hand)
+				if(MO.l_hand)
+					return 0
+				return 1
+			if(slot_r_hand)
+				if(MO.r_hand)
+					return 0
+				return 1
+			if(slot_wear_mask)
+				if(MO.wear_mask)
+					return 0
+				if( !(slot_flags & SLOT_MASK) )
+					return 0
+				return 1
+			if(slot_back)
+				if(MO.back)
+					return 0
+				if( !(slot_flags & SLOT_BACK) )
+					return 0
+				return 1
+		return 0 //Unsupported slot
+		//END MONKEY
 
 /obj/item/proc/on_found(mob/finder as mob)
 	return 0

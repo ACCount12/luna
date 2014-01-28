@@ -50,6 +50,7 @@
 	name = "identification card"
 	icon_state = "id"
 	item_state = "card-id"
+	slot_flags = SLOT_ID
 	var/access = list()
 	var/registered = null
 	var/assignment = null
@@ -202,15 +203,6 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = 3.0
-	flags = FPRINT
-
-
-/obj/item/weapon/paint
-	name = "Paint Can"
-	icon = 'old_or_unused.dmi'
-	icon_state = "paint_neutral"
-	item_state = "paintcan"
-	w_class = 3.0
 
 /obj/item/weapon/paper
 	name = "Paper"
@@ -222,6 +214,8 @@
 	w_class = 1.0
 	throw_speed = 3
 	throw_range = 15
+	slot_flags = SLOT_HEAD
+
 	var/see_face = 1
 	var/body_parts_covered = HEAD
 	var/protective_temperature = T0C + 10
@@ -465,47 +459,6 @@ Total SMES charging rate should not exceed total power generation rate, or an ov
 	icon = 'items.dmi'
 	icon_state = "wrap_paper"
 	var/amount = 20.0
-
-
-/obj/item/device/camera_bug
-	name = "camera bug"
-	icon_state = "camerabug"
-	w_class = 1.0
-	item_state = "electronic"
-	throw_speed = 4
-	throw_range = 20
-	var/bug_active = 0
-
-/obj/item/device/camera_bug/attack_self(mob/user as mob)
-	var/list/cameras = new/list()
-	for (var/obj/machinery/camera/C in world)
-		if (C.bugged && C.status)
-			cameras.Add(C)
-	if (length(cameras) == 0)
-		user << "\red No bugged functioning cameras found."
-		return
-
-	var/list/friendly_cameras = new/list()
-
-	for (var/obj/machinery/camera/C in cameras)
-		friendly_cameras.Add(C.c_tag)
-
-	var/target = input("Select the camera to observe", null) as null|anything in friendly_cameras
-	if (!target)
-		return
-
-	for (var/obj/machinery/camera/C in cameras)
-		if (C.c_tag == target)
-			target = C
-			break
-	if (user.stat == 2) return
-
-	user.client.eye = target
-	bug_active = 1
-
-	spawn(100)
-		bug_active = 0
-
 
 /obj/item/weapon/module
 	icon = 'module.dmi'

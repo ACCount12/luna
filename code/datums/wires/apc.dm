@@ -20,11 +20,9 @@ var/const/APC_WIRE_AI_CONTROL = 8
 	return 0
 
 /datum/wires/apc/UpdatePulsed(var/index)
-
 	var/obj/machinery/power/apc/A = holder
 
 	switch(index)
-
 		if(APC_WIRE_IDSCAN)
 			A.locked = 0
 

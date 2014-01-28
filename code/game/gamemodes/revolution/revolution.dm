@@ -34,8 +34,6 @@
 	"}
 
 	var/finished = 0
-	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
-	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
 /datum/game_mode/revolution/announce()
 	world << "<B>The current game mode is - Revolution!</B>"
@@ -165,9 +163,9 @@
 			rev_mob << "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply dial the frequency [format_frequency(freq)] to unlock it's hidden features.
 			rev_mob.mind.store_memory("<B>Radio Freq:</B> [format_frequency(freq)] ([R.name] [loc]).", 0, 0)*/
 		if(rev_mob.r_store)
-			rev_mob.equip_if_possible(new /obj/item/device/flash(rev_mob), rev_mob.slot_l_store)
+			rev_mob.equip_if_possible(new /obj/item/device/flash(rev_mob), slot_l_store)
 		if(rev_mob.l_store)
-			rev_mob.equip_if_possible(new /obj/item/device/flash(rev_mob), rev_mob.slot_r_store)
+			rev_mob.equip_if_possible(new /obj/item/device/flash(rev_mob), slot_r_store)
 
 
 

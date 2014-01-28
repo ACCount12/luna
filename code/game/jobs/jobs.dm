@@ -2,22 +2,22 @@ var/list/occupations = list(
 	"Engineer", "Engineer", "Engineer", "Engineer", "Engineer",
 	"Security Officer", "Security Officer", "Security Officer", "Security Officer", "Security Officer",
 	"Forensic Technician",
-	"Geneticist",
-	"Scientist", "Scientist", "Scientist",
+	"Geneticist", "Geneticist",
+	"Scientist", "Scientist", "Scientist",  "Scientist",
 	"Atmospheric Technician", "Atmospheric Technician",
-	"Medical Doctor", "Medical Doctor",
+	"Medical Doctor", "Medical Doctor", "Medical Doctor",
 	"Head of Personnel",
 	"Head of Security",
 	"Chief Engineer",
 	"Research Director",
 	"Counselor",
-	"Roboticist",
-	"Hydroponicist",
+	"Roboticist", "Roboticist",
+	"Hydroponicist", "Hydroponicist",
 	"AI",
 	"Barman",
 	"Chef",
-	"Janitor",
-	"Chemist",
+	"Janitor", "Janitor",
+	"Chemist", "Chemist",
 	"Warden",
 	"Clown",
 	"Mime",
@@ -25,8 +25,7 @@ var/list/occupations = list(
 	"Shaft Miner","Shaft Miner",
 	"Cargo Technician","Cargo Technician")
 
-var/list/assistant_occupations = list(
-	"Unassigned")
+var/list/assistant_occupations = list("Unassigned")
 
 /proc/IsResearcher(var/job)
 	switch(job)
@@ -47,8 +46,6 @@ var/list/assistant_occupations = list(
 
 /proc/GetRank(var/job)
 	switch(job)
-		if("Unassigned")
-			return 0
 		if("Engineer")
 			return 1
 		if("Security Officer")
@@ -77,16 +74,6 @@ var/list/assistant_occupations = list(
 			return 1
 		if("Hydroponicist")
 			return 1
-		if("Barman")
-			return 0
-		if("Clown")
-			return 0
-		if("Mime")
-			return 0
-		if("Chef")
-			return 0
-		if("Janitor")
-			return 0
 		if("Chemist")
 			return 2
 		if("Quartermaster")
@@ -96,8 +83,9 @@ var/list/assistant_occupations = list(
 		if("Shaft Miner")
 			return 1
 		if("Captain")
-			return 4
+			return 5
 		else
+			return 0
 			//world << "[job] NOT GIVEN RANK, REPORT JOB.DM ERROR TO CODER"
 
 /proc/IsSecurity(var/job)

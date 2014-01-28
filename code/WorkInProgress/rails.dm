@@ -1,22 +1,22 @@
-obj/rail
+/obj/structure/rail
 	name = "Rail Track"
 	icon = 'rail.dmi'
 	anchored = 1
-	var/obj/rail/node1
-	var/obj/rail/node2
+	var/obj/structure/rail/node1
+	var/obj/structure/rail/node2
 	var/node1_dir
 	var/node2_dir
 
-obj/rail/New()
+/obj/structure/rail/New()
 	sleep(1)
 	updatetrack()
-obj/rail/verb/update()
+/obj/structure/rail/verb/update()
 	set src in view(5)
 	updatetrack()
-obj/rail/proc/updatetrack()
+/obj/structure/rail/proc/updatetrack()
 	for(var/dir in cardinal)
 		var/turf/T = get_step(src,dir)
-		var/obj/rail/R = locate(/obj/rail/) in T
+		var/obj/structure/rail/R = locate(/obj/structure/rail/) in T
 		if(R)
 			if(node1 == null && node2 != R)
 				node1 = R
@@ -26,7 +26,7 @@ obj/rail/proc/updatetrack()
 	node1_dir = get_dir(src,node1)
 	node2_dir = get_dir(src,node2)
 	update_icon()
-obj/rail/update_icon()
+/obj/structure/rail/update_icon()
 	var/num
 	var/num2
 	if(!num || !num2)
@@ -37,7 +37,7 @@ obj/rail/update_icon()
 	icon_state = "rail_[num][num2]"
 	//usr << "rail-[num][num2]"
 
-obj/rail/attackby(var/obj/item/weapon/W as obj, var/mob/m as mob)
+/obj/structure/rail/attackby(var/obj/item/weapon/W as obj, var/mob/m as mob)
 	if(istype(W,/obj/item/weapon/wrench))
 		new/obj/item/weapon/track(loc)
 		del src
@@ -48,27 +48,27 @@ obj/rail/attackby(var/obj/item/weapon/W as obj, var/mob/m as mob)
 		m << "You unbolt the track."
 
 
-obj/railcart
+/obj/structure/railcart
 	name = "Cart"
 	icon = 'rail.dmi'
 	icon_state = "cart"
-	var/obj/rail/oldloc
+	var/obj/structure/rail/oldloc
 	var/on = 0
 	var/list/path_list = list()
 	var/way = 1 // 0 /not moving 1 moving backwards 2moving forwards
 	var/list/ontop = list()
 
-obj/railcart/verb/start()
+/obj/structure/railcart/verb/start()
 	set src in view(2)
 	on()
 	sleep(-1)
 	process()
 
-obj/railcart/verb/stop()
+/obj/structure/railcart/verb/stop()
 	set src in view(2)
 	off()
 
-obj/railcart/proc/on()
+/obj/structure/railcart/proc/on()
 	on = 1
 	density = 1
 	for(var/obj/o in loc)
@@ -84,31 +84,31 @@ obj/railcart/proc/on()
 	icon_state = "cartmoving"
 
 
-obj/railcart/proc/off()
+/obj/structure/railcart/proc/off()
 	on = 0
 	density = 0
 	ontop = list()
 	oldloc = null
 	icon_state = "cart"
 
-obj/railcart/Move(var/atom/NewLoc,var/Dir=0)
+/obj/structure/railcart/Move(var/atom/NewLoc,var/Dir=0)
 	var/turf/t = get_turf(NewLoc)
-	if(!locate(/obj/rail) in t)
+	if(!locate(/obj/structure/rail) in t)
 		off()
 	return ..()
 
-obj/railcart/attack_hand(mob/user as mob)
+/obj/structure/railcart/attack_hand(mob/user as mob)
 	if(on)
 		off()
 	else
 		on()
 
-obj/railcart/proc/process()
+/obj/structure/railcart/process()
 	while(on)
 		for(var/atom/a in ontop)
 			if(a.loc != loc)
 				ontop -= a
-		var/obj/rail/R = locate() in src.loc
+		var/obj/structure/rail/R = locate() in src.loc
 		if(!R)
 			return
 
@@ -129,9 +129,9 @@ obj/railcart/proc/process()
 		sleep(-1)
 		sleep(4)
 
-obj/railcart/Bump(atom/obstacle)
+/obj/structure/railcart/Bump(atom/obstacle)
 	..()
-	if(istype(obstacle,/obj/rail)|!obstacle.density|!obstacle)
+	if(istype(obstacle,/obj/structure/rail)|!obstacle.density|!obstacle)
 		return
 	off()
 	state("EMERGANCY STOP")
@@ -147,7 +147,7 @@ obj/item/weapon/track/attackby(var/obj/item/weapon/W as obj, var/mob/m as mob)
 	if(istype(W,/obj/item/weapon/wrench))
 		if(isturf(loc))
 			m << "You bolt the track into place."
-			var/obj/rail/R = new /obj/rail(get_turf(src))
+			var/obj/structure/rail/R = new /obj/structure/rail(get_turf(src))
 			if(R.node1)
 				R.node1.updatetrack()
 			if(R.node2)

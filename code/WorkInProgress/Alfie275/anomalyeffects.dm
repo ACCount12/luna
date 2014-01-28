@@ -214,7 +214,7 @@ var/list/anomalyeffects = list("emp" = 1, "heal"=2, "harm"=2, "march" = 1, "repe
 		if(istype(A, /obj/machinery/clonepod))
 			A:malfunction()
 
-	for(var/obj/shielding/shield/S in range(range, T))
+	for(var/obj/effect/shielding/shield/S in range(range, T))
 		S.disabled = 1
 		var/obj/overlay/pulse2 = new/obj/overlay ( S.loc )
 		pulse2.icon = 'effects.dmi'

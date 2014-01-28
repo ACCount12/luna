@@ -35,9 +35,6 @@
 	name = "Coffee"
 	real_name = "Coffee"
 	desc = "It's Coffee, the other pet!"
-	response_help  = "pets"
-	response_disarm = "gently pushes aside"
-	response_harm   = "stomps"
 
 //LOOK AT THIS - ..()??
 /*/mob/living/simple_animal/crab/attackby(var/obj/item/O as obj, var/mob/user as mob)

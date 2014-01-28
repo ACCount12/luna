@@ -194,3 +194,25 @@
 		if("mouth")
 			zone = "head"
 	return zone
+
+
+///eyecheck()
+///Returns a number between -1 to 2
+/mob/living/carbon/human/eyecheck()
+	var/number = 0
+
+	if(istype(src.head, /obj/item/clothing/head/helmet/welding))
+		var/obj/item/clothing/head/helmet/welding/W = src.head
+		if(!W.up) number += 2
+	else if(istype(src.head, /obj/item/clothing/head/helmet/space))
+		number += 2
+
+	if(istype(src.glasses, /obj/item/clothing/glasses/thermal))
+		number -= 1
+	else if(istype(src.glasses, /obj/item/clothing/glasses/sunglasses))
+		number += 1
+	else if(istype(src.glasses, /obj/item/clothing/glasses/welding))
+		var/obj/item/clothing/glasses/welding/W = src.glasses
+		if(!W.up) number += 2
+
+	return number

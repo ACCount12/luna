@@ -1,6 +1,5 @@
 /* TO DO:
 epilepsy flash on lights
-delay round message
 microwave makes robots
 dampen radios
 reactivate cameras - done
@@ -14,6 +13,8 @@ cable stun
 	var/list/possible_modules = list()
 	var/list/modules = list()
 	var/mob/living/silicon/ai/owner
+
+	var/obj/machinery/power/apc/hacked_apc
 
 /datum/ai_modules_picker/New(var/mob/living/silicon/ai/user)
 	..()
@@ -100,7 +101,7 @@ cable stun
 	mod_pick_name = "rcd"
 
 	name = "Disable RCDs"
-	desc = "Sends a specialised pulse to break all RCD devices on the station."
+	desc = "Sends a specialised pulse to break all RCD devices on the ship."
 
 	use()
 		if(..())
@@ -114,7 +115,7 @@ cable stun
 	mod_pick_name = "blackout"
 
 	name = "Blackout"
-	desc = "Attempts to overload the lighting circuits on the station, destroying some bulbs."
+	desc = "Attempts to overload the lighting circuits on the ship, destroying some bulbs."
 
 	use()
 		if(..())
@@ -148,7 +149,7 @@ cable stun
 	cost = 15
 
 	name = "Hack intercept"
-	desc = "Hacks the status upgrade from Cent. Com, removing any information about malfunctioning electrical systems."
+	desc = "Hacks the status upgrade from Centcomm, removing any information about malfunctioning satellite."
 
 	buy(var/mob/living/silicon/ai/user)
 		if(..())
@@ -167,7 +168,7 @@ cable stun
 		if(..())
 			for(var/obj/effect/landmark/malf/mgturret/T in ticker.mode.mode_landmarks)
 				new /turf/simulated/floor/plating/airless(T.loc)
-				var/datum/effect/system/bad_smoke_spread/smoke = new /datum/effect/system/bad_smoke_spread
+				var/datum/effect/effect/system/harmless_smoke_spread/smoke = new
 				smoke.attach(T.loc)
 				smoke.set_up(10, 0, T.loc)
 				smoke.start()
@@ -193,6 +194,25 @@ cable stun
 				slipper.chemicals["sacid"] = 10
 				slipper.chemicals["pacid"] = 10
 				// Deadly acidic cleaner foam!
+			return 1
+		return 0
+
+/datum/AI_Module/upgrade/scrambler
+	mod_pick_name = "scrambler"
+	cost = 60
+
+	name = "Radio scrambler"
+	desc = "Installs a powerful radio scrambler on satellite. You will need to configure it and turn it on."
+
+	buy(var/mob/living/silicon/ai/user)
+		if(..())
+			for(var/obj/effect/landmark/malf/scrambler/S in ticker.mode.mode_landmarks)
+				var/datum/effect/effect/system/harmless_smoke_spread/smoke = new
+				smoke.attach(S.loc)
+				smoke.set_up(10, 0, S.loc)
+				smoke.start()
+
+				new /obj/machinery/radioscrambler(S.loc)
 			return 1
 		return 0
 

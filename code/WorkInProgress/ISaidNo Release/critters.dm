@@ -146,7 +146,7 @@
 			src.CritterDeath()
 		return
 
-	proc/process()
+	process()
 		set background = 1
 		if (!src.alive) return
 		check_health()
@@ -284,7 +284,7 @@
 		s.set_up(5, 1, src)
 		s.start()
 	if (dosmoke)
-		var/datum/effect/system/harmless_smoke_spread/smoke = new /datum/effect/system/harmless_smoke_spread()
+		var/datum/effect/effect/system/harmless_smoke_spread/smoke = new /datum/effect/effect/system/harmless_smoke_spread()
 		smoke.set_up(10, 0, src.loc)
 		smoke.start()
 	src.task = "thinking"

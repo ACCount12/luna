@@ -143,11 +143,10 @@
 
 	if (stat != 2)
 		if (machine)
-			if (!( machine.check_eye(src) ))
+			if (!machine.check_eye(src))
 				reset_view(null)
-		else if(1 /*!(istype(r_hand, /obj/item/device/camera_bug) && r_hand:bug_active) || (istype(r_hand, /obj/item/device/camera_bug) && l_hand:bug_active )*/ )
-			if(!client.adminobs)
-				reset_view(null)
+		else if(!client.adminobs)
+			reset_view(null)
 
 
 	return 1

@@ -142,15 +142,7 @@
 	if (opened)
 		if(istype(O, /obj/item/weapon/crowbar))
 			griefProtection()
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
-			var/obj/structure/frame/machine/M = new /obj/structure/frame/machine(src.loc)
-			M.state = 2
-			M.icon_state = "box_1"
-			for(var/obj/I in component_parts)
-				if(I.reliability != 100 && crit_fail)
-					I.crit_fail = 1
-				I.loc = src.loc
-			del(src)
+			default_deconstruction_crowbar()
 			return 1
 
 /obj/machinery/r_n_d/server/attack_hand(mob/user as mob)

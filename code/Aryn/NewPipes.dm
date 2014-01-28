@@ -929,7 +929,7 @@
 			return src.attack_hand(user)
 
 		attack_hand(mob/user as mob)
-			user.machine = src
+			user.set_machine(src)
 			var/datum/UnifiedNetwork/Network = Networks[/obj/cabling/flexipipe]
 			if(Network)
 				var/datum/gas_mixture/air_contents = Network.Controller:air_contents

@@ -11,18 +11,18 @@
 /datum/artifact_effect/forcefield/ToggleActivate()
 	..()
 	if(created_field.len)
-		for(var/obj/shielding/shield/F in created_field)
+		for(var/obj/effect/shielding/shield/F in created_field)
 			created_field.Remove(F)
 			del(F)
 	else if(holder)
 		var/turf/T = get_turf(holder)
 		if(created_field.len < 16)
-			for(var/obj/shielding/shield/F in created_field)
+			for(var/obj/effect/shielding/shield/F in created_field)
 				created_field.Remove(F)
 				del(F)
 			//for now, just instantly respawn the fields when they get destroyed
 			while(created_field.len < 16)
-				var/obj/shielding/shield/E = new (locate(T.x,T.y,T.z))
+				var/obj/effect/shielding/shield/E = new (locate(T.x,T.y,T.z))
 				created_field.Add(E)
 				E.density = 1
 				E.anchored = 1
@@ -35,17 +35,17 @@
 	if(created_field.len && holder)
 		var/turf/T = get_turf(holder)
 		if(created_field.len < 16) //just instantly respawn the fields when they get destroyed
-			for(var/obj/shielding/shield/F in created_field)
+			for(var/obj/effect/shielding/shield/F in created_field)
 				created_field.Remove(F)
 				del(F)
 			while(created_field.len < 16)
-				var/obj/shielding/shield/E = new (locate(T.x,T.y,T.z))
+				var/obj/effect/shielding/shield/E = new (locate(T.x,T.y,T.z))
 				created_field.Add(E)
 				E.density = 1
 				E.anchored = 1
 				E.invisibility = 0
 
-		var/obj/shielding/shield/E = created_field[1]
+		var/obj/effect/shielding/shield/E = created_field[1]
 		E.loc = locate(T.x + 2,T.y + 2,T.z)
 		E = created_field[2]
 		E.loc = locate(T.x + 2,T.y + 1,T.z)

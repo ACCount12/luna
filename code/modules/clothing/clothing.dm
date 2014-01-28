@@ -36,22 +36,42 @@ SEE_PIXELS// if an object is located on an unlit area, but some of its pixels ar
 BLIND     // can't see anything
 */
 
-
+*/
 //Gloves
 /obj/item/clothing/gloves
 	name = "gloves"
 	gender = PLURAL //Carn: for grammarically correct text-parsing
 	w_class = 2.0
 	icon = 'icons/obj/clothing/gloves.dmi'
+	protective_temperature = 400
+	heat_transfer_coefficient = 0.25
 	siemens_coefficient = 0.50
+	var/wired = 0
+	var/obj/item/weapon/cell/cell = null
 	body_parts_covered = HANDS
 	slot_flags = SLOT_GLOVES
 	attack_verb = list("challenged")
 
-/obj/item/clothing/gloves/examine()
-	set src in usr
-	..()
-	return
+/obj/item/clothing/gloves/proc/attack_gloved(var/atom/A, var/mob/living/carbon/human/user, var/hand)
+	if(iscarbon(A) && wired && cell && user.a_intent == "harm") // STUNGLOVES!
+		var/mob/living/carbon/M = A
+
+		if(cell.use(2500))
+			M.visible_message("<span class='danger'>[M] has been touched with the stun gloves by [user]!</span>")
+			log_attack("[user.name] ([user.ckey]) stungloved [M.name] ([M.ckey])")
+
+			M.Stun(10)
+			M.Weaken(10)
+			if(ishuman(M))
+				var/mob/living/carbon/human/H = M
+				H.stuttering += 10
+		else
+			user << "<span class='notice'>Not enough charge!</span>"
+
+		return 1 // no attack_hand
+
+	return 0
+
 
 //Head
 /obj/item/clothing/head
@@ -60,7 +80,7 @@ BLIND     // can't see anything
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 
-
+/*
 //Mask
 /obj/item/clothing/mask
 	name = "mask"

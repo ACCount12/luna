@@ -656,7 +656,6 @@
 
 /obj/item/weapon/light
 	icon = 'lighting.dmi'
-	flags = FPRINT
 	force = 2
 	throwforce = 5
 	var/status = 0		// LIGHT_OK, LIGHT_BURNED or LIGHT_BROKEN

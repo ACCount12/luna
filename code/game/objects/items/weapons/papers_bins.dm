@@ -145,7 +145,7 @@ PHOTOGRAPHS
 	if (!istype(target, /mob/living/carbon/human)) return
 	if (istype(target:wear_suit, /obj/item/clothing/suit/straight_jacket) || target:stat)
 		if (src.amount > 2)
-			var/obj/spresent/present = new /obj/spresent (target:loc)
+			var/obj/structure/spresent/present = new /obj/structure/spresent (target:loc)
 			src.amount -= 2
 
 			if (target:client)
@@ -183,12 +183,12 @@ PHOTOGRAPHS
 	return
 
 
-/obj/spresent/relaymove(mob/user as mob)
+/obj/structure/spresent/relaymove(mob/user as mob)
 	if (user.stat)
 		return
 	user << "\blue You can't move."
 
-/obj/spresent/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/spresent/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	if (!istype(W, /obj/item/weapon/wirecutters))
 		user << "\blue I need wirecutters for that."

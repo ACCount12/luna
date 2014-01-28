@@ -37,7 +37,7 @@
 /obj/machinery/computer/communications/Topic(href, href_list)
 	if(..())
 		return
-	usr.machine = src
+	usr.set_machine(src)
 
 	if(!href_list["operation"])
 		return
@@ -197,7 +197,7 @@
 	if(..())
 		return
 
-	user.machine = src
+	user.set_machine(src)
 	var/dat = "<head><title>Communications Console</title></head><body>"
 	if (LaunchControl.online && main_shuttle.location==0)
 		var/timeleft = LaunchControl.timeleft()

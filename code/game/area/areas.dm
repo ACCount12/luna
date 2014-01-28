@@ -105,9 +105,9 @@
 							spawn(0)
 							D.open()
 				if(ANorthA.fire == 1)
-					var/obj/LightTest = locate(/obj/alertlighting/firelight) in D.loc
+					var/obj/LightTest = locate(/obj/effect/alertlighting/firelight) in D.loc
 					if(isnull(LightTest))
-						var/obj/alertlighting/firelight/F = new/obj/alertlighting/firelight(D.loc)
+						var/obj/effect/alertlighting/firelight/F = new/obj/effect/alertlighting/firelight(D.loc)
 						var/image/imagelight = image('alert.dmi',F,icon_state = "blue")
 						world << imagelight
 
@@ -120,9 +120,9 @@
 							spawn(0)
 							D.open()
 				if(AEastA.fire == 1)
-					var/obj/LightTest = locate(/obj/alertlighting/firelight) in D.loc
+					var/obj/LightTest = locate(/obj/effect/alertlighting/firelight) in D.loc
 					if(isnull(LightTest))
-						var/obj/alertlighting/firelight/F = new/obj/alertlighting/firelight(D.loc)
+						var/obj/effect/alertlighting/firelight/F = new/obj/effect/alertlighting/firelight(D.loc)
 						var/image/imagelight = image('alert.dmi',F,icon_state = "blue")
 						world << imagelight
 
@@ -135,9 +135,9 @@
 							spawn(0)
 							D.open()
 				if(ASouthA.fire == 1)
-					var/obj/LightTest = locate(/obj/alertlighting/firelight) in D.loc
+					var/obj/LightTest = locate(/obj/effect/alertlighting/firelight) in D.loc
 					if(isnull(LightTest))
-						var/obj/alertlighting/firelight/F = new/obj/alertlighting/firelight(D.loc)
+						var/obj/effect/alertlighting/firelight/F = new/obj/effect/alertlighting/firelight(D.loc)
 						var/image/imagelight = image('alert.dmi',F,icon_state = "blue")
 						world << imagelight
 
@@ -150,9 +150,9 @@
 							spawn(0)
 							D.open()
 				if(AWestA.fire == 1)
-					var/obj/LightTest = locate(/obj/alertlighting/firelight) in D.loc
+					var/obj/LightTest = locate(/obj/effect/alertlighting/firelight) in D.loc
 					if(isnull(LightTest))
-						var/obj/alertlighting/firelight/F = new/obj/alertlighting/firelight(D.loc)
+						var/obj/effect/alertlighting/firelight/F = new/obj/effect/alertlighting/firelight(D.loc)
 						var/image/imagelight = image('alert.dmi',F,icon_state = "blue")
 						world << imagelight
 			else
@@ -280,9 +280,9 @@
 							D.update_icon()
 							//world << "opened North"
 				if(ANorthA.air_doors_activated == 1)
-					var/obj/LightTest = locate(/obj/alertlighting/atmoslight) in D.loc
+					var/obj/LightTest = locate(/obj/effect/alertlighting/atmoslight) in D.loc
 					if(isnull(LightTest))
-						var/obj/alertlighting/atmoslight/F = new/obj/alertlighting/atmoslight(D.loc)
+						var/obj/effect/alertlighting/atmoslight/F = new/obj/effect/alertlighting/atmoslight(D.loc)
 						var/image/imagelight = image('alert.dmi',F,icon_state = "blueold")
 						world << imagelight
 
@@ -297,9 +297,9 @@
 							D.update_icon()
 							//world << "opened East"
 				if(AEastA.air_doors_activated == 1)
-					var/obj/LightTest = locate(/obj/alertlighting/atmoslight) in D.loc
+					var/obj/LightTest = locate(/obj/effect/alertlighting/atmoslight) in D.loc
 					if(isnull(LightTest))
-						var/obj/alertlighting/atmoslight/F = new/obj/alertlighting/atmoslight(D.loc)
+						var/obj/effect/alertlighting/atmoslight/F = new/obj/effect/alertlighting/atmoslight(D.loc)
 						var/image/imagelight = image('alert.dmi',F,icon_state = "blueold")
 						world << imagelight
 						//world << "Image should be placed"
@@ -315,9 +315,9 @@
 							D.update_icon()
 							//world << "opened South"
 				if(ASouthA.air_doors_activated == 1)
-					var/obj/LightTest = locate(/obj/alertlighting/atmoslight) in D.loc
+					var/obj/LightTest = locate(/obj/effect/alertlighting/atmoslight) in D.loc
 					if(isnull(LightTest))
-						var/obj/alertlighting/atmoslight/F = new/obj/alertlighting/atmoslight(D.loc)
+						var/obj/effect/alertlighting/atmoslight/F = new/obj/effect/alertlighting/atmoslight(D.loc)
 						var/image/imagelight = image('alert.dmi',F,icon_state = "blueold")
 						world << imagelight
 
@@ -332,9 +332,9 @@
 							D.update_icon()
 							//world << "opened West"
 				if(AWestA.air_doors_activated == 1)
-					var/obj/LightTest = locate(/obj/alertlighting/atmoslight) in D.loc
+					var/obj/LightTest = locate(/obj/effect/alertlighting/atmoslight) in D.loc
 					if(isnull(LightTest))
-						var/obj/alertlighting/atmoslight/F = new/obj/alertlighting/atmoslight(D.loc)
+						var/obj/effect/alertlighting/atmoslight/F = new/obj/effect/alertlighting/atmoslight(D.loc)
 						var/image/imagelight = image('alert.dmi',F,icon_state = "blueold")
 						world << imagelight
 			else

@@ -80,9 +80,9 @@
 
 	var/uniform = pick(/obj/item/clothing/under/color/black,/obj/item/clothing/under/color/blue,/obj/item/clothing/under/color/green,/obj/item/clothing/under/color/grey,/obj/item/clothing/under/color/orange,/obj/item/clothing/under/color/pink,/obj/item/clothing/under/color/red,/obj/item/clothing/under/color/white,/obj/item/clothing/under/color/yellow)
 
-	player.equip_if_possible(new uniform(player),player.slot_w_uniform)
+	player.equip_if_possible(new uniform(player),slot_w_uniform)
 
-	player.equip_if_possible(new /obj/item/device/pda,player.slot_belt)
+	player.equip_if_possible(new /obj/item/device/pda,slot_belt)
 	player.belt:owner = player.name
 
 /datum/game_mode/traitoramongus/proc/get_possible_traitors()

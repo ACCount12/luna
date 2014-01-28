@@ -444,10 +444,10 @@
 	var/list/targets = list()			//list of primary targets
 	var/list/secondarytargets = list()	//targets that are least important
 
-	/*if(check_anomalies)	//if its set to check for xenos/carps, check for non-mob "crittersssss"(And simple_animals)
+	if(check_anomalies)	//if its set to check for xenos/carps, check for non-mob "crittersssss"(And simple_animals)
 		for(var/mob/living/simple_animal/C in view(7, src))
 			if(!C.stat)
-				targets += C*/
+				targets += C
 
 	for(var/mob/living/carbon/C in view(7,src))	//loops through all living carbon-based lifeforms in view
 		switch(is_target(C))

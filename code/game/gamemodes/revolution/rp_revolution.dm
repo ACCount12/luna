@@ -12,8 +12,6 @@
 	config_tag = "rp-revolution"
 
 	var/finished = 0
-	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
-	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 	var/all_brigged = 0
 	var/brigged_time = 0
 

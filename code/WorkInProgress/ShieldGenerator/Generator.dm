@@ -148,7 +148,7 @@ Manual Mode Generation Rate:      <a href="?src=\ref[src]&man=1">M</a> <a href="
 
 		AutoTargetChargeLevel = max(min(AutoTargetChargeLevel, 100), 0)
 
-	usr.machine = src
+	usr.set_machine(src)
 	src.updateDialog()
 
 //STANDARD PROCESSING

@@ -201,12 +201,12 @@
 
 //if emptyhand then wear the suit, no bedsheet clothes for the alien
 
-		if("o_clothing")
+/*		if("o_clothing")
 			if (wear_suit)
 				if (emptyHand)
 					wear_suit.DblClick()
 				return
-			if (( istype(W, /obj/alien/skin_suit) ))
+			if (istype(W, /obj/alien/skin_suit))
 				u_equip(W)
 				head = W
 				return
@@ -222,11 +222,11 @@
 				if (emptyHand)
 					head.DblClick()
 				return
-			if (( istype(W, /obj/alien/head) ))
+			if (istype(W, /obj/alien/head))
 				u_equip(W)
 				head = W
 				return
-			return
+			return*/
 /*			if (!( istype(W, /obj/item/clothing/head) ))
 				return
 			u_equip(W)
@@ -238,7 +238,7 @@
 				if (emptyHand)
 					l_store.DblClick()
 				return
-			if ((!( istype(W, /obj/item) ) || W.w_class > 3))
+			if (!istype(W, /obj/item) || W.w_class > 3)
 				return
 			u_equip(W)
 			l_store = W
@@ -247,7 +247,7 @@
 				if (emptyHand)
 					r_store.DblClick()
 				return
-			if ((!( istype(W, /obj/item) ) || W.w_class > 3))
+			if (!istype(W, /obj/item) || W.w_class > 3)
 				return
 			u_equip(W)
 			r_store = W
@@ -447,23 +447,6 @@
 /mob/living/carbon/alien/humanoid/attack_hand(mob/living/carbon/human/M as mob)
 	..()
 
-	if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
-		var/obj/item/clothing/gloves/G = M.gloves
-		if(G.cell)
-			if(M.a_intent == "harm")//Stungloves.
-				if(G.cell.charge >= 2500)
-					G.cell.charge -= 2500
-					visible_message("<span class='danger'>[src] has been touched with the stun gloves by [M]!</span>")
-
-					Stun(10)
-					Weaken(10)
-
-					return 1
-				else
-					M << "<span class='notice'>Not enough charge!</span>"
-				return
-
-
 	if (M.a_intent == "help")
 		if(lying)
 			if(surgeries.len)
@@ -573,7 +556,7 @@
 
 
 /mob/living/carbon/alien/humanoid/show_inv(mob/user as mob)
-	user.machine = src
+	user.set_machine(src)
 	var/dat = {"
 	<B><HR><FONT size=3>[name]</FONT></B>
 	<BR><HR>

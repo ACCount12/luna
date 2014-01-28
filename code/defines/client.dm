@@ -21,3 +21,5 @@
 	var/warned = 0
 	var/admin_invis = 0
 	var/list/ctab_settings = list()
+
+	var/list/prefs = list()

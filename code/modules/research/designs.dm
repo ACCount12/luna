@@ -1334,7 +1334,7 @@ other types of metals and chemistry for reagents).
 	build_type = PROTOLATHE
 	materials = list("$metal" = 3000, "$plasma" = 3000, "$diamond" = 500)
 	reliability_base = 76
-	build_path = /obj/item/weapon/reagent_containers/glass/beaker/bluespace
+	build_path = /obj/item/weapon/reagent_containers/glass/beaker/large/bluespace
 	category = "Misc"
 
 /datum/design/noreactbeaker

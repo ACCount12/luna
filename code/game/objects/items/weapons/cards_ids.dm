@@ -67,7 +67,7 @@ FINGERPRINT CARD
 	if ((usr.stat || usr.restrained()))
 		return
 	if (usr.contents.Find(src))
-		usr.machine = src
+		usr.set_machine(src)
 		if (href_list["remove"])
 			var/obj/item/P = locate(href_list["remove"])
 			if ((P && P.loc == src))

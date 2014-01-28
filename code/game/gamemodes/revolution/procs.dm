@@ -71,12 +71,13 @@
 /datum/game_mode/proc/get_possible_revolutionaries()
 	var/list/candidates = list()
 
-	for(var/mob/living/carbon/human/player in world)
-		if(player.client && player.be_syndicate)
-			candidates += player.mind
+	for(var/mob/living/carbon/human/player in mob_list)
+		if(player.client)
+			if(BE_HEADREV in player.client.prefs)
+				candidates += player.mind
 
 	if(candidates.len < 1)
-		for(var/mob/living/carbon/human/player in world)
+		for(var/mob/living/carbon/human/player in mob_list)
 			if(player.client)
 				candidates += player.mind
 

@@ -27,7 +27,7 @@
 			return
 
 
-	user.machine = src
+	user.set_machine(src)
 	var/t = "<TT><B>Filter Monitoring</B><HR>"
 	t += "<BR><HR><A href='?src=\ref[src];zlevel=4'>Deck 1</A></TT>"
 	t += "<BR><HR><A href='?src=\ref[src];zlevel=3'>Deck 2</A></TT>"

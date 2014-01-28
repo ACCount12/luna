@@ -78,17 +78,6 @@
 			open.LightLevelGreen = S.LightLevelGreen
 			open.ul_UpdateLight()
 
-
-
-/turf/simulated/floor/prison			//Its good to be lazy.
-	name = "Welcome to Admin Prison"
-	wet = 0
-	image/wet_overlay = null
-
-	thermite = 0
-	oxygen = MOLES_O2STANDARD
-	nitrogen = MOLES_N2STANDARD
-
 /turf/simulated
 	name = "station"
 	var/wet = 0
@@ -101,6 +90,12 @@
 /turf/simulated/floor/engine
 	name = "reinforced floor"
 	icon_state = "engine"
+	thermal_conductivity = 0.025
+	heat_capacity = 325000
+
+/turf/simulated/floor/engine/dstar
+	name = "floor"
+	icon_state = "dstar"
 	thermal_conductivity = 0.025
 	heat_capacity = 325000
 
@@ -695,6 +690,10 @@ var/list/wood_icons = list("wood","wood-broken")
 	icon_state = "cult"
 	walltype = "cult"
 
+/turf/simulated/wall/dstar
+	icon_state = "d_metal0"
+	walltype = "d_metal"
+
 /turf/simulated/wall/heatshield
 	thermal_conductivity = 0
 	opacity = 0
@@ -705,7 +704,6 @@ var/list/wood_icons = list("wood","wood-broken")
 
 /turf/simulated/wall/heatshield/ThermiteBurn()
 	return // Thermite proof!
-
 /turf/simulated/wall/heatshield/attackby()
 	return
 /turf/simulated/wall/heatshield/attack_hand()
@@ -780,6 +778,10 @@ var/list/wood_icons = list("wood","wood-broken")
 /turf/unsimulated/wall/other
 	icon_state = "r_wall"
 
+/turf/unsimulated/wall/cyber
+	icon = 'cyberspace.dmi'
+	icon_state = "wall"
+
 /turf/proc/AdjacentTurfs()
 	var/L[] = new()
 	for(var/turf/simulated/t in oview(src,1))
@@ -791,7 +793,7 @@ var/list/wood_icons = list("wood","wood-broken")
 	var/L[] = new()
 	for(var/turf/simulated/t in oview(src,1))
 		if(!t.density && !LinkBlocked(src, t) && !TurfBlockedNonWindow(t))
-			if(locate(/obj/rail) in t)
+			if(locate(/obj/structure/rail) in t)
 				L.Add(t)
 	return L
 

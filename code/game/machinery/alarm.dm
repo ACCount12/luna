@@ -49,7 +49,7 @@
 
 	use_power(5, ENVIRON)
 
-	if (!( istype(location, /turf) ))
+	if (!istype(location, /turf))
 		return 0
 
 	var/datum/gas_mixture/environment = location.return_air(1)
@@ -133,7 +133,7 @@
 
 /obj/machinery/alarm/attack_hand(mob/user as mob)
 	if(!(user in range(3,src)) && !istype(user, /mob/living/silicon/))
-		user.machine = null
+		user.unset_machine()
 		return
 	if(user.stat)
 		return
@@ -141,7 +141,7 @@
 		return
 
 	var/turf/location = loc
-	if (!( istype(location, /turf) ))
+	if (!istype(location, /turf))
 		return
 
 	var/dat = ""
@@ -258,7 +258,7 @@
 		dat = mockpanel(buttons,"\blue <B>[alarm_zone] Atmosphere:</B><br>",null,readouts)
 
 	user << browse(dat, "window=alarm;size=400x500")
-	user.machine = src
+	user.set_machine(src)
 	onclose(user, "alarm")
 
 	return 1
@@ -299,9 +299,9 @@ obj/machinery/alarm/proc
 	air_doors_close(manual)
 		var/area/A = get_area(loc)
 		for(var/obj/machinery/door/airlock/E in A.auxdoors)
-			var/obj/LightTest = locate(/obj/alertlighting/atmoslight) in E.loc
+			var/obj/LightTest = locate(/obj/effect/alertlighting/atmoslight) in E.loc
 			if(isnull(LightTest))
-				var/obj/alertlighting/atmoslight/F = new/obj/alertlighting/atmoslight(E.loc)
+				var/obj/effect/alertlighting/atmoslight/F = new/obj/effect/alertlighting/atmoslight(E.loc)
 				var/image/imagelight = image('alert.dmi',F,icon_state = "blueold")
 				world << imagelight
 			if((!E.arePowerSystemsOn()) || (E.stat & NOPOWER)) continue
@@ -358,9 +358,9 @@ obj/machinery/alarm/proc
 		for(var/area/RA in A.related)
 			for(var/turf/T in RA)
 				if(T.density != 1)
-					var/obj/LightTest = locate(/obj/alertlighting/atmoslight) in T
+					var/obj/LightTest = locate(/obj/effect/alertlighting/atmoslight) in T
 					if(isnull(LightTest))
-						var/obj/alertlighting/atmoslight/F = new/obj/alertlighting/atmoslight(T)
+						var/obj/effect/alertlighting/atmoslight/F = new/obj/effect/alertlighting/atmoslight(T)
 						var/image/imagelight = image('alert.dmi',F,icon_state = "blueold")
 						world << imagelight
 			RA.activate_air_doors(manual*5)
@@ -371,7 +371,7 @@ obj/machinery/alarm/proc
 			var/area/B = get_area(E.loc)
 			if(B.air_doors_activated != 1)
 				var/turf/C = E.loc
-				for (var/obj/alertlighting/atmoslight/G in C)
+				for (var/obj/effect/alertlighting/atmoslight/G in C)
 					del(G)
 				if((!E.arePowerSystemsOn()) || (E.stat & NOPOWER)) continue
 					//E.air_locked = 0
@@ -390,7 +390,7 @@ obj/machinery/alarm/proc
 							D.open()
 		for(var/area/RA in A.related)
 			for(var/turf/T in RA)
-				for (var/obj/alertlighting/atmoslight/F in T)
+				for (var/obj/effect/alertlighting/atmoslight/F in T)
 					del(F)
 			RA.deactivate_air_doors(manual*5)
 
@@ -468,7 +468,7 @@ obj/machinery/alarm/proc
 	if(user.stat || stat & (NOPOWER|BROKEN))
 		return
 
-	user.machine = src
+	user.set_machine(src)
 	var/area/A = src.loc
 	var/d1
 	var/d2
@@ -526,7 +526,7 @@ obj/machinery/alarm/proc
 	if (usr.stat || stat & (BROKEN|NOPOWER))
 		return
 	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
-		usr.machine = src
+		usr.set_machine(src)
 		if (href_list["reset"])
 			src.reset()
 		else
@@ -564,7 +564,7 @@ obj/machinery/alarm/proc
 		var/area/B = get_area(E.loc)
 		if(B.fire != 1)
 			var/turf/C = E.loc
-			for (var/obj/alertlighting/firelight/G in C)
+			for (var/obj/effect/alertlighting/firelight/G in C)
 				del(G)
 			if(!E.blocked)
 				if(E.operating)
@@ -575,7 +575,7 @@ obj/machinery/alarm/proc
 	for(var/area/RA in A.related)
 		for(var/turf/T in RA)
 			if(T.density != 1)
-				for (var/obj/alertlighting/firelight/F in T)
+				for (var/obj/effect/alertlighting/firelight/F in T)
 					del(F)
 
 		RA.firereset()
@@ -595,9 +595,9 @@ obj/machinery/alarm/proc
 	if (!( istype(A, /area) ))
 		return
 	for(var/obj/machinery/door/firedoor/E in A.auxdoors)
-		var/obj/LightTest = locate(/obj/alertlighting/firelight) in E.loc
+		var/obj/LightTest = locate(/obj/effect/alertlighting/firelight) in E.loc
 		if(isnull(LightTest))
-			var/obj/alertlighting/firelight/F = new/obj/alertlighting/firelight(E.loc)
+			var/obj/effect/alertlighting/firelight/F = new/obj/effect/alertlighting/firelight(E.loc)
 			var/image/imagelight = image('alert.dmi',F,icon_state = "blue")
 			world << imagelight
 		if(!E.blocked)
@@ -609,9 +609,9 @@ obj/machinery/alarm/proc
 	for(var/area/RA in A.related)
 		for(var/turf/T in RA)
 			if(T.density != 1)
-				var/obj/LightTest = locate(/obj/alertlighting/firelight) in T
+				var/obj/LightTest = locate(/obj/effect/alertlighting/firelight) in T
 				if(isnull(LightTest))
-					var/obj/alertlighting/firelight/F = new/obj/alertlighting/firelight(T)
+					var/obj/effect/alertlighting/firelight/F = new/obj/effect/alertlighting/firelight(T)
 					var/image/imagelight = image('alert.dmi',F,icon_state = "blue")
 					world << imagelight
 		RA.firealert()
@@ -628,7 +628,7 @@ obj/machinery/alarm/proc
 	if(user.stat || stat & (NOPOWER|BROKEN))
 		return
 
-	user.machine = src
+	user.set_machine(src)
 	var/area/A = src.loc
 	var/d1
 	var/d2
@@ -690,7 +690,7 @@ obj/machinery/alarm/proc
 	if (usr.stat || stat & (BROKEN|NOPOWER))
 		return
 	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
-		usr.machine = src
+		usr.set_machine(src)
 		if (href_list["reset"])
 			src.reset()
 		else

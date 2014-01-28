@@ -45,7 +45,7 @@ Pod/Blast Doors computer
 		if (!istype(user, /mob/living/silicon))
 			usr << "\red You don't have the dexterity to do this!"
 			return 1
-	if ((!(in_range(src, user)) || !istype(src.loc, /turf)) && !istype(user, /mob/living/silicon))
+	if ((!in_range(src, user) || !istype(src.loc, /turf)) && !istype(user, /mob/living/silicon))
 		return 1
 	if (ishuman(user))
 		if(user.brainloss >= 60)
@@ -67,7 +67,7 @@ Pod/Blast Doors computer
 	for(var/x in src.verbs)
 		src.verbs -= x
 	set_broken()
-	var/datum/effect/system/harmless_smoke_spread/smoke = new /datum/effect/system/harmless_smoke_spread()
+	var/datum/effect/effect/system/harmless_smoke_spread/smoke = new /datum/effect/effect/system/harmless_smoke_spread()
 	smoke.set_up(5, 0, src)
 	smoke.start()
 	return
@@ -165,7 +165,7 @@ Pod/Blast Doors computer
 	if(..())
 		return
 
-	user.machine = src
+	user.set_machine(src)
 	var/dat
 	if (!( ticker ))
 		return
@@ -284,7 +284,7 @@ Pod/Blast Doors computer
 /obj/machinery/computer/card/Topic(href, href_list)
 	if(..())
 		return
-	usr.machine = src
+	usr.set_machine(src)
 	if (href_list["modify"])
 		if (src.modify)
 			src.modify.name = text("[]'s ID Card ([])", src.modify.registered, src.modify.assignment)
@@ -357,7 +357,7 @@ Pod/Blast Doors computer
 	src.updateUsrDialog()
 	return
 
-/obj/datacore/proc/manifest()
+/obj/effect/datacore/proc/manifest()
 	for(var/mob/living/carbon/human/H in world)
 		if (!isnull(H.mind) && (H.mind.assigned_role != "MODE"))
 			var/datum/data/record/G = new /datum/data/record(  )
@@ -512,7 +512,7 @@ Pod/Blast Doors computer
 		return
 
 	var/dat = "<HTML><BODY><TT><B>Mass Driver Controls</B>"
-	user.machine = src
+	user.set_machine(src)
 	var/d2
 	if (src.timing)
 		d2 = text("<A href='?src=\ref[];time=0'>Stop Time Launch</A>", src)
@@ -556,7 +556,7 @@ Pod/Blast Doors computer
 	if(..())
 		return
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
-		usr.machine = src
+		usr.set_machine(src)
 		if (href_list["power"])
 			var/t = text2num(href_list["power"])
 			t = min(max(0.25, t), 16)

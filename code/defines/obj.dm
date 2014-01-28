@@ -54,7 +54,6 @@
 	desc = "A roll of police tape used to block off crime scenes from the public."
 	icon = 'icons/policetape.dmi'
 	icon_state = "rollstart"
-	flags = FPRINT
 	var/tapestartx = 0
 	var/tapestarty = 0
 	var/tapestartz = 0
@@ -92,23 +91,11 @@
 	layer = 99
 	mouse_opacity = 0
 
-/obj/bhole
-	name = "black hole"
-	icon = 'objects.dmi'
-	desc = "FUCK FUCK FUCK AAAHHH"
-	icon_state = "bhole2"
-	opacity = 0
-	density = 0
-	anchored = 1
-	var/datum/effect/system/harmless_smoke_spread/smoke
 
-
-
-
-/obj/beam
+/obj/effect/beam
 	name = "beam"
 
-/obj/beam/a_laser
+/obj/effect/beam/a_laser
 	name = "a laser"
 	icon = 'projectiles.dmi'
 	icon_state = "laser"
@@ -121,26 +108,13 @@
 	flags = 0
 	pass_flags = PASSTABLE
 
-/obj/beam/i_beam
-	name = "i beam"
-	icon = 'projectiles.dmi'
-	icon_state = "ibeam"
-	var/obj/beam/i_beam/next = null
-	var/obj/item/device/infra/master = null
-	var/limit = null
-	var/visible = 0.0
-	var/left = null
-	anchored = 1.0
-	flags = 0
-	pass_flags = PASSTABLE
-
 /obj/begin
 	name = "begin"
 	icon = 'stationobjs.dmi'
 	icon_state = "begin"
 	anchored = 1.0
 
-/obj/datacore
+/obj/effect/datacore
 	name = "datacore"
 	var/list/medical = list(  )
 	var/list/general = list(  )
@@ -218,27 +192,11 @@
 	desc = "A terahertz-ray emitter and scanner used to detect underfloor objects such as cables and pipes."
 	icon_state = "t-ray0"
 	var/on = 0
-	flags = FPRINT
 	slot_flags = SLOT_BELT
 	w_class = 2
 	item_state = "electronic"
 	origin_tech = "magnets=2;engineering=2"
 	m_amt = 150
-
-// So far, its functionality is found only in code/game/machinery/doors/airlock.dm
-/obj/item/device/hacktool
-	name = "hacktool"
-	icon_state = "hacktool"
-	origin_tech = "magnets=2;engineering=5;syndicate=3"
-	flags = FPRINT | CONDUCT
-	force = 5.0
-	w_class = 2.0
-	throwforce = 5.0
-	throw_range = 15
-	throw_speed = 3
-	desc = "An item of dubious origins, with wires and antennas protruding out of it."
-	m_amt = 60
-	g_amt = 20
 
 /obj/effect/landmark
 	name = "landmark"

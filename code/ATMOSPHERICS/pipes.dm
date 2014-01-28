@@ -119,9 +119,9 @@
 					for(var/zone/Z in locT.zone.connections)
 						if (Z.space_connections.len >= 1)
 							return
-				parent.mingle_with_turf(get_step(loc, node1dir), volume)
+				//parent.mingle_with_turf(get_step(loc, node1dir), volume)
 				if(!nodealert)
-					//world << "Missing node from [src] at [src.x],[src.y],[src.z]"
+					world << "Missing node from [src] at [src.x],[src.y],[src.z]"
 					nodealert = 1
 
 			else if(!node2)
@@ -132,9 +132,9 @@
 					for(var/zone/Z in locT.zone.connections)
 						if (Z.space_connections.len >= 1)
 							return
-				parent.mingle_with_turf(get_step(loc, node2dir), volume)
+				//parent.mingle_with_turf(get_step(loc, node2dir), volume)
 				if(!nodealert)
-					//world << "Missing node from [src] at [src.x],[src.y],[src.z]"
+					world << "Missing node from [src] at [src.x],[src.y],[src.z]"
 					nodealert = 1
 
 
@@ -453,10 +453,10 @@
 			initialize_directions = dir
 			..()
 
-		process()
+/*		process()
 			..()
 			if(!node1)
-				parent.mingle_with_turf(loc, 200)
+				parent.mingle_with_turf(loc, 200)*/
 
 		carbon_dioxide
 			name = "Pressure Tank (Carbon Dioxide)"
@@ -735,7 +735,7 @@
 		pipeline_expansion()
 			return list(node1, node2, node3)
 
-		process()
+/*		process()
 			..()
 
 			if(!node1)
@@ -745,7 +745,7 @@
 				parent.mingle_with_turf(get_step(loc, node3dir), 70)
 
 			else if(!node3)
-				parent.mingle_with_turf(get_step(loc, node2dir), 70)
+				parent.mingle_with_turf(get_step(loc, node2dir), 70)*/
 
 		Del()
 			if(node1)

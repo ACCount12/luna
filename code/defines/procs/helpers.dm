@@ -243,29 +243,6 @@
 	return line
 */
 
-
-/proc/sortmobs()
-
-	var/list/mob_list = list()
-	for(var/mob/living/silicon/ai/M in world)
-		mob_list.Add(M)
-	for(var/mob/living/silicon/robot/M in world)
-		mob_list.Add(M)
-	for(var/mob/living/carbon/human/M in world)
-		mob_list.Add(M)
-	for(var/mob/living/carbon/alien/M in world)
-		mob_list.Add(M)
-	for(var/mob/dead/observer/M in world)
-		mob_list.Add(M)
-	for(var/mob/dead/official/M in world)
-		mob_list.Add(M)
-	for(var/mob/new_player/M in world)
-		mob_list.Add(M)
-	for(var/mob/living/carbon/monkey/M in world)
-		mob_list.Add(M)
-
-	return mob_list
-
 /proc/FindRecursive(var/target,var/atom/haystack)
 	for(var/v in haystack.contents)
 		if(v==target)

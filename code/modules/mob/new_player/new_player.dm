@@ -328,7 +328,7 @@ mob/new_player
 
 		ticker.minds += mind	//Strumpet - Add new players' minds to the ticker list to be used for traitor objectives.
 
-		preferences.copy_to(new_character)
+		preferences.copy_to(new_character, client)
 		new_character.dna.ready_dna(new_character)
 
 		mind.transfer_to(new_character)
@@ -443,7 +443,7 @@ mob/new_player
 		S.fields["ma_crim"] = "None"
 		S.fields["ma_crim_d"] = "No minor crime convictions."
 		S.fields["notes"] = "No notes."
-		for(var/obj/datacore/D in world)
+		for(var/obj/effect/datacore/D in world)
 			D.general += G
 			D.medical += M
 			D.security += S

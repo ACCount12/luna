@@ -29,7 +29,7 @@
 /mob/living/simple_animal/construct/Life()
 	..()
 	if(stat == 2)
-		new /obj/item/weapon/ectoplasm (src.loc)
+		//new /obj/item/weapon/ectoplasm (src.loc)
 		for(var/mob/M in viewers(src, null))
 			if((M.client && !( M.blinded )))
 				M.show_message("\red [src] collapses in a shattered heap. ")
@@ -62,8 +62,6 @@
 		if(!(tmob.status_flags & CANPUSH))
 			now_pushing = 0
 			return
-
-		tmob.LAssailant = src
 	now_pushing = 0
 	..()
 	if (!istype(AM, /atom/movable))
@@ -93,8 +91,6 @@
 				playsound(loc, M.attack_sound, 50, 1, 1)
 			for(var/mob/O in viewers(src, null))
 				O.show_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>", 1)
-			M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
 			var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 			health -= damage
 
@@ -255,7 +251,7 @@
 	var/energy = 0
 	var/max_energy = 1000
 
-/mob/living/simple_animal/constructbehemoth/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/mob/living/simple_animal/construct/behemoth/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(O.force)
 		if(O.force >= 11)
 			var/damage = O.force

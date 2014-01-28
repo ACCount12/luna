@@ -14,7 +14,6 @@
 	name = "pen"
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "pen"
-	flags = FPRINT
 	slot_flags = SLOT_BELT
 	throwforce = 0
 	w_class = 1.0

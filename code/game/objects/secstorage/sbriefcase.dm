@@ -1,21 +1,19 @@
-/obj/item/weapon/secstorage/sbriefcase
+/obj/item/weapon/storage/secure/briefcase
 	name = "secure briefcase"
-	icon = 'storage.dmi'
 	icon_state = "secure"
 	item_state = "sec-case"
 	desc = "A large briefcase with a digital locking system."
-	flags = FPRINT
 	force = 8.0
 	throw_speed = 1
 	throw_range = 4
 	w_class = 4.0
 
-/obj/item/weapon/secstorage/sbriefcase/New()
+/obj/item/weapon/storage/secure/briefcase/New()
 	..()
 	new /obj/item/weapon/paper(src)
 	new /obj/item/weapon/pen(src)
 
-/obj/item/weapon/secstorage/sbriefcase/attack(mob/M as mob, mob/user as mob)
+/obj/item/weapon/storage/secure/briefcase/attack(mob/M as mob, mob/user as mob)
 	var/t = user:zone_sel.selecting
 	if (t == "head")
 		if (M.stat < 2 && M.health < 50 && prob(90))

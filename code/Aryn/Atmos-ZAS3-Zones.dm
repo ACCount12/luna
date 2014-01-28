@@ -4,7 +4,7 @@ vs_control/var
 	FLOW_PERCENT = 15 //Percent of gas to send between connected turfs.
 	VACUUM_SPEED = 1.2 //Divisor of zone gases exposed directly to space (i.e. space tiles in members)
 
-#define QUANTIZE(variable)		(round(variable,0.0001))
+#define QUANTIZE(variable)		(round(variable,0.001))
 #define PLASMA_GFX 1
 var/list/zones = list()
 var/zone_update_delay = 5
@@ -254,14 +254,15 @@ zone
 						nit_avg = (nitrogen + Z.nitrogen) / (members.len + Z.members.len)
 						co2_avg = (co2 + Z.co2) / (members.len + Z.members.len)
 						plasma_avg = (plasma + Z.plasma) / (members.len + Z.members.len)
-					oxygen( (turf_oxy - oxy_avg) * (1-percent_flow/100) + oxy_avg )
-					nitrogen( (turf_nitro - nit_avg) * (1-percent_flow/100) + nit_avg )
-					co2( (turf_co2 - co2_avg) * (1-percent_flow/100) + co2_avg )
-					plasma((turf_plasma - plasma_avg) * (1-percent_flow/100) + plasma_avg)
-					Z.oxygen( (Z.turf_oxy - oxy_avg) * (1-percent_flow/100) + oxy_avg )
-					Z.nitrogen( (Z.turf_nitro - nit_avg) * (1-percent_flow/100) + nit_avg )
-					Z.co2( (Z.turf_co2 - co2_avg) * (1-percent_flow/100) + co2_avg )
-					Z.plasma( (Z.turf_plasma - plasma_avg) * (1-percent_flow/100) + plasma_avg )
+						flow_mod = (1-percent_flow/100)
+					oxygen( (turf_oxy - oxy_avg) * flow_mod + oxy_avg )
+					nitrogen( (turf_nitro - nit_avg) * flow_mod + nit_avg )
+					co2( (turf_co2 - co2_avg) * flow_mod + co2_avg )
+					plasma((turf_plasma - plasma_avg) * flow_mod + plasma_avg)
+					Z.oxygen( (Z.turf_oxy - oxy_avg) * flow_mod + oxy_avg )
+					Z.nitrogen( (Z.turf_nitro - nit_avg) * flow_mod + nit_avg )
+					Z.co2( (Z.turf_co2 - co2_avg) * flow_mod + co2_avg )
+					Z.plasma( (Z.turf_plasma - plasma_avg) * flow_mod + plasma_avg )
 					//End Magic
 
 				for(var/crap in connections) //Clean out invalid connections.

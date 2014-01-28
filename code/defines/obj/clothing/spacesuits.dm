@@ -6,6 +6,7 @@
 	item_state = "s_suit"
 	flags = FPRINT | SUITSPACE | PLASMAGUARD
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
+	flags_inv = HIDEGLOVES|HIDESHOES|HIDEJUMPSUIT
 	permeability_coefficient = 0.02
 	protective_temperature = 1000
 	heat_transfer_coefficient = 0.02

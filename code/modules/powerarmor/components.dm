@@ -43,7 +43,6 @@
 		name = "Powercell interface"
 		desc = "Boring, but reliable."
 		var/obj/item/weapon/cell/cell
-		slowdown = 0.5
 
 		process()
 			if (cell && cell.charge > 0 && parent.active)

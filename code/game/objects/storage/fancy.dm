@@ -49,9 +49,7 @@
 	icon_state = "crayonbox"
 	w_class = 2.0
 	icon_type = "crayon"
-	can_hold = list(
-		"/obj/item/toy/crayon"
-	)
+	can_hold = list(/obj/item/toy/crayon)
 
 /obj/item/weapon/storage/fancy/crayons/New()
 	..()
@@ -64,7 +62,7 @@
 	update_icon()
 
 /obj/item/weapon/storage/fancy/crayons/update_icon()
-	overlays = list() //resets list
+	overlays.Cut()
 	overlays += image('icons/obj/crayons.dmi',"crayonbox")
 	for(var/obj/item/toy/crayon/crayon in contents)
 		overlays += image('icons/obj/crayons.dmi',crayon.colourName)
@@ -80,3 +78,84 @@
 				return
 	else return
 	..()
+	update_icon()
+
+
+/*
+ * Vial Box
+ */
+
+/obj/item/weapon/storage/fancy/vials
+	icon = 'icons/obj/vialbox.dmi'
+	icon_state = "vialbox0"
+	icon_type = "vial"
+	name = "vial storage box"
+	desc = "A box for keeping things away from children."
+	storage_slots = 6
+	can_hold = list(/obj/item/weapon/reagent_containers/glass/beaker/vial)
+	var/closed = 0
+
+/obj/item/weapon/storage/fancy/vials/New()
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/fancy/vials/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(!istype(W, /obj/item/weapon/reagent_containers/glass/beaker/vial) || closed)
+		return
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/fancy/vials/update_icon(var/itemremoved = 0)
+	src.icon_state = "vialbox[contents.len]"
+	src.overlays.Cut()
+	if(closed)
+		overlays += image(icon, src, "cover")
+	return
+
+/*obj/item/weapon/storage/fancy/vials/attack_self()
+	..()
+	if (!closed)
+		usr << "<span class = 'notice'>You put the cover on \the [src]."
+		closed = 1
+	else
+		usr << "<span class = 'notice'>You take the cover off \the [src]."
+		closed = 0
+	update_icon()*/
+
+
+/obj/item/weapon/storage/fancy/vials/full/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/weapon/reagent_containers/glass/beaker/vial(src)
+	update_icon()
+
+/obj/item/weapon/storage/fancy/vials/virusall1/New()
+	..()
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/flu_virion(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/cold(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/epiglottis_virion(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/liver_enhance_virion(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/hullucigen_virion(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial(src)
+	update_icon()
+
+
+/obj/item/weapon/storage/fancy/vials/virusall2/New()
+	..()
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/pierrot_throat(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/brainrot(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/fake_gbs(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/magnitis(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial(src)
+	update_icon()
+
+/obj/item/weapon/storage/fancy/vials/flucold/New()
+	..()
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/flu_virion(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/cold(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/flu_virion(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial/virus/cold(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/vial(src)
+	update_icon()

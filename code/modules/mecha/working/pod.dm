@@ -3,7 +3,7 @@
 	icon_state = "engineering_pod"
 	desc = "Stubby and round, it has a human sized access hatch on the top."
 	wreckage = /obj/effect/decal/mecha_wreckage/hoverpod
-	step_in = 4
+	step_in = 3
 	thrusters = 1
 
 /obj/mecha/working/hoverpod/check_for_support()

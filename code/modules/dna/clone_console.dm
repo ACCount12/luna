@@ -5,62 +5,6 @@
 
 //Potential replacement for genetics revives or something I dunno (?)
 
-
-/obj/machinery/scan_consolenew
-	name = "DNA Modifier Access Console"
-	icon = 'computer.dmi'
-	icon_state = "scanner"
-	density = 1
-	var/uniblock = 1.0
-	var/strucblock = 1.0
-	var/subblock = 1.0
-	var/status = null
-	var/radduration = 2.0
-	var/radstrength = 1.0
-	var/radacc = 1.0
-	var/buffer1 = null
-	var/buffer2 = null
-	var/buffer3 = null
-	var/buffer1owner = null
-	var/buffer2owner = null
-	var/buffer3owner = null
-	var/buffer1label = null
-	var/buffer2label = null
-	var/buffer3label = null
-	var/buffer1type = null
-	var/buffer2type = null
-	var/buffer3type = null
-	var/buffer1iue = 0
-	var/buffer2iue = 0
-	var/buffer3iue = 0
-	var/delete = 0
-	var/injectorready = 1
-	var/temphtml = null
-	var/obj/machinery/dna_scanner/connected = null
-	var/obj/item/weapon/disk/data/genetics/diskette = null
-	anchored = 1.0
-
-	var/brightnessred = 0
-	var/brightnessgreen = 0
-	var/brightnessblue = 2
-
-
-/obj/machinery/clonepod
-	anchored = 1
-	name = "Cloning Pod"
-	desc = "An electronically-lockable pod for growing organic tissue."
-	density = 1
-	icon = 'cloning.dmi'
-	icon_state = "pod_0"
-	req_access = list(access_medlab) //For premature unlocking.
-	var/mob/living/occupant
-	var/heal_level = 80 //-40 //The clone is released once its health reaches this level.
-	var/locked = 0
-	var/obj/machinery/computer/cloning/connected = null //So we remember the connected clone machine.
-	var/mess = 0 //Need to clean out it if it's full of exploded clone.
-	var/attempting = 0 //One clone attempt at a time thanks
-	var/eject_wait = 0 //Don't eject them as soon as they are created fuckkk
-
 /obj/machinery/computer/cloning
 	name = "Cloning Console"
 	icon = 'computer.dmi'
@@ -145,7 +89,7 @@
 	return attack_hand(user)
 
 /obj/machinery/computer/cloning/attack_hand(mob/user as mob)
-	user.machine = src
+	user.set_machine(src)
 	add_fingerprint(user)
 
 	if(stat & (BROKEN|NOPOWER))
@@ -252,7 +196,7 @@
 				src.menu = 3
 
 	else if (href_list["del_rec"])
-		if ((!src.active_record) || (src.menu < 3))
+		if (!active_record || (src.menu < 3))
 			return
 		if (src.menu == 3) //If we are viewing a record, confirm deletion
 			src.temp = "Delete record?"
@@ -270,53 +214,57 @@
 					src.temp = "Access Denied."
 
 	else if (href_list["disk"]) //Load or eject.
-		switch(href_list["disk"])
-			if("load")
-				if ((isnull(src.diskette)) || (src.diskette.data == ""))
-					src.temp = "Load error."
-					src.updateUsrDialog()
-					return
-				if (isnull(src.active_record))
-					src.temp = "Record error."
-					src.menu = 1
-					src.updateUsrDialog()
-					return
-
-				if (src.diskette.data_type == "ui")
-					src.active_record.fields["UI"] = src.diskette.data
-					if (src.diskette.ue)
-						src.active_record.fields["name"] = src.diskette.owner
-				else if (src.diskette.data_type == "se")
-					src.active_record.fields["SE"] = src.diskette.data
-
-				src.temp = "Load successful."
-			if("eject")
-				if (!isnull(src.diskette))
-					src.diskette.loc = src.loc
-					src.diskette = null
-
-	else if (href_list["save_disk"]) //Save to disk!
-		if (isnull(src.diskette) || src.diskette.read_only || isnull(src.active_record))
-			src.temp = "Save error."
+		if(!istype(diskette))
+			src.temp = "Disk error."
 			src.updateUsrDialog()
 			return
 
-		switch(href_list["save_disk"]) //Save as Ui/Ui+Ue/Se
-			if("ui")
-				src.diskette.data = src.active_record.fields["UI"]
-				src.diskette.ue = 0
-				src.diskette.data_type = "ui"
-			if("ue")
-				src.diskette.data = src.active_record.fields["UI"]
-				src.diskette.ue = 1
-				src.diskette.data_type = "ui"
-			if("se")
-				src.diskette.data = src.active_record.fields["SE"]
-				src.diskette.ue = 0
-				src.diskette.data_type = "se"
-		src.diskette.owner = src.active_record.fields["name"]
-		src.diskette.name = "data disk - '[src.diskette.owner]'"
-		src.temp = "Save \[[href_list["save_disk"]]\] successful."
+		switch(href_list["disk"])
+			if("load")
+				if(!diskette.dna)
+					temp = "Load error."
+					updateUsrDialog()
+					return
+				if(isnull(active_record))
+					temp = "Record error."
+					menu = 1
+					updateUsrDialog()
+					return
+
+				active_record.fields["UI"] = diskette.dna.uni_identity
+				active_record.fields["SE"] = diskette.dna.struc_enzymes
+				active_record.fields["mutantrace"] = diskette.dna.mutantrace
+				active_record.fields["name"] = diskette.dna.owner_name
+				active_record.fields["ckey"] = diskette.dna.ckey
+				active_record.fields["mind"] = diskette.dna.mind
+
+				src.temp = "Load successful."
+
+			if("save")
+				if (diskette.read_only || isnull(src.active_record))
+					src.temp = "Save error."
+					src.updateUsrDialog()
+					return
+
+				if(!diskette.dna)
+					diskette.dna = new
+
+				diskette.dna.uni_identity = active_record.fields["UI"]
+				diskette.dna.struc_enzymes = active_record.fields["SE"]
+				diskette.dna.mutantrace = active_record.fields["mutantrace"]
+				diskette.dna.owner_name = active_record.fields["name"]
+				diskette.dna.ckey = active_record.fields["ckey"]
+				diskette.dna.mind = active_record.fields["mind"]
+
+				diskette.name = initial(diskette.name)
+				if(diskette.dna.owner_name)
+					diskette.name += " - '[diskette.dna.owner_name]'"
+
+				temp = "Saved."
+
+			if("eject")
+				diskette.loc = src.loc
+				diskette = null
 
 	else if (href_list["refresh"])
 		src.updateUsrDialog()
@@ -398,11 +346,10 @@
 	return selected_record
 
 /obj/machinery/computer/cloning/power_change()
-
 	if(stat & BROKEN)
 		icon_state = "commb"
 	else
-		if( powered() )
+		if(powered())
 			icon_state = initial(icon_state)
 			stat &= ~NOPOWER
 		else
@@ -410,28 +357,6 @@
 				src.icon_state = "c_unpowered"
 				stat |= NOPOWER
 
-
-//Find a dead mob with a brain and client.
-/*
-/proc/find_dead_player(var/find_key)
-	if (isnull(find_key))
-		return
-
-	var/mob/selected = null
-	for(var/mob/C)
-		//Dead people only thanks!
-		if ((C.stat != 2))
-			continue
-		//They need a brain!
-		if ((istype(C, /mob/living/carbon/human)) && (C:brain_op_stage >= 4.0))
-			continue
-
-		if ("[C.mind.key]" == find_key)
-			selected = C
-			break
-	if(!selected) //Search for a ghost if dead body with client isn't found.
-	return selected
-*/
 
 /proc/find_dead_player(var/find_key)
 	if(!find_key)
@@ -441,7 +366,7 @@
 	for(var/client/C)
 		if(!C.mob)
 			continue
-		//Dead people only thanks!
+		//Dead people only, thanks!
 		if (C.mob.stat != 2)
 			continue
 		//They need a brain!
@@ -460,293 +385,25 @@
 
 
 //Health Tracker Implant
-
 /obj/item/weapon/implant/health
 	name = "health implant"
 	var/healthstring = ""
 
 /obj/item/weapon/implant/health/proc/sensehealth()
-	if (!src.implanted)
+	if (!implanted)
 		return "ERROR"
 	else
-		src.healthstring = "[round(src.implanted:oxyloss)] - [round(src.implanted:fireloss)] - [round(src.implanted:toxloss)] - [round(src.implanted:bruteloss)]"
-		if (!src.healthstring)
-			src.healthstring = "ERROR"
-		return src.healthstring
+		healthstring = "[round(implanted.oxyloss)] - [round(implanted.fireloss)] - [round(implanted.toxloss)] - [round(implanted.bruteloss)]"
+		if (!healthstring)
+			healthstring = "ERROR"
+		return healthstring
 
-/obj/machinery/clonepod/attack_ai(mob/user as mob)
-	return attack_hand(user)
-/obj/machinery/clonepod/attack_paw(mob/user as mob)
-	return attack_hand(user)
-/obj/machinery/clonepod/attack_hand(mob/user as mob)
-	if ((isnull(src.occupant)) || (stat & NOPOWER))
-		return
-	if ((!isnull(src.occupant)) && (src.occupant.stat != 2))
-		var/completion = (100 * ((src.occupant.health + 100) / (src.heal_level + 100)))
-		user << "Current clone cycle is [round(completion)]% complete."
-	return
-
-//Clonepod
-
-//Start growing a human clone in the pod!
-/obj/machinery/clonepod/MouseDrop_T(mob/C as mob, mob/user as mob)
-	if(C != user)
-		return
-	if(user.stat)
-		return
-	if (!istype(C)|| C.anchored || get_dist(user, src) > 1 || get_dist(src,C) > 1 )
-		return
-/obj/machinery/clonepod/proc/growclone(mob/ghost as mob, var/clonename, var/ui, var/se, var/mindref, var/mutantrace)
-	if (!ghost || !ghost.client || src.mess || src.attempting)
-		return 0
-
-	src.attempting = 1 //One at a time!!
-	src.locked = 1
-
-	src.eject_wait = 1
-	spawn(30)
-		src.eject_wait = 0
-
-	src.occupant = new /mob/living/carbon/human(src)
-	ghost.client.mob = src.occupant
-
-	src.icon_state = "pod_1"
-	//Get the clone body ready
-	src.occupant.rejuv = 10
-	src.occupant.bruteloss += rand(60, 90)
-	src.occupant.toxloss += 30
-	src.occupant.oxyloss += 40
-	src.occupant.brainloss += rand(60, 90)
-	src.occupant.paralysis += 4
-
-	//Here let's calculate their health so the pod doesn't immediately eject them!!!
-	src.occupant.health = (src.occupant.bruteloss + src.occupant.toxloss + src.occupant.oxyloss)
-
-	src.occupant << "\blue <b>Clone generation process initiated.</b>"
-	src.occupant << "\blue This will take a moment, please hold."
-
-	if (clonename)
-		src.occupant.real_name = clonename
-	else
-		src.occupant.real_name = "clone"  //No null names!!
-
-	var/datum/mind/clonemind = (locate(mindref) in ticker.minds)
-
-	if (clonemind && (istype(clonemind))) //Move that mind over!!
-		clonemind.transfer_to(src.occupant)
-	else //welp
-		src.occupant.mind = new /datum/mind(  )
-		src.occupant.mind.key = src.occupant.key
-		src.occupant.mind.current = src.occupant
-		src.occupant.mind.transfer_to(src.occupant)
-		ticker.minds += src.occupant.mind
-
-	// -- Mode/mind specific stuff goes here
-	switch(ticker.mode.name)
-		if ("revolution")
-			if ((src.occupant.mind in ticker.mode:revolutionaries) || (src.occupant.mind in ticker.mode:head_revolutionaries))
-				ticker.mode:add_revolutionary(src.occupant.mind)
-				ticker.mode:update_all_rev_icons() //So the icon actually appears
-		if ("rp-revolution")
-			if ((src.occupant.mind in ticker.mode:revolutionaries) || (src.occupant.mind in ticker.mode:head_revolutionaries))
-				ticker.mode:add_revolutionary(src.occupant.mind)
-				ticker.mode:update_all_rev_icons() //So the icon actually appears
-
-	// -- End mode specific stuff
-
-	if(istype(ghost, /mob/dead/observer))
-		del(ghost) //Don't leave ghosts everywhere!!
-
-	if(!src.occupant.dna)
-		src.occupant.dna = new /datum/dna(  )
-	if(ui)
-		src.occupant.dna.uni_identity = ui
-		updateappearance(src.occupant, ui)
-	if(se)
-		src.occupant.dna.struc_enzymes = se
-		//Cloning now causes ALOT more genetic defects
-		for(var/i = 0 to 20)
-			randmutb(src.occupant) //Sometimes the clones come out wrong.
-	if(mutantrace)
-		src.occupant.dna.mutantrace = mutantrace
-
-	src.attempting = 0
-	return 1
-
-//Grow clones to maturity then kick them out.  FREELOADERS
-/obj/machinery/clonepod/process()
-
-	if (stat & NOPOWER) //Autoeject if power is lost
-		if (src.occupant)
-			src.locked = 0
-			src.go_out()
-		return
-
-	if ((src.occupant) && (src.occupant.loc == src))
-		if((src.occupant.stat == 2) || (src.occupant.suiciding))  //Autoeject corpses and suiciding dudes.
-			src.locked = 0
-			src.go_out()
-			src.connected_message("Clone Rejected: Deceased.")
-			return
-
-		else if(src.occupant.health < src.heal_level)
-			src.occupant.paralysis = 4
-
-			 //Slowly get that clone healed and finished.
-			src.occupant.bruteloss = max(src.occupant.bruteloss-1, 0)
-
-			//At this rate one clone takes about 95 seconds to produce.(with heal_level 90)
-			src.occupant.toxloss = max(src.occupant.toxloss-0.1, 0)
-
-			//Premature clones may have brain damage.
-			src.occupant.brainloss = max(src.occupant.brainloss-1, 0)
-
-			//So clones don't die of oxyloss in a running pod.
-			if (src.occupant.reagents.get_reagent_amount("inaprovaline") < 30)
-				src.occupant.reagents.add_reagent("inaprovaline", 60)
-
-			//Stop baking in the tubes you jerks.
-			src.occupant.fireloss = max(src.occupant.fireloss-2, 0)
-
-			use_power(65000) //This might need tweaking.
-			return
-
-		else if((src.occupant.health >= src.heal_level) && (!src.eject_wait))
-			src.connected_message("Cloning Process Complete.")
-			src.locked = 0
-			src.occupant.toxloss = 150
-			src.go_out()
-			return
-
-	else if ((!src.occupant) || (src.occupant.loc != src))
-		src.occupant = null
-		if (src.locked)
-			src.locked = 0
-		if (!src.mess)
-			icon_state = "pod_0"
-		use_power(200)
-		return
-
-	return
-
-//Let's unlock this early I guess.  Might be too early, needs tweaking.
-/obj/machinery/clonepod/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
-		if (!src.check_access(W))
-			user << "\red Access Denied."
-			return
-		if ((!src.locked) || (isnull(src.occupant)))
-			return
-		if ((src.occupant.health < -20) && (src.occupant.stat != 2))
-			user << "\red Access Refused."
-			return
-		else
-			src.locked = 0
-			user << "System unlocked."
-	else if (istype(W, /obj/item/weapon/card/emag))
-		if (isnull(src.occupant))
-			return
-		user << "You force an emergency ejection."
-		src.locked = 0
-		src.go_out()
-		return
-	else
-		..()
-
-//Put messages in the connected computer's temp var for display.
-/obj/machinery/clonepod/proc/connected_message(var/message)
-	if ((isnull(src.connected)) || (!istype(src.connected, /obj/machinery/computer/cloning)))
-		return 0
-	if (!message)
-		return 0
-
-	src.connected.temp = message
-	src.connected.updateUsrDialog()
-	return 1
-
-/obj/machinery/clonepod/verb/eject()
-	set src in oview(1)
-
-	if (usr.stat != 0)
-		return
-	src.go_out()
-	add_fingerprint(usr)
-	return
-
-/obj/machinery/clonepod/proc/go_out()
-	if (src.locked)
-		return
-
-	if (src.mess) //Clean that mess and dump those gibs!
-		src.mess = 0
-		gibs(src.loc)
-		src.icon_state = "pod_0"
-		for(var/obj/O in src)
-			O.loc = src.loc
-		return
-
-	if (!(src.occupant))
-		return
-	for(var/obj/O in src)
-		O.loc = src.loc
-
-	if (src.occupant.client)
-		src.occupant.client.eye = src.occupant.client.mob
-		src.occupant.client.perspective = MOB_PERSPECTIVE
-	src.occupant.loc = src.loc
-	src.icon_state = "pod_0"
-	src.eject_wait = 0 //If it's still set somehow.
-	domutcheck(src.occupant) //Waiting until they're out before possible monkeyizing.
-	src.occupant.toxloss = max(src.occupant.toxloss,101)
-	src.occupant = null
-	return
-
-/obj/machinery/clonepod/proc/malfunction()
-	if (src.occupant)
-		src.connected_message("Critical Error!")
-		src.mess = 1
-		src.icon_state = "pod_g"
-		src.occupant.ghostize()
-		spawn(5)
-			del(src.occupant)
-	return
-
-/obj/machinery/clonepod/relaymove(mob/user as mob)
-	if (user.stat)
-		return
-	src.go_out()
-	return
-
-/obj/machinery/clonepod/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
-				ex_act(severity)
-			del(src)
-			return
-		if(2.0)
-			if (prob(50))
-				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
-					ex_act(severity)
-				del(src)
-				return
-		if(3.0)
-			if (prob(25))
-				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
-					ex_act(severity)
-				del(src)
-				return
-		else
-	return
 
 /*
  *	Diskette Box
  */
 /obj/item/weapon/storage/box/disk/genetics
-	name = "Genetics Diskette Box"
+	name = "genetics diskette box"
 	icon_state = "disk_kit"
 	item_state = "syringe_kit"
 
@@ -787,9 +444,3 @@
 	<i>A good diskette is a great way to counter aforementioned genetic drift!</i><br>
 	<br>
 	<font size=1>This technology produced under license from Thinktronic Systems, LTD.</font>"}
-
-//SOME SCRAPS I GUESS
-/* EMP grenade/spell effect
-		if(istype(A, /obj/machinery/clonepod))
-			malfunction()
-*/
